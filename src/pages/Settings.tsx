@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { DashboardLayout } from "../components/DashboardLayout";
-import {
-  updateProfile,
-  updatePassword,
-  EmailAuthProvider,
-  reauthenticateWithCredential,
-} from "firebase/auth";
+import { updateProfile, updatePassword } from "firebase/auth";
 import { auth } from "../lib/firebase";
 import {
   User,
