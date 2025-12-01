@@ -31,3 +31,9 @@
 @utility animate-delay-300 {
   animation-delay: 300ms;
 }
+
+/* Ensure all links and buttons show the hand cursor */
+a,
+button {
+  cursor: pointer;
+}

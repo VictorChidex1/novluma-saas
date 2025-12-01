@@ -75,7 +75,10 @@ export function Navbar({}: NavbarProps) {
           <div className="hidden md:flex items-center space-x-4">
             {user ? (
               <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                <a
+                  href="/dashboard"
+                  className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors"
+                >
                   {user.photoURL ? (
                     <img
                       src={user.photoURL}
@@ -88,7 +91,7 @@ export function Navbar({}: NavbarProps) {
                     </div>
                   )}
                   <span>{user.displayName || user.email?.split("@")[0]}</span>
-                </div>
+                </a>
                 <button
                   onClick={handleLogout}
                   className="text-gray-500 hover:text-red-600 transition-colors"
