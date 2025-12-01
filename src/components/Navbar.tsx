@@ -3,6 +3,7 @@ import { Menu, X, LogOut, User as UserIcon } from "lucide-react";
 import Logo from "../assets/images/Logo.png";
 import { useAuth } from "../context/AuthContext";
 import { AuthModal } from "./AuthModal";
+import { Link } from "react-router-dom";
 
 interface NavbarProps {
   onSignin?: () => void; // Keeping these for backward compatibility if needed, but we'll use internal state
@@ -38,7 +39,7 @@ export function Navbar({}: NavbarProps) {
       <nav className="border-b border-gray-100 bg-white/80 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center space-x-2 cursor-pointer">
+          <Link to="/" className="flex items-center space-x-2 cursor-pointer">
             <img
               src={Logo}
               alt="Lumina Logo"
@@ -47,7 +48,7 @@ export function Navbar({}: NavbarProps) {
             <span className="text-xl font-bold tracking-tight text-gray-900">
               Luminar
             </span>
-          </div>
+          </Link>
 
           {/* Desktop Links */}
           <div className="hidden md:flex space-x-8 text-sm font-medium text-gray-500">
@@ -75,8 +76,8 @@ export function Navbar({}: NavbarProps) {
           <div className="hidden md:flex items-center space-x-4">
             {user ? (
               <div className="flex items-center gap-4">
-                <a
-                  href="/dashboard"
+                <Link
+                  to="/dashboard"
                   className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors"
                 >
                   {user.photoURL ? (
@@ -91,7 +92,7 @@ export function Navbar({}: NavbarProps) {
                     </div>
                   )}
                   <span>{user.displayName || user.email?.split("@")[0]}</span>
-                </a>
+                </Link>
                 <button
                   onClick={handleLogout}
                   className="text-gray-500 hover:text-red-600 transition-colors"

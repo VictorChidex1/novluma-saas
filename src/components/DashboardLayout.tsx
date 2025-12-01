@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { Link } from "react-router-dom";
 import {
   LayoutDashboard,
   Settings,
@@ -29,39 +30,39 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const SidebarContent = () => (
     <>
       <div className="p-6">
-        <a
-          href="/"
+        <Link
+          to="/"
           className="flex items-center gap-2 hover:opacity-80 transition-opacity"
         >
           <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-xl">L</span>
           </div>
           <span className="text-xl font-bold text-gray-900">Lumina</span>
-        </a>
+        </Link>
       </div>
 
       <nav className="flex-1 px-4 space-y-1">
-        <a
-          href="/dashboard"
+        <Link
+          to="/dashboard"
           className="flex items-center gap-3 px-4 py-3 text-indigo-600 bg-indigo-50 rounded-xl font-medium"
         >
           <LayoutDashboard size={20} />
           Overview
-        </a>
-        <a
-          href="#"
+        </Link>
+        <Link
+          to="#"
           className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-xl font-medium transition-colors"
         >
           <FolderKanban size={20} />
           Projects
-        </a>
-        <a
-          href="/dashboard/settings"
+        </Link>
+        <Link
+          to="/dashboard/settings"
           className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-xl font-medium transition-colors"
         >
           <Settings size={20} />
           Settings
-        </a>
+        </Link>
       </nav>
 
       <div className="p-4 border-t border-gray-200">
@@ -99,15 +100,15 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     <div className="flex h-screen bg-gray-50">
       {/* Mobile Header */}
       <div className="md:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-20 px-4 h-16 flex items-center justify-between">
-        <a
-          href="/"
+        <Link
+          to="/"
           className="flex items-center gap-2 hover:opacity-80 transition-opacity"
         >
           <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-xl">L</span>
           </div>
           <span className="text-xl font-bold text-gray-900">Lumina</span>
-        </a>
+        </Link>
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
