@@ -1,0 +1,60 @@
+import { Zap, Star, Shield } from "lucide-react";
+import type { Plan } from "../types";
+
+export const PLANS: Plan[] = [
+  {
+    id: "starter",
+    name: "Starter",
+    description: "Perfect for creators and side hustles.",
+    monthlyPrice: 15,
+    yearlyPrice: 12,
+    features: [
+      "5 Social Profiles",
+      "Basic AI Writing Assistant",
+      "24hr Support Response",
+      "1GB Asset Library",
+    ],
+    notIncluded: ["Competitor Analysis", "Team Collaboration", "API Access"],
+    icon: Zap,
+    popular: false,
+    color: "blue",
+  },
+  {
+    id: "pro",
+    name: "Pro",
+    description: "For growing brands and agencies.",
+    monthlyPrice: 49,
+    yearlyPrice: 39,
+    features: [
+      "15 Social Profiles",
+      "Advanced AI Analytics",
+      "Priority Support",
+      "50GB Asset Library",
+      "Competitor Analysis",
+      "3 Team Members",
+    ],
+    notIncluded: ["API Access", "SSO"],
+    icon: Star,
+    popular: true,
+    color: "indigo",
+  },
+  {
+    id: "enterprise",
+    name: "Enterprise",
+    description: "Scale globally with bank-grade security.",
+    monthlyPrice: 99,
+    yearlyPrice: 79,
+    features: [
+      "Unlimited Profiles",
+      "Dedicated Success Manager",
+      "Unlimited Storage",
+      "API Access",
+      "SSO & SAML",
+      "Custom AI Models",
+    ],
+    notIncluded: [],
+    icon: Shield,
+    popular: false,
+    color: "slate",
+  },
+];
