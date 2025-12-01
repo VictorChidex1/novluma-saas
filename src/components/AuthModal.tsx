@@ -74,7 +74,10 @@ export function AuthModal({
       onClose();
     } catch (error: any) {
       console.error("Google Auth Error:", error);
-      setError(error.message || "Failed to sign in with Google.");
+      // Display the specific error code if available
+      const errorMessage = error.message || "Failed to sign in with Google.";
+      const errorCode = error.code ? ` (${error.code})` : "";
+      setError(`${errorMessage}${errorCode}`);
     }
   };
 
