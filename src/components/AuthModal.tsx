@@ -50,15 +50,18 @@ export function AuthModal({
       }
       onClose();
     } catch (err: any) {
-      // Simple error handling
+      console.error("Auth Error:", err);
+      // Show the actual error message from Firebase for debugging
       if (err.code === "auth/email-already-in-use") {
         setError("Email already in use.");
       } else if (err.code === "auth/invalid-credential") {
         setError("Invalid email or password.");
       } else if (err.code === "auth/weak-password") {
         setError("Password should be at least 6 characters.");
+      } else if (err.code === "auth/operation-not-allowed") {
+        setError("Email/Password sign-in is not enabled in Firebase Console.");
       } else {
-        setError("Failed to authenticate. Please try again.");
+        setError(err.message || "Failed to authenticate. Please try again.");
       }
     } finally {
       setLoading(false);
@@ -69,9 +72,9 @@ export function AuthModal({
     try {
       await signInWithGoogle();
       onClose();
-    } catch (error) {
-      console.error(error);
-      setError("Failed to sign in with Google.");
+    } catch (error: any) {
+      console.error("Google Auth Error:", error);
+      setError(error.message || "Failed to sign in with Google.");
     }
   };
 
