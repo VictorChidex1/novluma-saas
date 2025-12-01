@@ -45,7 +45,7 @@ export function Navbar({}: NavbarProps) {
               className="w-10 h-10 object-contain"
             />
             <span className="text-xl font-bold tracking-tight text-gray-900">
-              Lumina
+              Luminar
             </span>
           </div>
 

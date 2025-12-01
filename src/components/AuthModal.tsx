@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { X, Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
+import { X, Mail, Lock, ArrowRight, Eye, EyeOff, User } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
 interface AuthModalProps {
@@ -14,6 +14,7 @@ export function AuthModal({
   defaultTab = "signin",
 }: AuthModalProps) {
   const [activeTab, setActiveTab] = useState<"signin" | "signup">(defaultTab);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -27,6 +28,7 @@ export function AuthModal({
     if (isOpen) {
       setActiveTab(defaultTab);
       setError("");
+      setName("");
       setEmail("");
       setPassword("");
       setShowPassword(false);
@@ -42,7 +44,7 @@ export function AuthModal({
 
     try {
       if (activeTab === "signup") {
-        await signUpWithEmail(email, password);
+        await signUpWithEmail(email, password, name);
       } else {
         await signInWithEmail(email, password);
       }
@@ -160,6 +162,28 @@ export function AuthModal({
 
           {/* Email Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
+            {activeTab === "signup" && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Full Name
+                </label>
+                <div className="relative">
+                  <User
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                    size={18}
+                  />
+                  <input
+                    type="text"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none"
+                    placeholder="Clint Lax"
+                  />
+                </div>
+              </div>
+            )}
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Email address
