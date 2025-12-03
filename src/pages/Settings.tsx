@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { DashboardLayout } from "../components/DashboardLayout";
 import { updateProfile, updatePassword, deleteUser } from "firebase/auth";
-import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  deleteDoc,
+  onSnapshot,
+} from "firebase/firestore";
 import { auth, db } from "../lib/firebase";
 import {
   Save,
@@ -16,6 +22,7 @@ import {
 } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 import { motion } from "framer-motion";
+import profilePicture from "../assets/images/profile-picture.png";
 
 export function Settings() {
   const { user } = useAuth();
@@ -23,6 +30,22 @@ export function Settings() {
   const [displayName, setDisplayName] = useState(user?.displayName || "");
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+
+  // Fetch real-time profile data from Firestore
+  useEffect(() => {
+    if (user?.uid) {
+      const unsubscribe = onSnapshot(doc(db, "users", user.uid), (doc) => {
+        if (doc.exists()) {
+          const data = doc.data();
+          if (data.photoURL) {
+            setAvatarUrl(data.photoURL);
+          }
+        }
+      });
+      return () => unsubscribe();
+    }
+  }, [user]);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -314,15 +337,11 @@ export function Settings() {
               <div className="flex items-center gap-4">
                 <div className="relative group">
                   <div className="w-20 h-20 bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center text-3xl font-bold text-indigo-600 dark:text-indigo-400 overflow-hidden">
-                    {user?.photoURL ? (
-                      <img
-                        src={user.photoURL}
-                        alt="Profile"
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      user?.displayName?.[0] || "U"
-                    )}
+                    <img
+                      src={avatarUrl || user?.photoURL || profilePicture}
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <label className="absolute inset-0 flex items-center justify-center bg-black/50 text-white opacity-0 group-hover:opacity-100 rounded-full cursor-pointer transition-opacity">
                     <span className="text-xs font-medium">Change</span>
