@@ -5,17 +5,14 @@ import { updateProfile, updatePassword, deleteUser } from "firebase/auth";
 import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { auth, db } from "../lib/firebase";
 import {
-  User,
-  Mail,
   Save,
   Loader2,
-  Laptop,
-  Phone,
   AlertTriangle,
   FileText,
   Download,
-  Sun,
   Moon,
+  Sun,
+  Laptop,
 } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 import { motion } from "framer-motion";
