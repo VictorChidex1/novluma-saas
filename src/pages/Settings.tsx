@@ -3,8 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { DashboardLayout } from "../components/DashboardLayout";
 import { updateProfile, updatePassword, deleteUser } from "firebase/auth";
 import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { auth, db, storage } from "../lib/firebase";
+import { auth, db } from "../lib/firebase";
 import {
   Save,
   Loader2,
@@ -29,18 +28,89 @@ export function Settings() {
     const file = e.target.files?.[0];
     if (!file || !user) return;
 
+    // 1. Check file size (max 5MB initial check)
+    if (file.size > 5 * 1024 * 1024) {
+      setMessage({ type: "error", text: "Image must be less than 5MB" });
+      return;
+    }
+
     setUploading(true);
     try {
-      const storageRef = ref(storage, `profile-pictures/${user.uid}`);
-      await uploadBytes(storageRef, file);
-      const photoURL = await getDownloadURL(storageRef);
+      // 2. Compress Image to Base64 (Max 100KB target)
+      const compressImage = (file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target?.result as string;
+            img.onload = () => {
+              const canvas = document.createElement("canvas");
+              let width = img.width;
+              let height = img.height;
 
-      await updateProfile(user, { photoURL });
+              // Resize if too large (max 500px)
+              const MAX_SIZE = 500;
+              if (width > height) {
+                if (width > MAX_SIZE) {
+                  height *= MAX_SIZE / width;
+                  width = MAX_SIZE;
+                }
+              } else {
+                if (height > MAX_SIZE) {
+                  width *= MAX_SIZE / height;
+                  height = MAX_SIZE;
+                }
+              }
+
+              canvas.width = width;
+              canvas.height = height;
+              const ctx = canvas.getContext("2d");
+              ctx?.drawImage(img, 0, 0, width, height);
+
+              // Compress to JPEG with 0.7 quality
+              const base64 = canvas.toDataURL("image/jpeg", 0.7);
+              resolve(base64);
+            };
+            img.onerror = (error) => reject(error);
+          };
+          reader.onerror = (error) => reject(error);
+        });
+      };
+
+      console.log("Compressing image...");
+      const base64Image = await compressImage(file);
+      console.log("Image compressed, length:", base64Image.length);
+
+      if (base64Image.length > 1048487) {
+        // Firestore 1MB limit safety buffer
+        throw new Error("Image is too large even after compression.");
+      }
+
+      // 3. Save to Firestore
+      console.log("Saving to Firestore...");
+      const userRef = doc(db, "users", user.uid);
+      await updateDoc(userRef, {
+        photoURL: base64Image,
+      });
+
+      // 4. Update Auth Profile (if possible, but Firestore is primary source now)
+      // Note: Auth profile has a 2KB limit for photoURL, so we likely CANNOT store base64 there.
+      // We will rely on Firestore for the image.
+
+      // Force a local reload or state update if needed, but the real-time listener in Navbar should pick it up
+      // if we implement one. For now, we just update Firestore.
 
       setMessage({ type: "success", text: "Profile picture updated!" });
+
+      // Reload page to reflect changes if we aren't using a real-time listener yet
+      window.location.reload();
     } catch (error) {
       console.error("Error uploading image:", error);
-      setMessage({ type: "error", text: "Failed to upload image." });
+      setMessage({
+        type: "error",
+        text: "Failed to upload image. Please try a smaller file.",
+      });
     } finally {
       setUploading(false);
     }

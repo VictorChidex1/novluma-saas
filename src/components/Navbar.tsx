@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
@@ -14,6 +14,8 @@ import {
   Moon,
   LayoutDashboard,
 } from "lucide-react";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../lib/firebase";
 import logo from "../assets/images/Logo.png";
 
 import profilePicture from "../assets/images/profile-picture.png";
@@ -31,6 +33,22 @@ export function Navbar({ onMenuClick, isSidebarOpen }: NavbarProps) {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+
+  // Fetch real-time profile data from Firestore
+  useEffect(() => {
+    if (user?.uid) {
+      const unsubscribe = onSnapshot(doc(db, "users", user.uid), (doc) => {
+        if (doc.exists()) {
+          const data = doc.data();
+          if (data.photoURL) {
+            setAvatarUrl(data.photoURL);
+          }
+        }
+      });
+      return () => unsubscribe();
+    }
+  }, [user]);
 
   const profileRef = useClickOutside<HTMLDivElement>(() =>
     setIsProfileOpen(false)
@@ -122,7 +140,7 @@ export function Navbar({ onMenuClick, isSidebarOpen }: NavbarProps) {
               >
                 <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-medium overflow-hidden">
                   <img
-                    src={user?.photoURL || profilePicture}
+                    src={avatarUrl || user?.photoURL || profilePicture}
                     alt={user?.displayName || "User"}
                     className="w-full h-full object-cover"
                   />
