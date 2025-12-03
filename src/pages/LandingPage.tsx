@@ -4,6 +4,7 @@ import { Features } from "../components/Features";
 import { Pricing } from "../components/Pricing";
 
 import Testimonials from "../components/Testimonials";
+import HowItWorks from "../components/HowItWorks";
 
 export function LandingPage() {
   return (
@@ -11,8 +12,9 @@ export function LandingPage() {
       <Navbar />
       <Hero onGetStarted={() => {}} />
       <Features />
-      <Pricing />
+      <HowItWorks />
       <Testimonials />
+      <Pricing />
     </div>
   );
 }

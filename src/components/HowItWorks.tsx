@@ -67,11 +67,24 @@ const HowItWorks = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.3 }}
-                className="flex flex-col items-center text-center"
+                whileHover={{ y: -10 }}
+                className="flex flex-col items-center text-center group cursor-pointer"
               >
-                <div className="w-24 h-24 rounded-full bg-white dark:bg-gray-900 border-4 border-indigo-100 dark:border-indigo-900/30 flex items-center justify-center mb-6 shadow-lg">
-                  <step.icon className="w-10 h-10 text-indigo-600 dark:text-indigo-400" />
-                </div>
+                <motion.div
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 260,
+                    damping: 20,
+                    delay: 0.5 + index * 0.2,
+                  }}
+                  whileHover={{ rotate: [0, -10, 10, -10, 0] }}
+                  className="w-24 h-24 rounded-full bg-white dark:bg-gray-900 border-4 border-indigo-100 dark:border-indigo-900/30 flex items-center justify-center mb-6 shadow-lg relative z-10 transition-colors duration-300 group-hover:border-indigo-500 dark:group-hover:border-indigo-400"
+                >
+                  <step.icon className="w-10 h-10 text-indigo-600 dark:text-indigo-400 transition-colors duration-300 group-hover:text-indigo-500" />
+                </motion.div>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
                   {step.title}
                 </h3>
