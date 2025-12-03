@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
 @theme {
   /* Define the animation directly here in CSS */
   --animate-fade-in-up: fadeInUp 0.5s ease-out forwards;
