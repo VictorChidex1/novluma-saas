@@ -135,7 +135,13 @@ const CareersPage = () => {
 
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-indigo-950 dark:bg-black">
+          {/* Background Effects */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute -top-[40%] -left-[20%] w-[70%] h-[70%] rounded-full bg-indigo-900/20 dark:bg-indigo-900/40 blur-3xl"></div>
+            <div className="absolute top-[20%] -right-[20%] w-[60%] h-[60%] rounded-full bg-indigo-800/20 dark:bg-indigo-800/30 blur-3xl"></div>
+          </div>
+
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <motion.div
@@ -143,14 +149,21 @@ const CareersPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
               >
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-900/50 border border-indigo-800 text-indigo-300 text-sm font-medium mb-6">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                  </span>
+                  We are hiring
+                </div>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 text-white">
                   Build the future of{" "}
-                  <span className="text-indigo-600 dark:text-indigo-400">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
                     AI
                   </span>{" "}
                   with us.
                 </h1>
-                <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+                <p className="text-xl text-indigo-200 mb-8 leading-relaxed">
                   Join a team of visionaries, engineers, and creators who are
                   redefining how the world creates content. We're looking for
                   the best.
@@ -158,7 +171,7 @@ const CareersPage = () => {
                 <div className="flex flex-wrap gap-4">
                   <Button
                     size="lg"
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-full px-8"
+                    className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-full px-8 border-0"
                     onClick={() => {
                       document
                         .getElementById("roles")
@@ -170,7 +183,7 @@ const CareersPage = () => {
                   <Button
                     variant="outline"
                     size="lg"
-                    className="rounded-full px-8"
+                    className="rounded-full px-8 bg-transparent text-white border-indigo-700 hover:bg-indigo-900/50 hover:text-white"
                   >
                     Read our Culture
                   </Button>
@@ -182,11 +195,11 @@ const CareersPage = () => {
                 transition={{ duration: 0.8, delay: 0.2 }}
                 className="relative"
               >
-                <div className="absolute inset-0 bg-indigo-600/10 rounded-3xl transform rotate-3 scale-105 -z-10 blur-2xl"></div>
+                <div className="absolute inset-0 bg-indigo-500/20 rounded-3xl transform rotate-3 scale-105 -z-10 blur-2xl"></div>
                 <img
                   src="/career-hero.png"
                   alt="Lumina Team"
-                  className="rounded-3xl shadow-2xl w-full object-cover aspect-[4/3]"
+                  className="rounded-3xl shadow-2xl w-full object-cover aspect-[4/3] border border-indigo-800/50"
                 />
               </motion.div>
             </div>

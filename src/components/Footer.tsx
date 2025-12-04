@@ -81,17 +81,25 @@ const Footer = () => {
           >
             <h4 className="text-white font-semibold mb-6">Company</h4>
             <ul className="space-y-4">
-              {["About Us", "Blog"].map((item) => (
-                <li key={item}>
-                  <motion.a
-                    href="#"
+              <li>
+                <Link to="/about">
+                  <motion.span
                     whileHover={{ x: 5 }}
-                    className="inline-block text-gray-400 hover:text-indigo-400 transition-colors"
+                    className="inline-block text-gray-400 hover:text-indigo-400 transition-colors cursor-pointer"
                   >
-                    {item}
-                  </motion.a>
-                </li>
-              ))}
+                    About Us
+                  </motion.span>
+                </Link>
+              </li>
+              <li>
+                <motion.a
+                  href="#"
+                  whileHover={{ x: 5 }}
+                  className="inline-block text-gray-400 hover:text-indigo-400 transition-colors"
+                >
+                  Blog
+                </motion.a>
+              </li>
               <li>
                 <Link to="/careers">
                   <motion.span

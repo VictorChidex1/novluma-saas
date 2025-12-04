@@ -8,6 +8,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 
 import ContactPage from "./pages/ContactPage";
 import CareersPage from "./pages/CareersPage";
+import AboutPage from "./pages/AboutPage";
 import ScrollToTop from "./components/ScrollToTop";
 import { Toaster } from "@/components/ui/sonner";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
@@ -24,6 +25,7 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/careers" element={<CareersPage />} />
+            <Route path="/about" element={<AboutPage />} />
             <Route
               path="/admin"
               element={
