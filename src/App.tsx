@@ -9,6 +9,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import ContactPage from "./pages/ContactPage";
 import CareersPage from "./pages/CareersPage";
 import ScrollToTop from "./components/ScrollToTop";
+import { Toaster } from "@/components/ui/sonner";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <ThemeProvider>
         <Router basename={import.meta.env.BASE_URL}>
           <ScrollToTop />
+          <Toaster />
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/contact" element={<ContactPage />} />

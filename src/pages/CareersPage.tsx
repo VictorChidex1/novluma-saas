@@ -22,10 +22,78 @@ import {
   Users,
   CheckCircle,
   Upload,
+  Loader2,
 } from "lucide-react";
+import { db } from "@/lib/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { toast } from "sonner";
 
 const CareersPage = () => {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    resume: null as string | null,
+    coverLetter: "",
+  });
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 500 * 1024) {
+        toast.error("File size exceeds 500KB limit.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prev) => ({ ...prev, resume: reader.result as string }));
+        toast.success("Resume attached successfully.");
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.email ||
+      !formData.resume
+    ) {
+      toast.error("Please fill in all required fields and upload a resume.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await addDoc(collection(db, "applications"), {
+        role: selectedRole,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        resume: formData.resume,
+        coverLetter: formData.coverLetter,
+        createdAt: serverTimestamp(),
+      });
+      toast.success("Application submitted successfully! We'll be in touch.");
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        resume: null,
+        coverLetter: "",
+      });
+      setSelectedRole(null); // Close dialog
+    } catch (error) {
+      console.error("Error submitting application:", error);
+      toast.error("Failed to submit application. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans selection:bg-indigo-100 dark:selection:bg-indigo-900/30 selection:text-indigo-900 dark:selection:text-indigo-100 flex flex-col">
@@ -262,7 +330,10 @@ const CareersPage = () => {
                       <span>{role.loc}</span>
                     </div>
                   </div>
-                  <Dialog>
+                  <Dialog
+                    open={selectedRole === role.title}
+                    onOpenChange={(open) => !open && setSelectedRole(null)}
+                  >
                     <DialogTrigger asChild>
                       <Button
                         variant="outline"
@@ -279,18 +350,37 @@ const CareersPage = () => {
                           Join our team and help build the future of AI.
                         </DialogDescription>
                       </DialogHeader>
-                      <form
-                        className="space-y-4 mt-4"
-                        onSubmit={(e) => e.preventDefault()}
-                      >
+                      <form className="space-y-4 mt-4" onSubmit={handleSubmit}>
                         <div className="grid grid-cols-2 gap-4">
                           <div className="space-y-2">
                             <Label htmlFor="firstName">First name</Label>
-                            <Input id="firstName" placeholder="Jane" />
+                            <Input
+                              id="firstName"
+                              placeholder="Jane"
+                              value={formData.firstName}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  firstName: e.target.value,
+                                })
+                              }
+                              required
+                            />
                           </div>
                           <div className="space-y-2">
                             <Label htmlFor="lastName">Last name</Label>
-                            <Input id="lastName" placeholder="Doe" />
+                            <Input
+                              id="lastName"
+                              placeholder="Doe"
+                              value={formData.lastName}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  lastName: e.target.value,
+                                })
+                              }
+                              required
+                            />
                           </div>
                         </div>
                         <div className="space-y-2">
@@ -299,6 +389,14 @@ const CareersPage = () => {
                             id="email"
                             type="email"
                             placeholder="jane@example.com"
+                            value={formData.email}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                email: e.target.value,
+                              })
+                            }
+                            required
                           />
                         </div>
                         <div className="space-y-2">
@@ -317,13 +415,17 @@ const CareersPage = () => {
                                   or drag and drop
                                 </p>
                                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                                  PDF, DOCX (MAX. 5MB)
+                                  {formData.resume
+                                    ? "Resume attached!"
+                                    : "PDF, DOCX (MAX. 500KB)"}
                                 </p>
                               </div>
                               <input
                                 id="resume-upload"
                                 type="file"
                                 className="hidden"
+                                accept=".pdf,.doc,.docx"
+                                onChange={handleFileChange}
                               />
                             </label>
                           </div>
@@ -334,13 +436,28 @@ const CareersPage = () => {
                             id="coverLetter"
                             placeholder="Tell us why you're a great fit..."
                             className="min-h-[100px]"
+                            value={formData.coverLetter}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                coverLetter: e.target.value,
+                              })
+                            }
                           />
                         </div>
                         <Button
                           type="submit"
                           className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+                          disabled={isSubmitting}
                         >
-                          Submit Application
+                          {isSubmitting ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              Submitting...
+                            </>
+                          ) : (
+                            "Submit Application"
+                          )}
                         </Button>
                       </form>
                     </DialogContent>
