@@ -96,13 +96,14 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <motion.a
-                  href="#"
-                  whileHover={{ x: 5 }}
-                  className="inline-block text-gray-400 hover:text-indigo-400 transition-colors"
-                >
-                  Blog
-                </motion.a>
+                <Link to="/blog">
+                  <motion.span
+                    whileHover={{ x: 5 }}
+                    className="inline-block text-gray-400 hover:text-indigo-400 transition-colors cursor-pointer"
+                  >
+                    Blog
+                  </motion.span>
+                </Link>
               </li>
               <li>
                 <Link to="/careers">
