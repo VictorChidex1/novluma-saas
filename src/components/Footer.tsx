@@ -19,8 +19,12 @@ const Footer = () => {
             transition={{ duration: 0.5 }}
           >
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">L</span>
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden">
+                <img
+                  src="/favicon.png"
+                  alt="Lumina Logo"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <span className="text-2xl font-bold text-white">Lumina</span>
             </div>
