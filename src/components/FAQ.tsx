@@ -62,25 +62,29 @@ const FAQ = () => {
           </motion.p>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <Accordion type="single" collapsible className="w-full">
-            {faqs.map((faq, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-left text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+        <Accordion type="single" collapsible className="w-full space-y-4">
+          {faqs.map((faq, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <AccordionItem
+                value={`item-${index}`}
+                className="border border-gray-200 dark:border-gray-800 rounded-lg px-4 data-[state=open]:border-indigo-500 dark:data-[state=open]:border-indigo-500 data-[state=open]:bg-indigo-50/50 dark:data-[state=open]:bg-indigo-900/20 transition-all duration-300"
+              >
+                <AccordionTrigger className="text-left text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors hover:no-underline py-4">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-gray-600 dark:text-gray-300">
+                <AccordionContent className="text-gray-600 dark:text-gray-300 pb-4">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>
-            ))}
-          </Accordion>
-        </motion.div>
+            </motion.div>
+          ))}
+        </Accordion>
       </div>
     </section>
   );
