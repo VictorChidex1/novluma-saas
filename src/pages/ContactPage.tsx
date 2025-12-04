@@ -51,9 +51,12 @@ const ContactPage = () => {
               </h2>
               <div className="space-y-8">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <motion.div
+                    whileHover={{ scale: 1.1, rotate: 10 }}
+                    className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center flex-shrink-0"
+                  >
                     <Mail className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
-                  </div>
+                  </motion.div>
                   <div>
                     <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
                       Email Us
@@ -71,9 +74,12 @@ const ContactPage = () => {
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <motion.div
+                    whileHover={{ scale: 1.1, rotate: 10 }}
+                    className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center flex-shrink-0"
+                  >
                     <Phone className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
-                  </div>
+                  </motion.div>
                   <div>
                     <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
                       Call Us
@@ -91,9 +97,12 @@ const ContactPage = () => {
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <motion.div
+                    whileHover={{ scale: 1.1, rotate: 10 }}
+                    className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center flex-shrink-0"
+                  >
                     <MapPin className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
-                  </div>
+                  </motion.div>
                   <div>
                     <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
                       Visit Us
@@ -115,17 +124,34 @@ const ContactPage = () => {
                   What to expect
                 </h3>
                 <ul className="space-y-4 mb-8">
-                  <li className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
-                    <Clock className="w-5 h-5 text-indigo-600 dark:text-indigo-400 flex-shrink-0" />
-                    <span>Response within 24 hours</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
-                    <CheckCircle className="w-5 h-5 text-indigo-600 dark:text-indigo-400 flex-shrink-0" />
-                    <span>Dedicated support team</span>
-                  </li>
+                  {[
+                    {
+                      icon: Clock,
+                      text: "Response within 24 hours",
+                    },
+                    {
+                      icon: CheckCircle,
+                      text: "Dedicated support team",
+                    },
+                  ].map((item, index) => (
+                    <motion.li
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.6 + index * 0.1 }}
+                      className="flex items-center gap-3 text-gray-600 dark:text-gray-300"
+                    >
+                      <item.icon className="w-5 h-5 text-indigo-600 dark:text-indigo-400 flex-shrink-0" />
+                      <span>{item.text}</span>
+                    </motion.li>
+                  ))}
                 </ul>
 
-                <div className="bg-indigo-50 dark:bg-indigo-900/20 p-6 rounded-xl border border-indigo-100 dark:border-indigo-800/50">
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  className="bg-indigo-50 dark:bg-indigo-900/20 p-6 rounded-xl border border-indigo-100 dark:border-indigo-800/50"
+                >
                   <div className="flex items-center gap-3 mb-2">
                     <Users className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                     <span className="font-semibold text-gray-900 dark:text-white">
@@ -136,7 +162,7 @@ const ContactPage = () => {
                     Join the community building the future of content with
                     Lumina.
                   </p>
-                </div>
+                </motion.div>
               </div>
 
               <div className="mt-12">
@@ -181,7 +207,7 @@ const ContactPage = () => {
                     <Input
                       id="firstName"
                       placeholder="Jane"
-                      className="bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700"
+                      className="bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-all duration-300 focus:scale-[1.01] origin-left"
                     />
                   </div>
                   <div className="space-y-2">
@@ -189,7 +215,7 @@ const ContactPage = () => {
                     <Input
                       id="lastName"
                       placeholder="Doe"
-                      className="bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700"
+                      className="bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-all duration-300 focus:scale-[1.01] origin-left"
                     />
                   </div>
                 </div>
@@ -200,7 +226,7 @@ const ContactPage = () => {
                     id="email"
                     type="email"
                     placeholder="jane@example.com"
-                    className="bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700"
+                    className="bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-all duration-300 focus:scale-[1.01] origin-left"
                   />
                 </div>
 
@@ -209,7 +235,7 @@ const ContactPage = () => {
                   <Input
                     id="subject"
                     placeholder="How can we help?"
-                    className="bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700"
+                    className="bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-all duration-300 focus:scale-[1.01] origin-left"
                   />
                 </div>
 
@@ -218,13 +244,18 @@ const ContactPage = () => {
                   <Textarea
                     id="message"
                     placeholder="Tell us more about your project..."
-                    className="min-h-[150px] bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 resize-none"
+                    className="min-h-[150px] bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 resize-none transition-all duration-300 focus:scale-[1.01] origin-left"
                   />
                 </div>
 
-                <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white h-12 text-lg">
-                  <Send className="w-4 h-4 mr-2" /> Send Message
-                </Button>
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white h-12 text-lg">
+                    <Send className="w-4 h-4 mr-2" /> Send Message
+                  </Button>
+                </motion.div>
               </form>
             </motion.div>
           </div>
