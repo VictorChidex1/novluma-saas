@@ -6,6 +6,8 @@ import { Dashboard } from "./pages/Dashboard";
 import { Settings } from "./pages/Settings";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
+import ContactPage from "./pages/ContactPage";
+
 function App() {
   return (
     <AuthProvider>
@@ -13,6 +15,7 @@ function App() {
         <Router basename={import.meta.env.BASE_URL}>
           <Routes>
             <Route path="/" element={<LandingPage />} />
+            <Route path="/contact" element={<ContactPage />} />
             <Route
               path="/dashboard"
               element={

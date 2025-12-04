@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Github, Twitter, Linkedin, Facebook } from "lucide-react";
+import { Instagram, Twitter, Linkedin, Facebook } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -30,7 +31,7 @@ const Footer = () => {
             <div className="flex gap-4">
               {[
                 { icon: Twitter, label: "Twitter" },
-                { icon: Github, label: "GitHub" },
+                { icon: Instagram, label: "Instagram" },
                 { icon: Linkedin, label: "LinkedIn" },
                 { icon: Facebook, label: "Facebook" },
               ].map((social, index) => (
@@ -80,7 +81,7 @@ const Footer = () => {
           >
             <h4 className="text-white font-semibold mb-6">Company</h4>
             <ul className="space-y-4">
-              {["About Us", "Blog", "Careers", "Contact"].map((item) => (
+              {["About Us", "Blog", "Careers"].map((item) => (
                 <li key={item}>
                   <motion.a
                     href="#"
@@ -91,6 +92,16 @@ const Footer = () => {
                   </motion.a>
                 </li>
               ))}
+              <li>
+                <Link to="/contact">
+                  <motion.span
+                    whileHover={{ x: 5 }}
+                    className="inline-block text-gray-400 hover:text-indigo-400 transition-colors cursor-pointer"
+                  >
+                    Contact
+                  </motion.span>
+                </Link>
+              </li>
             </ul>
           </motion.div>
 
