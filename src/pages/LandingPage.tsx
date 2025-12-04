@@ -5,6 +5,7 @@ import { Pricing } from "../components/Pricing";
 
 import Testimonials from "../components/Testimonials";
 import HowItWorks from "../components/HowItWorks";
+import FAQ from "../components/FAQ";
 
 export function LandingPage() {
   return (
@@ -15,6 +16,7 @@ export function LandingPage() {
       <HowItWorks />
       <Testimonials />
       <Pricing />
+      <FAQ />
     </div>
   );
 }
