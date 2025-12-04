@@ -1,7 +1,19 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   ArrowRight,
   Heart,
@@ -9,9 +21,12 @@ import {
   Globe,
   Users,
   CheckCircle,
+  Upload,
 } from "lucide-react";
 
 const CareersPage = () => {
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans selection:bg-indigo-100 dark:selection:bg-indigo-900/30 selection:text-indigo-900 dark:selection:text-indigo-100 flex flex-col">
       <Navbar />
@@ -42,6 +57,11 @@ const CareersPage = () => {
                   <Button
                     size="lg"
                     className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-full px-8"
+                    onClick={() => {
+                      document
+                        .getElementById("roles")
+                        ?.scrollIntoView({ behavior: "smooth" });
+                    }}
                   >
                     View Open Roles
                   </Button>
@@ -213,6 +233,16 @@ const CareersPage = () => {
                   dept: "Engineering",
                   loc: "Remote",
                 },
+                {
+                  title: "Partnership Manager",
+                  dept: "Business",
+                  loc: "New York / Remote",
+                },
+                {
+                  title: "Senior Data Analyst",
+                  dept: "Data Science",
+                  loc: "New York / Remote",
+                },
               ].map((role, index) => (
                 <motion.div
                   key={index}
@@ -232,12 +262,89 @@ const CareersPage = () => {
                       <span>{role.loc}</span>
                     </div>
                   </div>
-                  <Button
-                    variant="outline"
-                    className="rounded-full group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-600 transition-all"
-                  >
-                    Apply Now <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="rounded-full group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-600 transition-all"
+                        onClick={() => setSelectedRole(role.title)}
+                      >
+                        Apply Now <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[500px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                      <DialogHeader>
+                        <DialogTitle>Apply for {selectedRole}</DialogTitle>
+                        <DialogDescription>
+                          Join our team and help build the future of AI.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <form
+                        className="space-y-4 mt-4"
+                        onSubmit={(e) => e.preventDefault()}
+                      >
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="firstName">First name</Label>
+                            <Input id="firstName" placeholder="Jane" />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="lastName">Last name</Label>
+                            <Input id="lastName" placeholder="Doe" />
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="email">Email</Label>
+                          <Input
+                            id="email"
+                            type="email"
+                            placeholder="jane@example.com"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="resume">Resume</Label>
+                          <div className="flex items-center justify-center w-full">
+                            <label
+                              htmlFor="resume-upload"
+                              className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                            >
+                              <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                <Upload className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" />
+                                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                  <span className="font-semibold">
+                                    Click to upload
+                                  </span>{" "}
+                                  or drag and drop
+                                </p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400">
+                                  PDF, DOCX (MAX. 5MB)
+                                </p>
+                              </div>
+                              <input
+                                id="resume-upload"
+                                type="file"
+                                className="hidden"
+                              />
+                            </label>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="coverLetter">Cover Letter</Label>
+                          <Textarea
+                            id="coverLetter"
+                            placeholder="Tell us why you're a great fit..."
+                            className="min-h-[100px]"
+                          />
+                        </div>
+                        <Button
+                          type="submit"
+                          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+                        >
+                          Submit Application
+                        </Button>
+                      </form>
+                    </DialogContent>
+                  </Dialog>
                 </motion.div>
               ))}
             </div>
