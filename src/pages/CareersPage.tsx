@@ -23,10 +23,37 @@ import {
   CheckCircle,
   Upload,
   Loader2,
+  Target,
+  MessageSquare,
+  FileText,
+  Coffee,
+  Code,
+  Trophy,
 } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { toast } from "sonner";
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+    },
+  },
+};
 
 const CareersPage = () => {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
@@ -176,7 +203,13 @@ const CareersPage = () => {
                 why we offer industry-leading benefits.
               </p>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
+            >
               {[
                 {
                   icon: Globe,
@@ -201,15 +234,17 @@ const CareersPage = () => {
               ].map((benefit, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-indigo-500/50 transition-colors"
+                  variants={itemVariants}
+                  whileHover={{ y: -5, scale: 1.02 }}
+                  className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-indigo-500/50 transition-colors shadow-sm hover:shadow-lg group"
                 >
-                  <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center mb-4 text-indigo-600 dark:text-indigo-400">
+                  <motion.div
+                    whileHover={{ rotate: 12, scale: 1.1 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center mb-4 text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition-colors"
+                  >
                     <benefit.icon className="w-6 h-6" />
-                  </div>
+                  </motion.div>
                   <h3 className="text-xl font-semibold mb-2">
                     {benefit.title}
                   </h3>
@@ -218,7 +253,59 @@ const CareersPage = () => {
                   </p>
                 </motion.div>
               ))}
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Values Section */}
+        <section className="py-20 bg-white dark:bg-gray-950">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <h2 className="text-3xl font-bold mb-4">Our Core Values</h2>
+              <p className="text-gray-600 dark:text-gray-400 text-lg">
+                The principles that guide every decision we make.
+              </p>
             </div>
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              className="grid md:grid-cols-3 gap-8"
+            >
+              {[
+                {
+                  icon: Target,
+                  title: "Customer Obsession",
+                  desc: "We start with the customer and work backwards. Their success is our success.",
+                },
+                {
+                  icon: Zap,
+                  title: "Bias for Action",
+                  desc: "Speed matters. We calculate risk and move fast. We value doing over over-analyzing.",
+                },
+                {
+                  icon: MessageSquare,
+                  title: "Radical Candor",
+                  desc: "We care personally and challenge directly. Honest feedback is our secret weapon.",
+                },
+              ].map((value, index) => (
+                <motion.div
+                  key={index}
+                  variants={itemVariants}
+                  whileHover={{ y: -5 }}
+                  className="bg-gray-50 dark:bg-gray-900/50 p-8 rounded-2xl border border-gray-100 dark:border-gray-800 hover:border-indigo-500/30 transition-colors"
+                >
+                  <div className="w-14 h-14 bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center mb-6 text-indigo-600 dark:text-indigo-400">
+                    <value.icon className="w-7 h-7" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-3">{value.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                    {value.desc}
+                  </p>
+                </motion.div>
+              ))}
+            </motion.div>
           </div>
         </section>
 
@@ -277,6 +364,74 @@ const CareersPage = () => {
           </div>
         </section>
 
+        {/* Hiring Process Section */}
+        <section className="py-20 bg-gray-50 dark:bg-gray-900/30 border-y border-gray-200 dark:border-gray-800">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <h2 className="text-3xl font-bold mb-4">The Hiring Process</h2>
+              <p className="text-gray-600 dark:text-gray-400 text-lg">
+                Simple, transparent, and respectful of your time.
+              </p>
+            </div>
+            <div className="relative">
+              {/* Connecting Line (Desktop) */}
+              <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gray-200 dark:bg-gray-800 -translate-y-1/2 z-0"></div>
+
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="grid md:grid-cols-4 gap-8 relative z-10"
+              >
+                {[
+                  {
+                    icon: FileText,
+                    step: "01",
+                    title: "Application",
+                    desc: "Tell us your story.",
+                  },
+                  {
+                    icon: Coffee,
+                    step: "02",
+                    title: "Culture Chat",
+                    desc: "30-min vibe check.",
+                  },
+                  {
+                    icon: Code,
+                    step: "03",
+                    title: "Deep Dive",
+                    desc: "Show us your skills.",
+                  },
+                  {
+                    icon: Trophy,
+                    step: "04",
+                    title: "The Offer",
+                    desc: "Welcome aboard.",
+                  },
+                ].map((item, index) => (
+                  <motion.div
+                    key={index}
+                    variants={itemVariants}
+                    className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-800 text-center relative group hover:border-indigo-500 transition-colors"
+                  >
+                    <div className="w-12 h-12 mx-auto bg-white dark:bg-gray-900 border-4 border-gray-50 dark:border-gray-800 rounded-full flex items-center justify-center mb-4 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform duration-300">
+                      <item.icon className="w-5 h-5" />
+                    </div>
+                    <div className="text-xs font-bold text-indigo-600 dark:text-indigo-400 mb-2 uppercase tracking-wider">
+                      Step {item.step}
+                    </div>
+                    <h3 className="text-lg font-bold mb-1">{item.title}</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {item.desc}
+                    </p>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
         {/* Open Roles */}
         <section className="py-20 bg-gray-50 dark:bg-gray-900/50" id="roles">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -321,11 +476,15 @@ const CareersPage = () => {
               ].map((role, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  whileHover={{
+                    x: 10,
+                    backgroundColor: "rgba(99, 102, 241, 0.05)",
+                  }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4 hover:border-indigo-500 transition-colors group"
+                  className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4 hover:border-indigo-500 transition-all group"
                 >
                   <div>
                     <h3 className="text-lg font-bold group-hover:text-indigo-600 transition-colors">
