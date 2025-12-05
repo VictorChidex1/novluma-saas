@@ -105,9 +105,25 @@ export function EditProject() {
             Back to Projects
           </Button>
           <div className="flex items-center gap-3">
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              {project.status}
-            </span>
+            <select
+              value={project.status}
+              onChange={async (e) => {
+                const newStatus = e.target.value as Project["status"];
+                setProject({ ...project, status: newStatus });
+                // Auto-save status change
+                try {
+                  await updateProject(id!, { status: newStatus });
+                  toast.success(`Status updated to ${newStatus}`);
+                } catch (error) {
+                  toast.error("Failed to update status");
+                }
+              }}
+              className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 text-sm rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="Draft">Draft</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+            </select>
             <Button
               onClick={handleSave}
               disabled={saving}

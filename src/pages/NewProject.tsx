@@ -18,6 +18,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { addProject } from "@/lib/projects";
+import { generateContent } from "@/lib/gemini";
+import { toast } from "sonner";
 
 export function NewProject() {
   const navigate = useNavigate();
@@ -91,18 +93,27 @@ export function NewProject() {
     if (!user) return;
     setIsGenerating(true);
     try {
+      // 1. Generate content with AI
+      const generatedContent = await generateContent(
+        formData.topic,
+        formData.platform,
+        formData.tone
+      );
+
+      // 2. Save to Firestore
       await addProject(user.uid, {
         title: formData.topic,
         platform: formData.platform,
         tone: formData.tone,
+        content: generatedContent, // Save real content
+        words: generatedContent.split(/\s+/).length, // Calculate real word count
       });
-      // Simulate API delay for UX
-      setTimeout(() => {
-        setIsGenerating(false);
-        navigate("/dashboard/projects");
-      }, 1500);
+
+      navigate("/dashboard/projects");
     } catch (error) {
       console.error("Failed to create project:", error);
+      toast.error("Failed to generate content. Please try again.");
+    } finally {
       setIsGenerating(false);
     }
   };

@@ -1,4 +1,6 @@
+import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
+import { getUserProjects } from "@/lib/projects";
 import { DashboardLayout } from "../components/DashboardLayout";
 import { motion } from "framer-motion";
 import {
@@ -47,29 +49,21 @@ export function Dashboard() {
     },
   ];
 
-  const recentActivity = [
-    {
-      id: 1,
-      title: "Blog Post: AI Trends 2025",
-      type: "Generated Content",
-      time: "2 hours ago",
-      status: "Completed",
-    },
-    {
-      id: 2,
-      title: "Social Media Campaign",
-      type: "Project Created",
-      time: "5 hours ago",
-      status: "In Progress",
-    },
-    {
-      id: 3,
-      title: "Product Description V2",
-      type: "Edited",
-      time: "Yesterday",
-      status: "Draft",
-    },
-  ];
+  const [recentProjects, setRecentProjects] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchRecent = async () => {
+      if (user) {
+        try {
+          const projects = await getUserProjects(user.uid);
+          setRecentProjects(projects.slice(0, 3));
+        } catch (error) {
+          console.error("Failed to fetch recent projects", error);
+        }
+      }
+    };
+    fetchRecent();
+  }, [user]);
 
   const usageStats = [
     {
@@ -181,34 +175,55 @@ export function Dashboard() {
                 className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden"
               >
                 <div className="divide-y divide-gray-100 dark:divide-gray-800">
-                  {recentActivity.map((activity) => (
-                    <div
-                      key={activity.id}
-                      className="p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors flex items-center justify-between group"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
-                          <FileText className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <h4 className="font-medium text-gray-900 dark:text-white">
-                            {activity.title}
-                          </h4>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
-                            {activity.type} • {activity.time}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
-                          {activity.status}
-                        </span>
-                        <button className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <MoreHorizontal className="w-4 h-4" />
-                        </button>
-                      </div>
+                  {recentProjects.length === 0 ? (
+                    <div className="p-8 text-center text-gray-500 dark:text-gray-400">
+                      No recent activity. Start a new project!
                     </div>
-                  ))}
+                  ) : (
+                    recentProjects.map((project) => (
+                      <div
+                        key={project.id}
+                        className="p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors flex items-center justify-between group"
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                            <FileText className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <h4 className="font-medium text-gray-900 dark:text-white">
+                              {project.title}
+                            </h4>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">
+                              {project.platform} •{" "}
+                              {project.createdAt?.seconds
+                                ? new Date(
+                                    project.createdAt.seconds * 1000
+                                  ).toLocaleDateString()
+                                : "Just now"}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span
+                            className={`px-2.5 py-1 rounded-full text-xs font-medium ${
+                              project.status === "Completed"
+                                ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
+                                : project.status === "In Progress"
+                                ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400"
+                                : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
+                            }`}
+                          >
+                            {project.status}
+                          </span>
+                          <Link to={`/dashboard/projects/${project.id}`}>
+                            <button className="p-2 text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <MoreHorizontal className="w-4 h-4" />
+                            </button>
+                          </Link>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </motion.div>
             </section>

@@ -3,7 +3,6 @@ import {
   addDoc,
   query,
   where,
-  orderBy,
   getDocs,
   deleteDoc,
   doc,
@@ -26,15 +25,21 @@ export interface Project {
 
 export const addProject = async (
   userId: string,
-  data: { title: string; platform: string; tone: string }
+  data: {
+    title: string;
+    platform: string;
+    tone: string;
+    content?: string;
+    words?: number;
+  }
 ) => {
   try {
     const docRef = await addDoc(collection(db, "projects"), {
       userId,
       ...data,
-      content: "Generated content placeholder...", // In a real app, this would come from AI
+      content: data.content || "Generated content placeholder...",
       status: "Completed",
-      words: Math.floor(Math.random() * 1000) + 200, // Mock word count
+      words: data.words || Math.floor(Math.random() * 1000) + 200,
       createdAt: serverTimestamp(),
     });
     return docRef.id;
@@ -46,17 +51,21 @@ export const addProject = async (
 
 export const getUserProjects = async (userId: string): Promise<Project[]> => {
   try {
-    const q = query(
-      collection(db, "projects"),
-      where("userId", "==", userId),
-      orderBy("createdAt", "desc")
-    );
+    // Remove orderBy to avoid needing a composite index immediately
+    const q = query(collection(db, "projects"), where("userId", "==", userId));
 
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map((doc) => ({
+    const projects = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     })) as Project[];
+
+    // Sort client-side
+    return projects.sort((a, b) => {
+      const dateA = a.createdAt?.seconds || 0;
+      const dateB = b.createdAt?.seconds || 0;
+      return dateB - dateA; // Descending order
+    });
   } catch (error) {
     console.error("Error getting projects: ", error);
     throw error;
