@@ -76,9 +76,9 @@ export function Navbar({ onMenuClick, isSidebarOpen }: NavbarProps) {
   const isMenuIconOpen = onMenuClick ? isSidebarOpen : isMenuOpen;
 
   const navLinks = [
-    { name: "Features", href: "#features" },
-    { name: "Pricing", href: "#pricing" },
-    { name: "Customers", href: "#customers" },
+    { name: "Features", href: "/#features", type: "hash" },
+    { name: "Pricing", href: "/#pricing", type: "hash" },
+    { name: "Customers", href: "/customers", type: "route" },
   ];
 
   return (
@@ -101,15 +101,25 @@ export function Navbar({ onMenuClick, isSidebarOpen }: NavbarProps) {
 
           {/* Desktop Navigation Links - Centered */}
           <div className="hidden md:flex items-center gap-8 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
-              >
-                {link.name}
-              </a>
-            ))}
+            {navLinks.map((link) =>
+              link.type === "route" ? (
+                <Link
+                  key={link.name}
+                  to={link.href}
+                  className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+                >
+                  {link.name}
+                </Link>
+              ) : (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+                >
+                  {link.name}
+                </a>
+              )
+            )}
           </div>
 
           {/* Desktop Menu */}
@@ -228,16 +238,27 @@ export function Navbar({ onMenuClick, isSidebarOpen }: NavbarProps) {
       {showMobileMenu && (
         <div className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {link.name}
-              </a>
-            ))}
+            {navLinks.map((link) =>
+              link.type === "route" ? (
+                <Link
+                  key={link.name}
+                  to={link.href}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {link.name}
+                </Link>
+              ) : (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {link.name}
+                </a>
+              )
+            )}
             <div className="border-t border-gray-100 dark:border-gray-800 my-2"></div>
             {userRole === "admin" && (
               <Link

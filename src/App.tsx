@@ -14,6 +14,7 @@ import BlogPostPage from "./pages/BlogPostPage";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import CookiePolicy from "./pages/CookiePolicy";
+import CustomersPage from "./pages/CustomersPage";
 import ScrollToTop from "./components/ScrollToTop";
 import { Toaster } from "@/components/ui/sonner";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
@@ -38,6 +39,7 @@ function App() {
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsOfService />} />
             <Route path="/cookies" element={<CookiePolicy />} />
+            <Route path="/customers" element={<CustomersPage />} />
             <Route
               path="/admin/*"
               element={
