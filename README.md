@@ -30,10 +30,29 @@ A professional, high-performance landing page designed to convert:
   - **Hero & Culture**: Immersive visuals with parallax effects.
   - **Job Board**: Dynamic list of open positions.
   - **Application System**: Seamless **Modal Form** integrated with Firebase.
-  - **Resume Upload**: Auto-converts files to Base64 for secure storage.
+  - **Resume Upload**: Auto-converts files to Base664 for secure storage.
 - **Contact Page**:
   - **Split Layout**: Professional design with "What to expect" guidelines.
   - **Validation**: Real-time form validation and user feedback.
+
+## 🤖 AI Content Generation
+
+Lumina is powered by **Google Gemini 2.0**.
+
+- **Smart Generation**: Creates blog posts, social media content, and emails based on your topic and tone.
+- **Model Strategy**: Automatically falls back between `gemini-2.0-flash`, `gemini-flash-latest`, and `gemini-pro` to ensure reliability.
+- **Direct Integration**: Uses the raw REST API for maximum stability and performance.
+
+### Environment Variables
+
+Ensure your `.env.local` has the following keys:
+
+```env
+VITE_FIREBASE_API_KEY=...
+# ... other Firebase keys ...
+VITE_GEMINI_API_KEY=AIzaSy...
+```
+
 - **Blog System (New)**:
   - **Public Blog**: Dynamic grid layout with category filtering.
   - **Article Pages**: SEO-friendly dynamic routes (`/blog/:slug`) with rich content rendering.

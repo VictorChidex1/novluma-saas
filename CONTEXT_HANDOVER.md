@@ -1,36 +1,58 @@
-# Lumina Context Handover
+# Context Handover
 
-## Project State
+## Project: Lumina SaaS
 
-**Project**: Lumina (SaaS Application)
-**Frontend**: React + Vite + Tailwind CSS + Framer Motion
-**Backend**: Firebase (Auth, Firestore)
+**Current State**: Feature Complete (MVP)
+**Last Updated**: December 5, 2025
 
-## Recent Accomplishments
+## 🚀 Recent Accomplishments
 
-1.  **Blog System Enhancements**:
-    - Implemented **Pagination** (7 posts per page) logic in `BlogPage.tsx`.
-    - Added **Category Filtering** with smooth "Liquid Grid" layout animations.
-    - Styled with **Framer Motion** (`layout` prop) for fluid reordering.
-2.  **Privacy Policy Page**:
-    - Created `PrivacyPolicy.tsx` with premium styling (matching Blog hero).
-    - Added **Sticky Table of Contents** for easy navigation.
-    - Implemented **Reading Progress Bar** (top gradient line).
-    - Included **Print/PDF** button and **DPO Contact Card**.
+### 1. AI Content Generation (Major Feature)
 
-## Key Files Created/Modified
+- **Integration**: Successfully integrated Google Gemini API.
+- **Models**: configured to use **Gemini 2.0 Flash** (`gemini-2.0-flash`) as the primary model, with fallbacks to `gemini-flash-latest` and `gemini-pro-latest`.
+- **Architecture**: Switched from the Google SDK to a **Direct REST API** implementation (`src/lib/gemini.ts`) to resolve 404 errors caused by model version mismatches.
+- **UI**: "New Project" wizard (`/dashboard/new`) now generates real content.
+- **Debugging**: Solved a critical "404 Model Not Found" issue by discovering the user's API key had access to Gemini 2.0 but not 1.5.
 
-- `src/pages/BlogPage.tsx`: Main blog logic (filtering + pagination).
-- `src/pages/PrivacyPolicy.tsx`: New component with detailed legal UX.
-- `src/components/Footer.tsx`: Updated links to include Privacy Policy.
-- `src/App.tsx`: Added `/privacy` route.
+### 2. Stability & Error Handling
 
-## Next/Pending Steps
+- **Global Error Boundary**: Implemented `src/components/ErrorBoundary.tsx` to catch runtime crashes (White Screen of Death) and display helpful error messages.
+- **Firebase Recovery**: Restored accidental deletion of Firebase config in `.env.local`.
 
-- [ ] **Careers Page**: Final polish on resume upload UX (current implementation works but can be styled further).
-- [ ] **Admin Dashboard**: Consider adding "Featured Post" toggle in the editor.
+## 🔑 Key Configuration
 
-## Environment Notes
+### Environment Variables (`.env.local`)
 
-- Ensure `.env.local` contains valid Firebase credentials.
-- `npm run deploy` manages GitHub Pages deployment.
+The project requires both Firebase and Gemini keys:
+
+```env
+# Firebase
+VITE_FIREBASE_API_KEY=...
+VITE_FIREBASE_AUTH_DOMAIN=...
+VITE_FIREBASE_PROJECT_ID=...
+# ... (standard Firebase config)
+
+# AI
+VITE_GEMINI_API_KEY=...
+```
+
+### AI Service (`src/lib/gemini.ts`)
+
+The service uses a robust fallback strategy:
+
+1.  `gemini-2.0-flash` (v1beta) - Primary, fastest, and newest.
+2.  `gemini-flash-latest` (v1beta) - Fallback for latest stable flash.
+3.  `gemini-pro-latest` (v1beta) - Fallback for standard pro.
+
+## 📝 Next Steps
+
+1.  **Refine Prompts**: The current prompt in `gemini.ts` is generic. It can be improved for specific platforms (e.g., specific tweet lengths, LinkedIn formatting).
+2.  **User Feedback**: Add a way for users to "Regenerate" or "Refine" the content after it's created.
+3.  **Usage Quotas**: Monitor API usage to ensure we stay within free tier limits or implement rate limiting.
+
+## 📂 Critical Files
+
+- `src/lib/gemini.ts`: Core AI logic.
+- `src/pages/NewProject.tsx`: UI for generating content.
+- `src/components/ErrorBoundary.tsx`: Global error handler.
