@@ -144,9 +144,15 @@ const CustomersPage = () => {
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white font-sans selection:bg-indigo-100 dark:selection:bg-indigo-900/30 selection:text-indigo-900 dark:selection:text-indigo-100 flex flex-col">
       <Navbar />
 
-      <main className="flex-grow pt-24">
+      <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative py-20 lg:py-32 overflow-hidden">
+        <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-indigo-950 dark:bg-black">
+          {/* Background Effects */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute -top-[40%] -left-[20%] w-[70%] h-[70%] rounded-full bg-indigo-900/20 dark:bg-indigo-900/40 blur-3xl"></div>
+            <div className="absolute top-[20%] -right-[20%] w-[60%] h-[60%] rounded-full bg-indigo-800/20 dark:bg-indigo-800/30 blur-3xl"></div>
+          </div>
+
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center max-w-4xl mx-auto mb-16">
               <motion.div
@@ -154,17 +160,17 @@ const CustomersPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
               >
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-sm font-medium mb-6">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-900/50 border border-indigo-800 text-indigo-300 text-sm font-medium mb-6">
                   <Users className="w-4 h-4" />
                   Customer Stories
                 </div>
-                <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-8">
+                <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-8 text-white">
                   Trusted by absolute{" "}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-cyan-500">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
                     Industry Leaders
                   </span>
                 </h1>
-                <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl mx-auto">
+                <p className="text-xl text-indigo-200 leading-relaxed max-w-2xl mx-auto">
                   Join thousands of forward-thinking companies using Lumina to
                   power their next phase of growth.
                 </p>
@@ -172,7 +178,7 @@ const CustomersPage = () => {
             </div>
 
             {/* Impact Metrics */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto mb-20 border-y border-gray-100 dark:border-gray-800 py-12">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto mb-20 border-y border-indigo-800/30 py-12">
               {metrics.map((metric, index) => (
                 <motion.div
                   key={index}
@@ -182,23 +188,21 @@ const CustomersPage = () => {
                   transition={{ delay: index * 0.1 }}
                   className="text-center"
                 >
-                  <div className="w-10 h-10 mx-auto bg-indigo-50 dark:bg-indigo-900/20 rounded-full flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-3">
+                  <div className="w-10 h-10 mx-auto bg-indigo-900/30 rounded-full flex items-center justify-center text-indigo-400 mb-3 border border-indigo-800/50">
                     <metric.icon className="w-5 h-5" />
                   </div>
-                  <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
+                  <div className="text-3xl font-bold text-white mb-1">
                     {metric.value}
                   </div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
-                    {metric.label}
-                  </div>
+                  <div className="text-sm text-indigo-300">{metric.label}</div>
                 </motion.div>
               ))}
             </div>
 
             {/* Infinite Logo Marquee */}
             <div className="relative w-full overflow-hidden py-10">
-              <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white dark:from-gray-950 to-transparent z-10"></div>
-              <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white dark:from-gray-950 to-transparent z-10"></div>
+              <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-indigo-950 dark:from-black to-transparent z-10"></div>
+              <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-indigo-950 dark:from-black to-transparent z-10"></div>
               <motion.div
                 className="flex gap-16 items-center w-max"
                 animate={{ x: ["0%", "-50%"] }}
@@ -213,10 +217,10 @@ const CustomersPage = () => {
                     key={index}
                     className="flex flex-col items-center gap-2 group cursor-pointer opacity-50 hover:opacity-100 transition-opacity"
                   >
-                    <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-xl flex items-center justify-center group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/50 transition-colors">
-                      <company.icon className="w-6 h-6 text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" />
+                    <div className="w-12 h-12 bg-indigo-900/20 rounded-xl flex items-center justify-center group-hover:bg-indigo-900/40 transition-colors border border-indigo-800/30">
+                      <company.icon className="w-6 h-6 text-indigo-400 group-hover:text-white transition-colors" />
                     </div>
-                    <span className="text-sm font-semibold text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                    <span className="text-sm font-semibold text-indigo-300 group-hover:text-white transition-colors">
                       {company.name}
                     </span>
                   </div>

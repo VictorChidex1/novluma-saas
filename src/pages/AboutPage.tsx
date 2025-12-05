@@ -189,7 +189,7 @@ const AboutPage = () => {
               {[
                 { label: "Active Users", value: "80k+" },
                 { label: "Countries", value: "125+" },
-                { label: "Content Created", value: "1M+" },
+                { label: "Content Created", value: "10M+" },
                 { label: "Team Members", value: "40" },
               ].map((stat, index) => (
                 <motion.div
