@@ -4,6 +4,8 @@ import { ThemeProvider } from "./context/ThemeContext";
 import { LandingPage } from "./pages/LandingPage";
 import { Dashboard } from "./pages/Dashboard";
 import { Settings } from "./pages/Settings";
+import { NewProject } from "./pages/NewProject";
+import { Projects } from "./pages/Projects";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
 import ContactPage from "./pages/ContactPage";
@@ -69,6 +71,22 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Settings />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/new"
+              element={
+                <ProtectedRoute>
+                  <NewProject />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/projects"
+              element={
+                <ProtectedRoute>
+                  <Projects />
                 </ProtectedRoute>
               }
             />
