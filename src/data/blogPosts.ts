@@ -209,7 +209,7 @@ export const blogPosts: BlogPost[] = [
       <h2>Why It Matters</h2>
       <p>Understanding this architecture helps us understand the limitations of AI. It explains why they hallucinate (they are probabilistic token predictors, not truth machines) and why context windows are expensive (attention scales quadratically).</p>
     `,
-    author: "Dr. Chidera Nweke",
+    author: "Agbaho Victor",
     date: "Nov 5, 2025",
     readTime: "12 min read",
     category: "AI & Tech",

@@ -22,13 +22,15 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Download, Loader2, Search, Users } from "lucide-react";
+import { Download, Loader2, Search, Users, FileText } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
 const AdminDashboard = () => {
   const { user } = useAuth();
   const [applications, setApplications] = useState<Application[]>([]);
+  const [postCount, setPostCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [filterRole, setFilterRole] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
@@ -46,6 +48,11 @@ const AdminDashboard = () => {
           apps.push({ id: doc.id, ...doc.data() } as Application);
         });
         setApplications(apps);
+
+        // Fetch blog posts count
+        const postsQ = query(collection(db, "blog_posts"));
+        const postsSnapshot = await getDocs(postsQ);
+        setPostCount(postsSnapshot.size);
       } catch (error: any) {
         console.error("Error fetching applications:", error);
         toast.error(`Failed to load applications: ${error.message}`);
@@ -122,7 +129,21 @@ const AdminDashboard = () => {
                 <div className="text-2xl font-bold">{applications.length}</div>
               </CardContent>
             </Card>
-            {/* Add more stats here if needed */}
+
+            <Link to="/admin/blog">
+              <Card className="hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors cursor-pointer border-indigo-200 dark:border-indigo-800">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-indigo-600 dark:text-indigo-400">
+                    Manage Blog
+                  </CardTitle>
+                  <FileText className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{postCount} Posts</div>
+                  <p className="text-xs text-gray-500 mt-1">Click to manage</p>
+                </CardContent>
+              </Card>
+            </Link>
           </div>
 
           {/* Filters */}

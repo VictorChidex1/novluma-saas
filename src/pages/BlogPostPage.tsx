@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
@@ -13,18 +13,79 @@ import {
   Twitter,
   Linkedin,
   Facebook,
+  Loader2,
 } from "lucide-react";
-import { blogPosts } from "@/data/blogPosts";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, query, where, limit } from "firebase/firestore";
+
+interface BlogPost {
+  id: string;
+  slug: string;
+  title: string;
+  content: string;
+  author: string;
+  date: string;
+  readTime: string;
+  category: string;
+  image: string;
+}
 
 const BlogPostPage = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const post = blogPosts.find((p) => p.slug === slug);
+  const [post, setPost] = useState<BlogPost | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
 
-  // Scroll to top on mount or slug change
   useEffect(() => {
+    const fetchPost = async () => {
+      if (!slug) return;
+      setLoading(true);
+      try {
+        // Fetch current post
+        const q = query(
+          collection(db, "blog_posts"),
+          where("slug", "==", slug),
+          limit(1)
+        );
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+          const doc = querySnapshot.docs[0];
+          const postData = { id: doc.id, ...doc.data() } as BlogPost;
+          setPost(postData);
+
+          // Fetch related posts (simple implementation: just fetch 3 recent posts excluding current)
+          const relatedQ = query(collection(db, "blog_posts"), limit(4));
+          const relatedSnapshot = await getDocs(relatedQ);
+          const related: BlogPost[] = [];
+          relatedSnapshot.forEach((d) => {
+            if (d.id !== doc.id) {
+              related.push({ id: d.id, ...d.data() } as BlogPost);
+            }
+          });
+          setRelatedPosts(related.slice(0, 3));
+        } else {
+          setPost(null);
+        }
+      } catch (error) {
+        console.error("Error fetching post:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPost();
     window.scrollTo(0, 0);
   }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-gray-950 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+      </div>
+    );
+  }
 
   if (!post) {
     return (
@@ -36,8 +97,6 @@ const BlogPostPage = () => {
       </div>
     );
   }
-
-  const relatedPosts = blogPosts.filter((p) => p.slug !== slug).slice(0, 3);
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans selection:bg-indigo-100 dark:selection:bg-indigo-900/30 selection:text-indigo-900 dark:selection:text-indigo-100 flex flex-col">

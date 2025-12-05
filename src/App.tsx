@@ -14,6 +14,8 @@ import BlogPostPage from "./pages/BlogPostPage";
 import ScrollToTop from "./components/ScrollToTop";
 import { Toaster } from "@/components/ui/sonner";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
+import AdminBlogPage from "@/pages/admin/AdminBlogPage";
+import AdminPostEditor from "@/pages/admin/AdminPostEditor";
 import { AdminRoute } from "@/components/AdminRoute";
 
 function App() {
@@ -31,10 +33,18 @@ function App() {
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:slug" element={<BlogPostPage />} />
             <Route
-              path="/admin"
+              path="/admin/*"
               element={
                 <AdminRoute>
-                  <AdminDashboard />
+                  <Routes>
+                    <Route path="/" element={<AdminDashboard />} />
+                    <Route path="/blog" element={<AdminBlogPage />} />
+                    <Route path="/blog/new" element={<AdminPostEditor />} />
+                    <Route
+                      path="/blog/edit/:id"
+                      element={<AdminPostEditor />}
+                    />
+                  </Routes>
                 </AdminRoute>
               }
             />
