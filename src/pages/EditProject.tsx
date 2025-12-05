@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { DashboardLayout } from "../components/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -13,17 +13,28 @@ import {
 } from "lucide-react";
 import { getProject, updateProject, type Project } from "@/lib/projects";
 import { toast } from "sonner";
+import { useAuth } from "@/context/AuthContext";
 
 export function EditProject() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [project, setProject] = useState<Project | null>(null);
   const [formData, setFormData] = useState({
     title: "",
     content: "",
   });
+
+  // Auto-resize textarea when title changes
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height =
+        textareaRef.current.scrollHeight + "px";
+    }
+  }, [formData.title]);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -149,10 +160,10 @@ export function EditProject() {
             </div>
             <div className="flex-1">
               <textarea
+                ref={textareaRef}
                 value={formData.title}
                 onChange={(e) => {
                   setFormData({ ...formData, title: e.target.value });
-                  // Auto-adjust height
                   e.target.style.height = "auto";
                   e.target.style.height = e.target.scrollHeight + "px";
                 }}
