@@ -164,9 +164,9 @@ const Footer = () => {
             <Link to="/terms" className="hover:text-white transition-colors">
               Terms of Service
             </Link>
-            <a href="#" className="hover:text-white transition-colors">
+            <Link to="/cookies" className="hover:text-white transition-colors">
               Cookie Policy
-            </a>
+            </Link>
           </div>
         </div>
       </div>

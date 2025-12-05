@@ -2,10 +2,18 @@ import { useState, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion, useScroll, useSpring } from "framer-motion";
-import { Printer, Download, Scale, FileText, CheckCircle2 } from "lucide-react";
+import {
+  Printer,
+  Download,
+  Cookie,
+  Settings,
+  CheckCircle2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
-const TermsOfService = () => {
+const CookiePolicy = () => {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -13,15 +21,21 @@ const TermsOfService = () => {
     restDelta: 0.001,
   });
 
-  const [activeSection, setActiveSection] = useState("acceptance");
+  const [activeSection, setActiveSection] = useState("what-are-cookies");
+  // Mock state for cookie preferences
+  const [preferences, setPreferences] = useState({
+    essential: true,
+    analytics: true,
+    marketing: false,
+    functional: true,
+  });
 
   const sections = [
-    { id: "acceptance", title: "1. Acceptance of Terms" },
-    { id: "use-license", title: "2. Use License" },
-    { id: "disclaimer", title: "3. Disclaimer" },
-    { id: "limitations", title: "4. Limitations" },
-    { id: "revisions", title: "5. Revisions" },
-    { id: "governing-law", title: "6. Governing Law" },
+    { id: "what-are-cookies", title: "1. What Are Cookies" },
+    { id: "how-we-use", title: "2. How We Use Cookies" },
+    { id: "types-of-cookies", title: "3. Types of Cookies" },
+    { id: "managing-cookies", title: "4. Managing Cookies" },
+    { id: "preferences", title: "5. Your Preferences" },
   ];
 
   useEffect(() => {
@@ -69,7 +83,7 @@ const TermsOfService = () => {
           <div className="absolute inset-0 z-0">
             <img
               src="/privacy-hero.png"
-              alt="Terms Background"
+              alt="Cookie Policy Background"
               className="w-full h-full object-cover opacity-50 dark:opacity-40"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-indigo-950/80 via-indigo-950/80 to-indigo-950 dark:from-black/80 dark:via-black/80 dark:to-black"></div>
@@ -96,13 +110,14 @@ const TermsOfService = () => {
                 Legal
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight mb-8 text-white">
-                Terms of{" "}
+                Cookie{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
-                  Service
+                  Policy
                 </span>
               </h1>
               <p className="text-xl md:text-2xl text-indigo-200 mb-10 leading-relaxed max-w-2xl mx-auto">
-                Please read these terms carefully before using our service.
+                Understanding how and why we use cookies to improve your
+                experience.
               </p>
             </motion.div>
           </div>
@@ -160,7 +175,7 @@ const TermsOfService = () => {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-12 p-6 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border border-gray-100 dark:border-gray-800">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
-                    <FileText className="w-6 h-6" />
+                    <Cookie className="w-6 h-6" />
                   </div>
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
@@ -181,47 +196,49 @@ const TermsOfService = () => {
                   className="gap-2 text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400"
                 >
                   <Printer className="w-4 h-4" />
-                  Print Terms
+                  Print Policy
                 </Button>
               </div>
 
               <div className="prose prose-lg dark:prose-invert max-w-none space-y-16">
-                <section id="acceptance" className="scroll-mt-32">
+                <section id="what-are-cookies" className="scroll-mt-32">
                   <h2 className="flex items-center gap-3 text-2xl font-bold mb-6 text-gray-900 dark:text-white group">
                     <span className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-sm text-indigo-600 dark:text-indigo-400">
                       1
                     </span>
-                    Acceptance of Terms
+                    What Are Cookies
                   </h2>
-                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                    By accessing and placing an order with Lumina, you confirm
-                    that you are in agreement with and bound by the terms of
-                    service contained in the Terms & Conditions outlined below.
-                    These terms apply to the entire website and any email or
-                    other type of communication between you and Lumina.
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed max-w-none">
+                    Cookies are small text files that are placed on your
+                    computer or mobile device by websites that you visit. They
+                    are widely used in order to make websites work, or work more
+                    efficiently, as well as to provide information to the owners
+                    of the site. Lumina uses cookies to distinguish you from
+                    other users of our website.
                   </p>
                 </section>
 
-                <section id="use-license" className="scroll-mt-32">
+                <section id="how-we-use" className="scroll-mt-32">
                   <h2 className="flex items-center gap-3 text-2xl font-bold mb-6 text-gray-900 dark:text-white">
                     <span className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-sm text-indigo-600 dark:text-indigo-400">
                       2
                     </span>
-                    Use License
+                    How We Use Cookies
                   </h2>
                   <div className="bg-gray-50 dark:bg-gray-900/50 p-6 rounded-xl border border-gray-100 dark:border-gray-800 mb-6">
                     <p className="text-gray-600 dark:text-gray-300 mb-4">
-                      Permission is granted to temporarily download one copy of
-                      the materials (information or software) on Lumina's
-                      website for personal, non-commercial transitory viewing
-                      only.
+                      We use cookies for a variety of reasons detailed below.
+                      Unfortunately, in most cases there are no industry
+                      standard options for disabling cookies without completely
+                      disabling the functionality and features they add to this
+                      site.
                     </p>
                     <ul className="space-y-2">
                       {[
-                        "Modify or copy the materials",
-                        "Use the materials for any commercial purpose",
-                        "Attempt to decompile or reverse engineer any software",
-                        "Remove any copyright or other proprietary notations",
+                        "To keep you signed in",
+                        "To understand how you use the site",
+                        "To remember your preferences",
+                        "To provide personalized content",
                       ].map((item, i) => (
                         <li
                           key={i}
@@ -235,81 +252,186 @@ const TermsOfService = () => {
                   </div>
                 </section>
 
-                <section id="disclaimer" className="scroll-mt-32">
+                <section id="types-of-cookies" className="scroll-mt-32">
                   <h2 className="flex items-center gap-3 text-2xl font-bold mb-6 text-gray-900 dark:text-white">
                     <span className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-sm text-indigo-600 dark:text-indigo-400">
                       3
                     </span>
-                    Disclaimer
+                    Types of Cookies We Use
                   </h2>
-                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                    The materials on Lumina's website are provided "as is".
-                    Lumina makes no warranties, expressed or implied, and hereby
-                    disclaims and negates all other warranties, including
-                    without limitation, implied warranties or conditions of
-                    merchantability, fitness for a particular purpose, or
-                    non-infringement of intellectual property or other violation
-                    of rights.
-                  </p>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {[
+                      {
+                        title: "Essential Cookies",
+                        desc: "Necessary for the website to function properly. You cannot opt-out of these.",
+                      },
+                      {
+                        title: "Analytics Cookies",
+                        desc: "Help us understand how visitors interact with the website.",
+                      },
+                      {
+                        title: "Functional Cookies",
+                        desc: "Enable enhanced functionality and personalization.",
+                      },
+                      {
+                        title: "Marketing Cookies",
+                        desc: "Used to track visitors across websites to display relevant ads.",
+                      },
+                    ].map((item, i) => (
+                      <div
+                        key={i}
+                        className="p-4 rounded-xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800"
+                      >
+                        <h4 className="font-semibold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
+                          <Cookie className="w-4 h-4 text-indigo-500" />
+                          {item.title}
+                        </h4>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          {item.desc}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
                 </section>
 
-                <section id="limitations" className="scroll-mt-32">
+                <section id="managing-cookies" className="scroll-mt-32">
                   <h2 className="flex items-center gap-3 text-2xl font-bold mb-6 text-gray-900 dark:text-white">
                     <span className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-sm text-indigo-600 dark:text-indigo-400">
                       4
                     </span>
-                    Limitations
+                    Managing Cookies
                   </h2>
-                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                    In no event shall Lumina or its suppliers be liable for any
-                    damages (including, without limitation, damages for loss of
-                    data or profit, or due to business interruption) arising out
-                    of the use or inability to use the materials on Lumina's
-                    website, even if Lumina or a Lumina authorized
-                    representative has been notified orally or in writing of the
-                    possibility of such damage.
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+                    Most web browsers allow some control of most cookies through
+                    the browser settings. To find out more about cookies,
+                    including how to see what cookies have been set, visit{" "}
+                    <a
+                      href="http://www.aboutcookies.org"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-indigo-600 dark:text-indigo-400 hover:underline"
+                    >
+                      www.aboutcookies.org
+                    </a>{" "}
+                    or{" "}
+                    <a
+                      href="http://www.allaboutcookies.org"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-indigo-600 dark:text-indigo-400 hover:underline"
+                    >
+                      www.allaboutcookies.org
+                    </a>
+                    .
                   </p>
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    Find out how to manage cookies on popular browsers:
+                  </p>
+                  <ul className="mt-2 space-y-1 text-gray-600 dark:text-gray-300 list-disc list-inside">
+                    <li>
+                      <a href="#" className="hover:text-indigo-500">
+                        Google Chrome
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="hover:text-indigo-500">
+                        Mozilla Firefox
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="hover:text-indigo-500">
+                        Apple Safari
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" className="hover:text-indigo-500">
+                        Microsoft Edge
+                      </a>
+                    </li>
+                  </ul>
                 </section>
 
-                <section id="revisions" className="scroll-mt-32">
+                <section id="preferences" className="scroll-mt-32">
                   <h2 className="flex items-center gap-3 text-2xl font-bold mb-6 text-gray-900 dark:text-white">
                     <span className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-sm text-indigo-600 dark:text-indigo-400">
                       5
                     </span>
-                    Revisions and Errata
-                  </h2>
-                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                    The materials appearing on Lumina's website could include
-                    technical, typographical, or photographic errors. Lumina
-                    does not warrant that any of the materials on its website
-                    are accurate, complete, or current. Lumina may make changes
-                    to the materials contained on its website at any time
-                    without notice.
-                  </p>
-                </section>
-
-                <section id="governing-law" className="scroll-mt-32">
-                  <h2 className="flex items-center gap-3 text-2xl font-bold mb-6 text-gray-900 dark:text-white">
-                    <span className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-sm text-indigo-600 dark:text-indigo-400">
-                      6
-                    </span>
-                    Governing Law
+                    Your Preferences
                   </h2>
 
                   <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6 shadow-sm">
-                    <div className="flex items-start gap-4">
-                      <Scale className="w-8 h-8 text-indigo-600 dark:text-indigo-400 flex-shrink-0" />
+                    <div className="flex items-start gap-4 mb-6">
+                      <Settings className="w-8 h-8 text-indigo-600 dark:text-indigo-400 flex-shrink-0" />
                       <div>
-                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
-                          Any claim relating to Lumina's website shall be
-                          governed by the laws of the State of Delaware without
-                          regard to its conflict of law provisions.
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          General Terms and Conditions applicable to Use of a
-                          Web Site.
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+                          Cookie Settings
+                        </h3>
+                        <p className="text-gray-600 dark:text-gray-300 text-sm">
+                          Manage your cookie preferences for this website.
                         </p>
                       </div>
+                    </div>
+
+                    <div className="space-y-6">
+                      {[
+                        {
+                          key: "essential",
+                          label: "Essential Cookies",
+                          desc: "Required for basic site functionality.",
+                          disabled: true,
+                        },
+                        {
+                          key: "analytics",
+                          label: "Analytics Cookies",
+                          desc: "Help us improve our website.",
+                        },
+                        {
+                          key: "marketing",
+                          label: "Marketing Cookies",
+                          desc: "Used for targeted advertising.",
+                        },
+                        {
+                          key: "functional",
+                          label: "Functional Cookies",
+                          desc: "Allow for personalization.",
+                        },
+                      ].map((item) => (
+                        <div
+                          key={item.key}
+                          className="flex items-center justify-between"
+                        >
+                          <div>
+                            <Label
+                              htmlFor={item.key}
+                              className="text-base font-medium text-gray-900 dark:text-white"
+                            >
+                              {item.label}
+                            </Label>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              {item.desc}
+                            </p>
+                          </div>
+                          <Switch
+                            id={item.key}
+                            checked={
+                              preferences[item.key as keyof typeof preferences]
+                            }
+                            disabled={item.disabled}
+                            onCheckedChange={(checked: boolean) =>
+                              setPreferences((prev) => ({
+                                ...prev,
+                                [item.key]: checked,
+                              }))
+                            }
+                          />
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800 flex justify-end">
+                      <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                        Save Preferences
+                      </Button>
                     </div>
                   </div>
                 </section>
@@ -324,4 +446,4 @@ const TermsOfService = () => {
   );
 };
 
-export default TermsOfService;
+export default CookiePolicy;
