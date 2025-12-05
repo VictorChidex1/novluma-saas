@@ -148,14 +148,18 @@ export function EditProject() {
               <PlatformIcon className="w-6 h-6" />
             </div>
             <div className="flex-1">
-              <input
-                type="text"
+              <textarea
                 value={formData.title}
-                onChange={(e) =>
-                  setFormData({ ...formData, title: e.target.value })
-                }
-                className="w-full bg-transparent text-xl font-bold text-gray-900 dark:text-white border-none focus:ring-0 p-0 placeholder-gray-400"
+                onChange={(e) => {
+                  setFormData({ ...formData, title: e.target.value });
+                  // Auto-adjust height
+                  e.target.style.height = "auto";
+                  e.target.style.height = e.target.scrollHeight + "px";
+                }}
+                className="w-full bg-transparent text-xl font-bold text-gray-900 dark:text-white border-none focus:ring-0 p-0 placeholder-gray-400 resize-none overflow-hidden"
                 placeholder="Project Title"
+                rows={1}
+                style={{ minHeight: "28px" }}
               />
               <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mt-1">
                 <span className="capitalize">{project.platform}</span>
