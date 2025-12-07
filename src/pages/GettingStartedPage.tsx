@@ -76,7 +76,7 @@ export function GettingStartedPage() {
         <div className="relative w-full aspect-video max-w-4xl mx-auto bg-gray-900 rounded-2xl overflow-hidden mb-20 shadow-xl border border-gray-800">
           <iframe
             className="w-full h-full"
-            src="https://www.youtube.com/embed/ryJCy87EU3g?rel=0"
+            src="https://www.youtube.com/embed/B3nMvfDlQJQ?rel=0"
             title="Novluma Crash Course"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen

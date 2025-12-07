@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "predeploy": "npm run build -- --base=/lumina-saas/",
+    "predeploy": "npm run build -- --base=/novluma-saas/",
     "deploy": "gh-pages -d dist",
     "lint": "eslint .",
     "preview": "vite preview"
