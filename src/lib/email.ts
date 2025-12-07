@@ -3,7 +3,12 @@ import emailjs from "@emailjs/browser";
 // Initialize EmailJS with your Public Key
 // We will call this when the app starts or before sending
 export const initEmail = () => {
-  emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
+  const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+  if (publicKey) {
+    emailjs.init(publicKey);
+  } else {
+    console.warn("EmailJS Public Key missing. Email features will not work.");
+  }
 };
 
 export const sendWelcomeEmail = async (email: string, name: string) => {
