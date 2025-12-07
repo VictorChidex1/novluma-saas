@@ -1,6 +1,6 @@
-# Lumina SaaS
+# Novluma SaaS
 
-Lumina is a modern SaaS application built with **React**, **Vite**, and **Firebase**. It features a high-converting landing page, secure authentication, a protected user dashboard, and a robust settings system.
+Novluma is a modern SaaS application built with **React**, **Vite**, and **Firebase**. It features a high-converting landing page, secure authentication, a protected user dashboard, and a robust settings system.
 
 ## 🚀 Features
 
@@ -43,7 +43,7 @@ A professional, high-performance landing page designed to convert:
 
 ## 🤖 AI Content Generation
 
-Lumina is powered by **Google Gemini 2.0**.
+Novluma is powered by **Google Gemini 2.0**.
 
 - **Smart Generation**: Creates blog posts, social media content, and emails based on your topic and tone.
 - **Model Strategy**: Automatically falls back between `gemini-2.0-flash`, `gemini-flash-latest`, and `gemini-pro` to ensure reliability.

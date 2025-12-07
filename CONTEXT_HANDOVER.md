@@ -1,11 +1,11 @@
-# Lumina SaaS - Comprehensive Project Documentation
+# Novluma SaaS - Comprehensive Project Documentation
 
 **Project Status**: MVP Complete
 **Last Updated**: December 5, 2025
 
 ## � Project Overview
 
-Lumina is a modern SaaS platform designed for AI-powered content generation. It features a high-converting landing page, a full user dashboard, a blog system, an admin panel, and a powerful AI engine.
+Novluma is a modern SaaS platform designed for AI-powered content generation. It features a high-converting landing page, a full user dashboard, a blog system, an admin panel, and a powerful AI engine.
 
 ## 🛠️ Technology Stack
 
