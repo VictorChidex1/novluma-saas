@@ -11,11 +11,13 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export function SupportPage() {
+  const navigate = useNavigate();
+
   const resources = [
     {
       title: "Getting Started Guide",
@@ -23,7 +25,7 @@ export function SupportPage() {
         "Everything you need to know to create your first content project.",
       icon: Book,
       color: "bg-blue-500",
-      link: "/docs/getting-started",
+      link: "/dashboard/getting-started",
     },
     {
       title: "Video Tutorials",
@@ -95,6 +97,7 @@ export function SupportPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
+              onClick={() => navigate(resource.link)}
               className="bg-white dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-indigo-500 dark:hover:border-indigo-500/50 hover:shadow-md transition-all group cursor-pointer"
             >
               <div

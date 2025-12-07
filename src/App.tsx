@@ -8,6 +8,7 @@ import { NewProject } from "./pages/NewProject";
 import { Projects } from "./pages/Projects";
 import { EditProject } from "./pages/EditProject";
 import { SupportPage } from "./pages/SupportPage";
+import { GettingStartedPage } from "./pages/GettingStartedPage";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
 import ContactPage from "./pages/ContactPage";
@@ -105,6 +106,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <SupportPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/getting-started"
+              element={
+                <ProtectedRoute>
+                  <GettingStartedPage />
                 </ProtectedRoute>
               }
             />
