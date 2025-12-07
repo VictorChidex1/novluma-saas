@@ -1,12 +1,5 @@
 import { DashboardLayout } from "../components/DashboardLayout";
-import {
-  ArrowLeft,
-  Sparkles,
-  PlusCircle,
-  Pencil,
-  Save,
-  Play,
-} from "lucide-react";
+import { ArrowLeft, Sparkles, PlusCircle, Pencil, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -80,26 +73,13 @@ export function GettingStartedPage() {
         </div>
 
         {/* Hero Video Section */}
-        <div className="relative w-full aspect-video max-w-4xl mx-auto bg-gray-900 rounded-2xl overflow-hidden mb-20 shadow-xl group cursor-pointer border border-gray-800">
-          <div className="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/30 transition-colors">
-            <div className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20 group-hover:scale-110 transition-transform">
-              <Play className="w-8 h-8 text-white fill-white ml-1" />
-            </div>
-          </div>
-          <div className="absolute bottom-6 left-6 text-white">
-            <h3 className="text-lg font-bold">Lumina Crash Course</h3>
-            <p className="text-white/80 text-sm">
-              2:30 • Watch the full walkthrough
-            </p>
-          </div>
-          {/* Placeholder Grid Pattern */}
-          <div
-            className="absolute inset-0 -z-10 opacity-20"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle, #ffffff 1px, transparent 1px)",
-              backgroundSize: "30px 30px",
-            }}
+        <div className="relative w-full aspect-video max-w-4xl mx-auto bg-gray-900 rounded-2xl overflow-hidden mb-20 shadow-xl border border-gray-800">
+          <iframe
+            className="w-full h-full"
+            src="https://www.youtube.com/embed/ryJCy87EU3g?rel=0"
+            title="Lumina Crash Course"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
           />
         </div>
 
