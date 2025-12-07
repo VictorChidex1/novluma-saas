@@ -22,6 +22,7 @@ import TermsOfService from "./pages/TermsOfService";
 import CookiePolicy from "./pages/CookiePolicy";
 import CustomersPage from "./pages/CustomersPage";
 import ScrollToTop from "./components/ScrollToTop";
+import { DocsPage } from "./pages/docs/DocsPage";
 import { Toaster } from "@/components/ui/sonner";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 import AdminBlogPage from "@/pages/admin/AdminBlogPage";
@@ -46,6 +47,8 @@ function App() {
             <Route path="/terms" element={<TermsOfService />} />
             <Route path="/cookies" element={<CookiePolicy />} />
             <Route path="/customers" element={<CustomersPage />} />
+            <Route path="/docs" element={<DocsPage />} />
+            <Route path="/docs/:slug" element={<DocsPage />} />
             <Route
               path="/admin/*"
               element={

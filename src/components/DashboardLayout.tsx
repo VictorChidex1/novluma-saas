@@ -8,6 +8,7 @@ import {
   PieChart,
   HelpCircle,
   LogOut,
+  Book,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -28,6 +29,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     { name: "Team", href: "/dashboard/team", icon: Users },
     { name: "Reports", href: "/reports", icon: PieChart },
     { name: "Settings", href: "/dashboard/settings", icon: Settings },
+    { name: "Documentation", href: "/docs", icon: Book },
     { name: "Help & Support", href: "/dashboard/support", icon: HelpCircle },
   ];
 

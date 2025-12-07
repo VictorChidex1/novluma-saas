@@ -62,17 +62,30 @@ const Footer = () => {
           >
             <h4 className="text-white font-semibold mb-6">Product</h4>
             <ul className="space-y-4">
-              {["Features", "Pricing", "Testimonials", "FAQ"].map((item) => (
-                <li key={item}>
-                  <motion.a
-                    href={`#${item.toLowerCase()}`}
-                    whileHover={{ x: 5 }}
-                    className="inline-block text-gray-400 hover:text-indigo-400 transition-colors"
-                  >
-                    {item}
-                  </motion.a>
-                </li>
-              ))}
+              {["Features", "Pricing", "Docs", "Testimonials", "FAQ"].map(
+                (item) => (
+                  <li key={item}>
+                    {item === "Docs" ? (
+                      <Link to="/docs">
+                        <motion.span
+                          whileHover={{ x: 5 }}
+                          className="inline-block text-gray-400 hover:text-indigo-400 transition-colors cursor-pointer"
+                        >
+                          {item}
+                        </motion.span>
+                      </Link>
+                    ) : (
+                      <motion.a
+                        href={`'#'${item.toLowerCase()}`}
+                        whileHover={{ x: 5 }}
+                        className="inline-block text-gray-400 hover:text-indigo-400 transition-colors"
+                      >
+                        {item}
+                      </motion.a>
+                    )}
+                  </li>
+                )
+              )}
             </ul>
           </motion.div>
 

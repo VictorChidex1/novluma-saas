@@ -108,6 +108,7 @@ export function Navbar({
   const navLinks = [
     { name: "Features", href: "/#features", type: "hash" },
     { name: "Pricing", href: "/#pricing", type: "hash" },
+    { name: "Docs", href: "/docs", type: "route" },
     { name: "Customers", href: "/customers", type: "route" },
   ];
 
