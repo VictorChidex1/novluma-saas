@@ -2,7 +2,7 @@
   "name": "lumina",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://VictorChidex1.github.io/lumina-saas",
+  "homepage": "https://VictorChidex1.github.io/novluma-saas",
   "type": "module",
   "scripts": {
     "dev": "vite",
