@@ -249,7 +249,64 @@ Computers count time in "24-hour format" (0 to 23).
 
 ---
 
-## 📖 Glossary for the Newbie
+## � Chapter 6: The Navigation Flow (Smart Routing)
+
+We had a tricky problem. We wanted two things that seemed to fight each other:
+
+1.  **New Users**: Should go straight to the Dashboard when they sign up.
+2.  **Existing Users**: Should be able to click the Logo and go back to the Homepage to check pricing.
+
+### 6.1 The Conflict (The "Loop of Death")
+
+At first, we put a "Guard" on the Homepage:
+
+```typescript
+// OLD Homepage Logic (Bad)
+if (user) return <Navigate to="/dashboard" />;
+```
+
+- **The Problem**: If a user was in the Dashboard and clicked "Home", they went to Home -> Home saw they were logged in -> Kicked them back to Dashboard. It looked like a page refresh.
+
+### 6.2 The Fix: Action-Based Routing
+
+We moved the redirect logic. Instead of automatically redirecting _everyone_ who visits the homepage, we only redirect people _specifically when they sign in_.
+
+**Step 1: The Login Modal (`AuthModal.tsx`)**
+This is where the user clicks "Sign In".
+
+```tsx
+const navigate = useNavigate(); // The Steering Wheel
+
+const handleGoogleSignIn = async () => {
+  await signInWithGoogle();
+  onClose();
+  navigate("/dashboard"); // <--- FORCE them to go to Dashboard
+};
+```
+
+> **Newbie Translation**:
+>
+> - We changed the logic from "If you _are_ here, move" to "If you _just arrived_, move".
+> - `navigate("/dashboard")` is like grabbing the steering wheel and turning the car immediately after the key is turned.
+
+**Step 2: The Homepage (`LandingPage.tsx`)**
+We simply deleted the guard.
+
+```tsx
+// Now, the Homepage is just a page.
+// It doesn't care if you are logged in or not.
+export function LandingPage() { ... }
+```
+
+### 6.3 The Result
+
+- **Sign Up**: You are whisked away to the Dashboard. ✅
+- **Click Home**: You stay on the Homepage. ✅
+- **Go Back**: You use the Navbar specific to logged-in users to go back to Dashboard. ✅
+
+---
+
+## �📖 Glossary for the Newbie
 
 - **Component**: A reusable building block of code (e.g., `<Button />`).
 - **Prop**: Data you pass _into_ a component (like giving the Button a label "Click Me").

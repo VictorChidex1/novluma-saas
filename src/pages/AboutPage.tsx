@@ -5,12 +5,30 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Target, Zap, Globe, Heart } from "lucide-react";
 
+// Team Images
+import agbahoImg from "@/assets/images/team/agbaho-victor.png";
+import oziomaImg from "@/assets/images/team/dr-ozioma.png";
+import davidImg from "@/assets/images/team/david-miller.png";
+import sarahImg from "@/assets/images/team/sarah-chen.png";
+import emilyImg from "@/assets/images/team/emily-zhang.png";
+import michaelImg from "@/assets/images/team/michael-ross.png";
+import alexImg from "@/assets/images/team/dr-alex.png";
+import karlImg from "@/assets/images/team/karl-dora.png";
+
 const AboutPage = () => {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans selection:bg-indigo-100 dark:selection:bg-indigo-900/30 selection:text-indigo-900 dark:selection:text-indigo-100 flex flex-col">
       <Navbar />
 
       <main className="flex-grow">
+        {/* ... (Hero, Mission, Stats, Timeline sections check out) ... */}
+        {/* Skipping straight to Team Section logic for brevity in replace block if possible, but replace_file_content needs contiguous block. 
+            I will include the imports at the top and then I might need a second targeted replace for the array if they are too far apart.
+            Actually, the imports are at line 1. The array is at line 298.
+            I cannot do this in one MultiReplace if I am changing non-contiguous blocks unless I use `multi_replace`.
+            Wait, I should use `multi_replace_file_content`!
+        */}
+
         {/* Hero Section */}
         <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-indigo-950 dark:bg-black">
           {/* Background Effects */}
@@ -299,42 +317,42 @@ const AboutPage = () => {
                 {
                   name: "Agbaho Victor",
                   role: "CEO & Founder",
-                  img: "/agbaho-victor.png",
+                  img: agbahoImg,
                 },
                 {
                   name: "Dr Agbaho Ozioma",
                   role: "CMO",
-                  img: "/dr-ozioma.png",
+                  img: oziomaImg,
                 },
                 {
                   name: "David Miller",
                   role: "CTO",
-                  img: "/david-miller.png",
+                  img: davidImg,
                 },
                 {
                   name: "Sarah Chen",
                   role: "Senior Software Engineer ",
-                  img: "/sarah-chen.png",
+                  img: sarahImg,
                 },
                 {
                   name: "Emily Zhang",
                   role: "Head of Design",
-                  img: "/emily-zhang.png",
+                  img: emilyImg,
                 },
                 {
                   name: "Michael Ross",
                   role: "Head of Product",
-                  img: "/michael-ross.png",
+                  img: michaelImg,
                 },
                 {
                   name: "Alex Johnson",
                   role: "Head of Neuroscience",
-                  img: "/dr-alex.png",
+                  img: alexImg,
                 },
                 {
                   name: "Karl Dorathy",
                   role: "Head of Growth",
-                  img: "/karl-dora.png",
+                  img: karlImg,
                 },
               ].map((member, index) => (
                 <motion.div
