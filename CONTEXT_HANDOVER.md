@@ -69,6 +69,9 @@ Novluma is a modern SaaS platform designed for AI-powered content generation. It
 
 - **Skeleton Loaders**: Replaced basic spinners with shimmering skeleton UI for "Projects List" and "Editor" to improve perceived performance.
 - **Animations**: Extended Framer Motion usage to Support Deck cards (staggered entrance).
+- **Dynamic Greeting**:
+  - **Logic**: Uses `new Date().getHours()` to determine time of day.
+  - **Behavior**: Returns "Good morning" (<12), "Good afternoon" (<18), or "Good evening" to personalize the dashboard experience.
 
 ### 7. Documentation Hub
 

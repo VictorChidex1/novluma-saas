@@ -18,10 +18,10 @@ export function LandingPage() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authTab, setAuthTab] = useState<"signin" | "signup">("signin");
 
-  // Redirect to dashboard if logged in
-  if (user && !loading) {
-    return <Navigate to="/dashboard" replace />;
-  }
+  // Redirect logic removed to allow users to visit the homepage from the dashboard logic
+  // if (user && !loading) {
+  //   return <Navigate to="/dashboard" replace />;
+  // }
 
   const openAuth = (tab: "signin" | "signup") => {
     setAuthTab(tab);
