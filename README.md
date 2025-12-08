@@ -40,8 +40,17 @@ A professional, high-performance landing page designed to convert:
     - **Video Integration**: Embedded YouTube product tour.
     - **Visual Timeline**: "Zig-Zag" layout with real screenshots for onboarding.
     - **Interactive Deck**: Direct navigation to key documentation.
+- **Documentation Hub (New)**:
+  - **Comprehensive Guides**: Getting Started, Features, Brand Voice, and Troubleshooting.
+  - **Pro UX**: "Next/Previous" navigation and "Callout" boxes for tips/warnings.
+  - **Search Ready**: Built for easy expansion and discoverability.
 
-## 🤖 AI Content Generation
+### **Landing Page**
+
+A professional, high-performance landing page designed to convert:
+
+- **Hero Section**: Immersive background with **Video Modal** (Watch Demo) and **Auth Integration** (Start Free Trial).
+- **Features**: Interactive grid with **3D Tilt** effects on hover.
 
 Novluma is powered by **Google Gemini 2.0**.
 

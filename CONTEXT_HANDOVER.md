@@ -70,9 +70,31 @@ Novluma is a modern SaaS platform designed for AI-powered content generation. It
 - **Skeleton Loaders**: Replaced basic spinners with shimmering skeleton UI for "Projects List" and "Editor" to improve perceived performance.
 - **Animations**: Extended Framer Motion usage to Support Deck cards (staggered entrance).
 
+### 7. Documentation Hub
+
+- **Content**: Comprehensive guides on Getting Started, Brand Voice, Troubleshooting, and API.
+- **UX**: Professional "Callout" boxes (Tips/Warnings) and "Next/Previous" article navigation.
+- **Architecture**: Data-driven content structure (`docs.ts`) for easy maintenance.
+
 ---
 
 ## 🐛 Debugging Log (Critical Issues Fixed)
+
+### 7. Broken Logo on Subpaths (GitHub Pages)
+
+- **Issue**: Footer logo broken on non-root deployments (`/novluma-saas/`).
+- **Root Cause**: Hardcoded `/favicon.png` path resolved to domain root.
+- **Fix**: Implemented `import.meta.env.BASE_URL` to dynamically prefix assets based on the environment.
+
+### 8. Firebase Unauthorized Domain
+
+- **Issue**: `auth/unauthorized-domain` prevented sign-ups on new Vercel/GitHub domains.
+- **Fix**: Detailed advisory provided to manually whitelist domains in Firebase Console (User action confirmed).
+
+### 9. Dark Mode Visibility
+
+- **Issue**: "Watch Demo" button text invisible in dark mode due to Framer Motion conflict.
+- **Fix**: Removed hardcoded animation styles to allow Tailwind `dark:hover` classes to take precedence.
 
 ### 1. AI Generation Failure (Error 404)
 

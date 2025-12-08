@@ -10,10 +10,18 @@ import Footer from "../components/Footer";
 
 import { useState } from "react";
 import { AuthModal } from "../components/AuthModal";
+import { useAuth } from "../context/AuthContext";
+import { Navigate } from "react-router-dom";
 
 export function LandingPage() {
+  const { user, loading } = useAuth();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authTab, setAuthTab] = useState<"signin" | "signup">("signin");
+
+  // Redirect to dashboard if logged in
+  if (user && !loading) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   const openAuth = (tab: "signin" | "signup") => {
     setAuthTab(tab);
