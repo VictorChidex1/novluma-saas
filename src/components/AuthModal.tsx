@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { X, Mail, Lock, ArrowRight, Eye, EyeOff, User } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ export function AuthModal({
   const [loading, setLoading] = useState(false);
 
   const { signInWithGoogle, signInWithEmail, signUpWithEmail } = useAuth();
+  const navigate = useNavigate();
 
   // Reset state when modal opens/closes or tab changes
   React.useEffect(() => {
@@ -57,6 +59,7 @@ export function AuthModal({
         await signInWithEmail(email, password);
       }
       onClose();
+      navigate("/dashboard");
     } catch (err: any) {
       console.error("Auth Error:", err);
       // Show the actual error message from Firebase for debugging
@@ -80,6 +83,7 @@ export function AuthModal({
     try {
       await signInWithGoogle();
       onClose();
+      navigate("/dashboard");
     } catch (error: any) {
       console.error("Google Auth Error:", error);
       // Display the specific error code if available

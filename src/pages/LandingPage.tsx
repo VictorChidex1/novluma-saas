@@ -10,11 +10,11 @@ import Footer from "../components/Footer";
 
 import { useState } from "react";
 import { AuthModal } from "../components/AuthModal";
-import { useAuth } from "../context/AuthContext";
-import { Navigate } from "react-router-dom";
+// import { useAuth } from "../context/AuthContext"; // Unused now
+// import { Navigate } from "react-router-dom";      // Unused now
 
 export function LandingPage() {
-  const { user, loading } = useAuth();
+  // const { user, loading } = useAuth(); // Unused now
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authTab, setAuthTab] = useState<"signin" | "signup">("signin");
 
