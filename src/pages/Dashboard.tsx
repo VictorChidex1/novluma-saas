@@ -96,6 +96,13 @@ export function Dashboard() {
     show: { opacity: 1, y: 0 },
   };
 
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good morning";
+    if (hour < 18) return "Good afternoon";
+    return "Good evening";
+  };
+
   return (
     <DashboardLayout>
       <div className="max-w-6xl mx-auto">
@@ -107,7 +114,7 @@ export function Dashboard() {
             transition={{ duration: 0.5 }}
           >
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Good afternoon, {user?.displayName?.split(" ")[0] || "User"} 👋
+              {getGreeting()}, {user?.displayName?.split(" ")[0] || "User"} 👋
             </h1>
             <p className="text-gray-600 dark:text-gray-400 mt-2">
               Here's what's happening with your creative workspace today.
