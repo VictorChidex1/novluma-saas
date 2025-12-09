@@ -15,7 +15,10 @@ import {
   MoreHorizontal,
   Briefcase,
   Zap,
+  Download,
+  Printer,
 } from "lucide-react";
+
 import { getProject, updateProject, type Project } from "@/lib/projects";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -179,7 +182,7 @@ export function EditProject() {
   return (
     <DashboardLayout>
       <div className="max-w-4xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 print:hidden">
           <Button
             variant="ghost"
             onClick={() => navigate("/dashboard/projects")}
@@ -256,6 +259,42 @@ export function EditProject() {
               <option value="In Progress">In Progress</option>
               <option value="Completed">Completed</option>
             </select>
+
+            {/* Export Actions */}
+            <div className="flex items-center gap-2 print:hidden">
+              <Button
+                variant="outline"
+                size="icon"
+                title="Download Markdown"
+                onClick={() => {
+                  const blob = new Blob([formData.content], {
+                    type: "text/markdown",
+                  });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = `${formData.title || "project"}.md`;
+                  document.body.appendChild(a);
+                  a.click();
+                  document.body.removeChild(a);
+                  URL.revokeObjectURL(url);
+                  toast.success("Downloaded as Markdown");
+                }}
+              >
+                <Download className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                title="Save as PDF"
+                onClick={() => {
+                  window.print();
+                }}
+              >
+                <Printer className="w-4 h-4" />
+              </Button>
+            </div>
+
             <Button
               onClick={handleSave}
               disabled={saving}
@@ -273,7 +312,7 @@ export function EditProject() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden print:border-none print:shadow-none">
           {/* Header */}
           <div className="p-6 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50 flex items-center gap-4">
             <div className="w-12 h-12 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">

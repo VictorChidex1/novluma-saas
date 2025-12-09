@@ -83,7 +83,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
       {/* Mobile header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 z-20 px-4 h-16 flex items-center justify-between">
+      <div className="md:hidden fixed top-0 left-0 right-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 z-20 px-4 h-16 flex items-center justify-between print:hidden">
         <Link to="/" className="flex items-center gap-2">
           <img src={logo} alt="Novluma Logo" className="h-8 w-auto" />
           <span className="text-xl font-bold text-gray-900 dark:text-white">
@@ -97,7 +97,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       </div>
 
       {/* Desktop Sidebar */}
-      <aside className="w-64 hidden md:flex flex-col">
+      <aside className="w-64 hidden md:flex flex-col print:hidden">
         <SidebarContent />
       </aside>
 

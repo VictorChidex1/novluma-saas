@@ -14,6 +14,7 @@ import emilyImg from "@/assets/images/team/emily-zhang.png";
 import michaelImg from "@/assets/images/team/michael-ross.png";
 import alexImg from "@/assets/images/team/dr-alex.png";
 import karlImg from "@/assets/images/team/karl-dora.png";
+import estherImg from "@/assets/images/team/esther-onyi.jpg";
 
 const AboutPage = () => {
   return (
@@ -205,10 +206,10 @@ const AboutPage = () => {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               {[
-                { label: "Active Users", value: "80k+" },
-                { label: "Countries", value: "125+" },
-                { label: "Content Created", value: "10M+" },
-                { label: "Team Members", value: "40" },
+                { label: "Active Users", value: "10k+" },
+                { label: "Countries", value: "25+" },
+                { label: "Content Created", value: "500K+" },
+                { label: "Team Members", value: "15" },
               ].map((stat, index) => (
                 <motion.div
                   key={index}
@@ -246,22 +247,22 @@ const AboutPage = () => {
 
               {[
                 {
-                  year: "2021",
+                  year: "2025",
                   title: "Inception",
                   desc: "Founded in San Francisco with a vision to democratize AI.",
                 },
                 {
-                  year: "2022",
+                  year: "2026",
                   title: "Beta Launch",
                   desc: "Released our first beta to 500 exclusive creators.",
                 },
                 {
-                  year: "2023",
+                  year: "2026",
                   title: "Series A",
                   desc: "Raised $12M to scale our engineering team.",
                 },
                 {
-                  year: "2024",
+                  year: "2026",
                   title: "Global Expansion",
                   desc: "Opened offices in London and Tokyo. Hit 1M users.",
                 },
@@ -335,9 +336,9 @@ const AboutPage = () => {
                   img: sarahImg,
                 },
                 {
-                  name: "Emily Zhang",
+                  name: "Esther Onyinye",
                   role: "Head of Design",
-                  img: emilyImg,
+                  img: estherImg,
                 },
                 {
                   name: "Michael Ross",
