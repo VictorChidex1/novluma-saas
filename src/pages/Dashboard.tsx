@@ -67,16 +67,23 @@ export function Dashboard() {
     fetchProjects();
   }, [user]);
 
+  // Calculate real stats
+  const totalWords = projects.reduce(
+    (acc, project) => acc + (project.words || 0),
+    0
+  );
+  const totalProjects = projects.length;
+
   const usageStats = [
     {
       label: "Words Generated",
-      current: 12500,
+      current: totalWords,
       limit: 50000,
       color: "bg-indigo-600",
     },
     {
       label: "Projects Created",
-      current: 8,
+      current: totalProjects,
       limit: 20,
       color: "bg-purple-600",
     },
