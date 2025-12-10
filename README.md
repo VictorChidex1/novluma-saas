@@ -41,9 +41,17 @@ A professional, high-performance landing page designed to convert:
     - **Visual Timeline**: "Zig-Zag" layout with real screenshots for onboarding.
     - **Interactive Deck**: Direct navigation to key documentation.
 - **Documentation Hub (New)**:
+
   - **Comprehensive Guides**: Getting Started, Features, Brand Voice, and Troubleshooting.
   - **Pro UX**: "Next/Previous" navigation and "Callout" boxes for tips/warnings.
   - **Search Ready**: Built for easy expansion and discoverability.
+
+- **Pro Dashboard (New)**:
+  - **Usage Insights**: Real-time Area Chart visualizations powered by `recharts`.
+  - **Dynamic Stats**: "Words Generated" and "Project Count" aggregating live from Firestore.
+  - **Export System**:
+    - **PDF Generation**: Styled browser-native print export.
+    - **Markdown Download**: Instant `.md` file generation for developers.
 
 ### **Landing Page**
 

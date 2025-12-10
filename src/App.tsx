@@ -11,6 +11,7 @@ import { SupportPage } from "./pages/SupportPage";
 import { GettingStartedPage } from "./pages/GettingStartedPage";
 import { ApiDocsPage } from "./pages/ApiDocsPage";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { FAQPage } from "./pages/FAQPage";
 
 import ContactPage from "./pages/ContactPage";
 import CareersPage from "./pages/CareersPage";
@@ -49,6 +50,7 @@ function App() {
             <Route path="/customers" element={<CustomersPage />} />
             <Route path="/docs" element={<DocsPage />} />
             <Route path="/docs/:slug" element={<DocsPage />} />
+            <Route path="/faq" element={<FAQPage />} />
             <Route
               path="/admin/*"
               element={

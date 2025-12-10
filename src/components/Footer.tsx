@@ -65,8 +65,8 @@ const Footer = () => {
               {["Features", "Pricing", "Docs", "Testimonials", "FAQ"].map(
                 (item) => (
                   <li key={item}>
-                    {item === "Docs" ? (
-                      <Link to="/docs">
+                    {item === "Docs" || item === "FAQ" ? (
+                      <Link to={item === "Docs" ? "/docs" : "/faq"}>
                         <motion.span
                           whileHover={{ x: 5 }}
                           className="inline-block text-gray-400 hover:text-indigo-400 transition-colors cursor-pointer"
