@@ -68,6 +68,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           email: user.email,
           displayName: displayName,
           photoURL: user.photoURL,
+          role: "user",
+          plan: "free",
+          usage: {
+            wordsUsed: 0,
+            cycleStart: serverTimestamp(),
+          },
           createdAt: serverTimestamp(),
         });
 

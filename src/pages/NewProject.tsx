@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
-import { addProject } from "@/lib/projects";
+import { addProject, checkUsage, incrementUsage } from "@/lib/projects";
 import { generateContent } from "@/lib/gemini";
 import { toast } from "sonner";
 
@@ -112,23 +112,38 @@ export function NewProject() {
 
   const handleGenerate = async () => {
     if (!user) return;
+
+    // 1. Check Usage Limit
+    const canProceed = await checkUsage(user.uid);
+    if (!canProceed) {
+      toast.error(
+        "You have reached your monthly word limit (20,000 words). Upgrade to Pro for unlimited generation!"
+      );
+      return;
+    }
+
     setIsGenerating(true);
     try {
-      // 1. Generate content with AI
+      // 2. Generate content with AI
       const generatedContent = await generateContent(
         formData.topic,
         formData.platform,
         formData.tone
       );
 
-      // 2. Save to Firestore
+      const wordCount = generatedContent.split(/\s+/).length;
+
+      // 3. Save to Firestore
       await addProject(user.uid, {
         title: formData.topic,
         platform: formData.platform,
         tone: formData.tone,
-        content: generatedContent, // Save real content
-        words: generatedContent.split(/\s+/).length, // Calculate real word count
+        content: generatedContent,
+        words: wordCount,
       });
+
+      // 4. Increment Usage
+      await incrementUsage(user.uid, wordCount);
 
       navigate("/dashboard/projects");
     } catch (error) {

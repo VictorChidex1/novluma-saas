@@ -113,3 +113,65 @@ export const updateProject = async (
     throw error;
   }
 };
+
+export const checkUsage = async (userId: string): Promise<boolean> => {
+  try {
+    const userRef = doc(db, "users", userId);
+    const userSnap = await import("firebase/firestore").then((m) =>
+      m.getDoc(userRef)
+    );
+
+    if (!userSnap.exists()) return false;
+
+    const data = userSnap.data();
+
+    // Admins have unlimited usage
+    if (data.role === "admin") return true;
+
+    const usage = data.usage || {
+      wordsUsed: 0,
+      cycleStart: Timestamp.now(),
+    };
+
+    const now = new Date();
+    const cycleStart = usage.cycleStart.toDate();
+    const diffTime = Math.abs(now.getTime() - cycleStart.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    // Lazy Reset: If cycle is older than 30 days, reset it
+    if (diffDays > 30) {
+      await import("firebase/firestore").then((m) =>
+        m.updateDoc(userRef, {
+          usage: {
+            wordsUsed: 0,
+            cycleStart: serverTimestamp(),
+          },
+        })
+      );
+      return true; // Reset done, allow usage
+    }
+
+    // Check Limit (Default: 20k, can be adjusted)
+    const LIMIT = 20000;
+    return usage.wordsUsed < LIMIT;
+  } catch (error) {
+    console.error("Error checking usage:", error);
+    return false; // Fail safe
+  }
+};
+
+export const incrementUsage = async (userId: string, count: number) => {
+  try {
+    const userRef = doc(db, "users", userId);
+    // We use increment() from firestore to be atomic
+    const { increment } = await import("firebase/firestore");
+
+    await import("firebase/firestore").then((m) =>
+      m.updateDoc(userRef, {
+        "usage.wordsUsed": increment(count),
+      })
+    );
+  } catch (error) {
+    console.error("Error incrementing usage:", error);
+  }
+};

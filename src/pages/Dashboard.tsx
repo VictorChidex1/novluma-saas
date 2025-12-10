@@ -52,40 +52,69 @@ export function Dashboard() {
   ];
 
   const [projects, setProjects] = useState<any[]>([]);
+  const [usageData, setUsageData] = useState({
+    wordsUsed: 0,
+    rawCycleStart: null as any,
+    role: "user",
+  });
 
   useEffect(() => {
-    const fetchProjects = async () => {
+    const fetchDashboardData = async () => {
       if (user) {
         try {
-          const data = await getUserProjects(user.uid);
-          setProjects(data);
+          // Fetch Projects
+          const projectsData = await getUserProjects(user.uid);
+          setProjects(projectsData);
+
+          // Fetch User Usage
+          const { doc, getDoc } = await import("firebase/firestore");
+          const { db } = await import("@/lib/firebase");
+          const userSnap = await getDoc(doc(db, "users", user.uid));
+
+          if (userSnap.exists()) {
+            const data = userSnap.data();
+            setUsageData({
+              wordsUsed: data.usage?.wordsUsed || 0,
+              rawCycleStart: data.usage?.cycleStart || null,
+              role: data.role || "user",
+            });
+          }
         } catch (error) {
-          console.error("Failed to fetch projects", error);
+          console.error("Failed to fetch dashboard data", error);
         }
       }
     };
-    fetchProjects();
+    fetchDashboardData();
   }, [user]);
 
   // Calculate real stats
-  const totalWords = projects.reduce(
-    (acc, project) => acc + (project.words || 0),
-    0
-  );
   const totalProjects = projects.length;
+
+  const getResetDate = () => {
+    if (usageData.role === "admin") return "Never";
+    if (!usageData.rawCycleStart) return "30 days";
+    const date = usageData.rawCycleStart.toDate();
+    date.setDate(date.getDate() + 30);
+    return date.toLocaleDateString();
+  };
 
   const usageStats = [
     {
       label: "Words Generated",
-      current: totalWords,
-      limit: 50000,
+      current: usageData.role === "admin" ? "∞" : usageData.wordsUsed,
+      limit: usageData.role === "admin" ? "Unlimited" : 20000,
       color: "bg-indigo-600",
+      subtext:
+        usageData.role === "admin"
+          ? "Admin Access"
+          : `Resets on ${getResetDate()}`,
     },
     {
       label: "Projects Created",
       current: totalProjects,
-      limit: 20,
+      limit: "Unlimited",
       color: "bg-purple-600",
+      subtext: "No limit",
     },
   ];
 
@@ -270,16 +299,33 @@ export function Dashboard() {
                       <span className="text-gray-600 dark:text-gray-400">
                         {stat.label}
                       </span>
-                      <span className="font-medium text-gray-900 dark:text-white">
-                        {stat.current.toLocaleString()} /{" "}
-                        {stat.limit.toLocaleString()}
-                      </span>
+                      <div className="text-right">
+                        <span className="font-medium text-gray-900 dark:text-white block">
+                          {typeof stat.current === "number"
+                            ? stat.current.toLocaleString()
+                            : stat.current}{" "}
+                          /{" "}
+                          {typeof stat.limit === "number"
+                            ? stat.limit.toLocaleString()
+                            : stat.limit}
+                        </span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          {stat.subtext}
+                        </span>
+                      </div>
                     </div>
                     <div className="h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{
-                          width: `${(stat.current / stat.limit) * 100}%`,
+                          width:
+                            typeof stat.limit === "number" &&
+                            typeof stat.current === "number"
+                              ? `${Math.min(
+                                  (stat.current / stat.limit) * 100,
+                                  100
+                                )}%`
+                              : "100%",
                         }}
                         transition={{ duration: 1, delay: 0.5 }}
                         className={`h-full ${stat.color} rounded-full`}

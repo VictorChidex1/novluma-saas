@@ -31,6 +31,11 @@ export interface UserProfile {
   displayName: string;
   photoURL?: string;
   role?: "admin" | "user";
+  plan?: "free" | "pro" | "enterprise";
+  usage?: {
+    wordsUsed: number;
+    cycleStart: any;
+  };
   createdAt: any;
 }
 

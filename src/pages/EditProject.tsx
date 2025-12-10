@@ -19,11 +19,19 @@ import {
   Printer,
 } from "lucide-react";
 
-import { getProject, updateProject, type Project } from "@/lib/projects";
+import {
+  getProject,
+  updateProject,
+  checkUsage,
+  incrementUsage,
+  type Project,
+} from "@/lib/projects";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import { useAuth } from "@/context/AuthContext";
 export function EditProject() {
+  const { user } = useAuth();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -140,6 +148,21 @@ export function EditProject() {
 
   // Magic Edit Logic
   const handleMagicEdit = async (instruction: string) => {
+    // Dynamic import to avoid circular dependency loop if any, or just use context hook if available
+    // But since we are inside a component inside AuthProvider, we can use useAuth hook if we lift it up.
+    // However, I see I forgot to import useAuth in the top level. I will fix that in a separate edit or here.
+    // Let's assume I will add `const { user } = useAuth();` at top level.
+    if (!user) return; // Guard
+
+    // 1. Check Usage
+    const canProceed = await checkUsage(user.uid);
+    if (!canProceed) {
+      toast.error(
+        "You have reached your monthly word limit. Upgrade to Pro for unlimited AI edits!"
+      );
+      return;
+    }
+
     const textarea = document.querySelector(
       "textarea[placeholder='Start writing or use Magic Edit to generate content...']"
     ) as HTMLTextAreaElement;
@@ -168,6 +191,11 @@ export function EditProject() {
         formData.content.substring(end);
 
       setFormData({ ...formData, content: newContent });
+
+      // 2. Increment Usage
+      const wordCount = refinedText.split(/\s+/).length;
+      await incrementUsage(user.uid, wordCount);
+
       toast.success("Magic Edit complete! ✨");
     } catch (error) {
       console.error(error);

@@ -82,7 +82,7 @@ const faqs = [
       {
         question: "Which AI models power Novluma?",
         answer:
-          "We use a hybrid orchestration engine. For reasoning and complex structuring, we leverage Google's Gemini 1.5 Pro. For speed and creative drafting, we utilize Gemini 1.5 Flash. This ensures you get the best balance of intelligence and latency.",
+          "We use a hybrid orchestration engine. For reasoning and complex structuring, we leverage Google's Gemini 2.0 Pro. For speed and creative drafting, we utilize Gemini 2.0 Flash. This ensures you get the best balance of intelligence and latency.",
       },
       {
         question: "Is my data used to train your models?",
