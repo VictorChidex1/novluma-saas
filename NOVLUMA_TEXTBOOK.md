@@ -313,3 +313,30 @@ export function LandingPage() { ... }
 - **State (`useState`)**: The memory of the component. If you type in a text box, the State remembers what you typed.
 - **Hook (`useEffect`)**: A trigger. "When [X] happens, run this code." (e.g., "When the component loads, check the time").
 - **Deployment**: Moving your code from your laptop (Localhost) to the internet (Vercel) so the world can see it.
+
+## Chapter 8: Pro Design & Navigation Secrets 🎨
+
+### 1. The "Glowing" Hero Section
+To make the FAQ page look premium, we used **Absolute Positioning** and **Blur Effects**.
+
+- **The Blobs**: We placed `<div>` circles *behind* the text using `absolute inset-0` and `z-0`.
+- **The Blur**: We applied `blur-3xl` to these circles to turn them into soft, glowing gradients.
+- **Dark Mode**: We forced the background to be dark (`bg-indigo-950`) even in light mode for that specific section, ensuring high contrast for the white text.
+
+### 2. The Text Gradient
+How do you make text multi-colored?
+
+```css
+/* 1. Make the text transparent */
+text-transparent
+/* 2. Clip the background to the text shape */
+bg-clip-text
+/* 3. Add the gradient background */
+bg-gradient-to-r from-indigo-400 to-cyan-400
+```
+
+### 3. The "Instant" Link
+You asked about the `Link` component. Here is the difference:
+
+- **`<a href="/contact">`**: This is a standard HTML link. It causes the **entire browser to refresh**. The screen flashes white, and all scripts reload. 🐢
+- **`<Link to="/contact">`**: This is a React Router component. It swaps the content **instantly** without reloading the page. It keeps the "Single Page App" feel smooth and fast. 🚀
