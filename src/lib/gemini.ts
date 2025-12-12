@@ -1,4 +1,30 @@
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "./firebase";
+
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+
+// KILL SWITCH: Global Guard
+const checkSystemStatus = async () => {
+  try {
+    const settingsRef = doc(db, "system_config", "app_settings");
+    const settingsSnap = await getDoc(settingsRef);
+
+    if (settingsSnap.exists()) {
+      const data = settingsSnap.data();
+      if (data.ai_generation_enabled === false) {
+        throw new Error(
+          data.maintenance_message ||
+            "System temporarily under maintenance. Please try again later."
+        );
+      }
+    }
+    // If doc doesn't exist, default to ALLOW (fail open)
+  } catch (error: any) {
+    if (error.message.includes("maintenance")) throw error;
+    // Log other errors but don't block user (fail safe)
+    console.warn("System check failed, proceeding:", error);
+  }
+};
 
 export const generateContent = async (
   topic: string,
@@ -8,6 +34,9 @@ export const generateContent = async (
   if (!API_KEY) {
     throw new Error("Gemini API Key is missing");
   }
+
+  // 1. Check Kill Switch
+  await checkSystemStatus();
 
   const prompt = `
     You are an expert content creator. Write a ${platform} about "${topic}".
@@ -115,6 +144,9 @@ export const refineContent = async (
   if (!API_KEY) {
     throw new Error("Gemini API Key is missing");
   }
+
+  // 1. Check Kill Switch
+  await checkSystemStatus();
 
   const prompt = `
     You are an expert editor. Rewrite the following text based on this instruction: "${instruction}".
