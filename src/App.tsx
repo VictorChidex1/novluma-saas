@@ -32,15 +32,10 @@ import AdminPostEditor from "@/pages/admin/AdminPostEditor";
 import { AdminRoute } from "@/components/AdminRoute";
 
 import { HelmetProvider } from "react-helmet-async";
-import SEO from "./components/SEO";
 
 function App() {
   return (
     <HelmetProvider>
-      <SEO
-        title="AI Content Generator"
-        description="Novluma is the ultimate AI-powered content creation platform. Generate blogs, social posts, and scripts in seconds."
-      />
       <AuthProvider>
         <ThemeProvider>
           <Router basename={import.meta.env.BASE_URL}>
