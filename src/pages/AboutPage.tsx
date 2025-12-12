@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Target, Zap, Globe, Heart } from "lucide-react";
 
@@ -18,6 +19,10 @@ import estherImg from "@/assets/images/team/esther-onyi.png";
 const AboutPage = () => {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans selection:bg-indigo-100 dark:selection:bg-indigo-900/30 selection:text-indigo-900 dark:selection:text-indigo-100 flex flex-col">
+      <SEO
+        title="About Us"
+        description="Meet the team behind Novluma. We are a diverse group of engineers, designers, and creatives passionate about AI."
+      />
       <Navbar />
 
       <main className="flex-grow">

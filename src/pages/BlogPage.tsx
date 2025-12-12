@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, ArrowRight, User, Loader2 } from "lucide-react";
 import { db } from "@/lib/firebase";
@@ -95,6 +96,10 @@ const BlogPage = () => {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans selection:bg-indigo-100 dark:selection:bg-indigo-900/30 selection:text-indigo-900 dark:selection:text-indigo-100 flex flex-col">
+      <SEO
+        title="Blog"
+        description="Discover insights, tutorials, and updates from the Novluma team. Learn how to maximize your AI content generation."
+      />
       <Navbar />
 
       <main className="flex-grow">

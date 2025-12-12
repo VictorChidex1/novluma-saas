@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import {
   Plus,
   Minus,
@@ -216,6 +217,10 @@ export function FAQPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 selection:bg-indigo-100 dark:selection:bg-indigo-900/30 selection:text-indigo-900 dark:selection:text-indigo-100 flex flex-col">
+      <SEO
+        title="FAQ"
+        description="Frequently Asked Questions about Novluma. Find answers about billing, features, and technical details."
+      />
       <Navbar />
 
       <main className="flex-grow">

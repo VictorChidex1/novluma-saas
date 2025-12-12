@@ -1,6 +1,7 @@
 import { useParams, Navigate, Link } from "react-router-dom";
 import { DocsLayout } from "../../components/docs/DocsLayout";
 import { docsData } from "../../data/docs";
+import SEO from "../../components/SEO";
 import { ChevronRight, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -44,6 +45,14 @@ export function DocsPage() {
 
   return (
     <DocsLayout>
+      <SEO
+        title={activeArticle?.title || "Documentation"}
+        description={
+          activeArticle?.description ||
+          "Learn how to use Novluma effectively with our comprehensive documentation."
+        }
+        type="article"
+      />
       <motion.article
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}

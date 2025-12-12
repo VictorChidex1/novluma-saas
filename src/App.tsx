@@ -31,112 +31,121 @@ import AdminBlogPage from "@/pages/admin/AdminBlogPage";
 import AdminPostEditor from "@/pages/admin/AdminPostEditor";
 import { AdminRoute } from "@/components/AdminRoute";
 
+import { HelmetProvider } from "react-helmet-async";
+import SEO from "./components/SEO";
+
 function App() {
   return (
-    <AuthProvider>
-      <ThemeProvider>
-        <Router basename={import.meta.env.BASE_URL}>
-          <ScrollToTop />
-          <ScrollToHashElement />
-          <Toaster />
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/careers" element={<CareersPage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/blog" element={<BlogPage />} />
-            <Route path="/blog/:slug" element={<BlogPostPage />} />
-            <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="/terms" element={<TermsOfService />} />
-            <Route path="/cookies" element={<CookiePolicy />} />
-            <Route path="/customers" element={<CustomersPage />} />
-            <Route path="/docs" element={<DocsPage />} />
-            <Route path="/docs/:slug" element={<DocsPage />} />
-            <Route path="/faq" element={<FAQPage />} />
-            <Route
-              path="/admin/*"
-              element={
-                <AdminRoute>
-                  <Routes>
-                    <Route path="/" element={<AdminDashboard />} />
-                    <Route path="/blog" element={<AdminBlogPage />} />
-                    <Route path="/blog/new" element={<AdminPostEditor />} />
-                    <Route
-                      path="/blog/edit/:id"
-                      element={<AdminPostEditor />}
-                    />
-                  </Routes>
-                </AdminRoute>
-              }
-            />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dashboard/settings"
-              element={
-                <ProtectedRoute>
-                  <Settings />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dashboard/new"
-              element={
-                <ProtectedRoute>
-                  <NewProject />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dashboard/projects"
-              element={
-                <ProtectedRoute>
-                  <Projects />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dashboard/projects/:id"
-              element={
-                <ProtectedRoute>
-                  <EditProject />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dashboard/support"
-              element={
-                <ProtectedRoute>
-                  <SupportPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dashboard/getting-started"
-              element={
-                <ProtectedRoute>
-                  <GettingStartedPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dashboard/docs/api"
-              element={
-                <ProtectedRoute>
-                  <ApiDocsPage />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </Router>
-      </ThemeProvider>
-    </AuthProvider>
+    <HelmetProvider>
+      <SEO
+        title="AI Content Generator"
+        description="Novluma is the ultimate AI-powered content creation platform. Generate blogs, social posts, and scripts in seconds."
+      />
+      <AuthProvider>
+        <ThemeProvider>
+          <Router basename={import.meta.env.BASE_URL}>
+            <ScrollToTop />
+            <ScrollToHashElement />
+            <Toaster />
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/careers" element={<CareersPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/blog" element={<BlogPage />} />
+              <Route path="/blog/:slug" element={<BlogPostPage />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/terms" element={<TermsOfService />} />
+              <Route path="/cookies" element={<CookiePolicy />} />
+              <Route path="/customers" element={<CustomersPage />} />
+              <Route path="/docs" element={<DocsPage />} />
+              <Route path="/docs/:slug" element={<DocsPage />} />
+              <Route path="/faq" element={<FAQPage />} />
+              <Route
+                path="/admin/*"
+                element={
+                  <AdminRoute>
+                    <Routes>
+                      <Route path="/" element={<AdminDashboard />} />
+                      <Route path="/blog" element={<AdminBlogPage />} />
+                      <Route path="/blog/new" element={<AdminPostEditor />} />
+                      <Route
+                        path="/blog/edit/:id"
+                        element={<AdminPostEditor />}
+                      />
+                    </Routes>
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/settings"
+                element={
+                  <ProtectedRoute>
+                    <Settings />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/new"
+                element={
+                  <ProtectedRoute>
+                    <NewProject />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/projects"
+                element={
+                  <ProtectedRoute>
+                    <Projects />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/projects/:id"
+                element={
+                  <ProtectedRoute>
+                    <EditProject />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/support"
+                element={
+                  <ProtectedRoute>
+                    <SupportPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/getting-started"
+                element={
+                  <ProtectedRoute>
+                    <GettingStartedPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/docs/api"
+                element={
+                  <ProtectedRoute>
+                    <ApiDocsPage />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </Router>
+        </ThemeProvider>
+      </AuthProvider>
+    </HelmetProvider>
   );
 }
 

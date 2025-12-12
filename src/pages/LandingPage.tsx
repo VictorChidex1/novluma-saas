@@ -13,6 +13,8 @@ import { AuthModal } from "../components/AuthModal";
 // import { useAuth } from "../context/AuthContext"; // Unused now
 // import { Navigate } from "react-router-dom";      // Unused now
 
+import SEO from "../components/SEO";
+
 export function LandingPage() {
   // const { user, loading } = useAuth(); // Unused now
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -30,6 +32,10 @@ export function LandingPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 selection:bg-indigo-100 dark:selection:bg-indigo-900/30 selection:text-indigo-900 dark:selection:text-indigo-100">
+      <SEO
+        title="Home"
+        description="Novluma is the ultimate AI-powered content creation platform. Transform your ideas into professional content in seconds."
+      />
       <Navbar
         onSignin={() => openAuth("signin")}
         onGetStarted={() => openAuth("signup")}
