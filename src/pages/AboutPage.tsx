@@ -8,12 +8,12 @@ import { Target, Zap, Globe, Heart } from "lucide-react";
 // Team Images
 import agbahoImg from "@/assets/images/team/agbaho-victor.png";
 import oziomaImg from "@/assets/images/team/dr-ozioma.png";
-import davidImg from "@/assets/images/team/david-miller.png";
-import sarahImg from "@/assets/images/team/sarah-chen.png";
-import michaelImg from "@/assets/images/team/michael-ross.png";
-import alexImg from "@/assets/images/team/dr-alex.png";
-import karlImg from "@/assets/images/team/karl-dora.png";
-import estherImg from "@/assets/images/team/esther-onyi.jpg";
+import churchyllImg from "@/assets/images/team/churchyll-goodman.png";
+import onyinyeImg from "@/assets/images/team/onyinye-elizabeth.png";
+import emmanuelImg from "@/assets/images/team/emmanuel-olafisoye.png";
+import alexImg from "@/assets/images/team/bosa.png";
+import karlImg from "@/assets/images/team/mymimi.png";
+import estherImg from "@/assets/images/team/esther-onyi.png";
 
 const AboutPage = () => {
   return (
@@ -237,7 +237,7 @@ const AboutPage = () => {
                 Our Journey
               </h2>
               <p className="text-gray-600 dark:text-gray-400 text-lg">
-                From a garage in San Francisco to a global platform.
+                From a garage in Lagos to a global platform.
               </p>
             </div>
             <div className="max-w-4xl mx-auto relative">
@@ -248,7 +248,7 @@ const AboutPage = () => {
                 {
                   year: "2025",
                   title: "Inception",
-                  desc: "Founded in San Francisco with a vision to democratize AI.",
+                  desc: "Founded in Lagos with a vision to democratize AI.",
                 },
                 {
                   year: "2026",
@@ -258,12 +258,12 @@ const AboutPage = () => {
                 {
                   year: "2026",
                   title: "Series A",
-                  desc: "Raised $12M to scale our engineering team.",
+                  desc: "Raising $1M to scale our engineering team.",
                 },
                 {
                   year: "2026",
                   title: "Global Expansion",
-                  desc: "Opened offices in London and Tokyo. Hit 1M users.",
+                  desc: "Opening offices in Lagos and Abuja. Hit 1M users.",
                 },
               ].map((item, index) => (
                 <motion.div
@@ -325,14 +325,14 @@ const AboutPage = () => {
                   img: oziomaImg,
                 },
                 {
-                  name: "David Miller",
+                  name: "Churchyll Goodman",
                   role: "CTO",
-                  img: davidImg,
+                  img: churchyllImg,
                 },
                 {
-                  name: "Sarah Chen",
+                  name: "Onyinye Elizabeth",
                   role: "Senior Software Engineer ",
-                  img: sarahImg,
+                  img: onyinyeImg,
                 },
                 {
                   name: "Esther Onyinye",
@@ -340,9 +340,9 @@ const AboutPage = () => {
                   img: estherImg,
                 },
                 {
-                  name: "Michael Ross",
+                  name: "Emmanuel Olafisoye",
                   role: "Head of Product",
-                  img: michaelImg,
+                  img: emmanuelImg,
                 },
                 {
                   name: "Alex Johnson",
