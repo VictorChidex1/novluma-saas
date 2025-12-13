@@ -193,9 +193,9 @@ const ContactPage = () => {
                         Come say hello at our office HQ.
                       </p>
                       <p className="text-gray-900 dark:text-white font-medium">
-                        123 AI Boulevard
+                        40A Thompson Ave,
                         <br />
-                        San Francisco, CA 94107
+                        Ikoyi, Lagos 106104
                       </p>
                     </div>
                   </div>
