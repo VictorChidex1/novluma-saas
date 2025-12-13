@@ -140,6 +140,31 @@ To deploy to GitHub Pages:
 npm run deploy
 ```
 
+## 🛡️ Safety & Maintenance
+
+### **Kill Switch (Emergency Stop)**
+
+Novluma includes a database-driven "Kill Switch" to instantly disable all AI generation features globally without redeploying code.
+
+1.  **To Activate (Stop AI)**:
+
+    - Go to Firestore -> `system_config` / `app_settings`
+    - Set `ai_generation_enabled` to `false`.
+    - Result: Users get a "System under maintenance" error.
+
+2.  **To Deactivate (Start AI)**:
+    - Set `ai_generation_enabled` to `true`.
+
+### **API Security**
+
+Since this is a client-side app, the Gemini API key is technically exposed. To prevent abuse:
+
+1.  Go to **Google AI Studio**.
+2.  Enable **HTTP Referrer Restrictions**.
+3.  Whitelist your domains:
+    - `https://novluma-saas.vercel.app/*`
+    - `http://localhost:5173/*`
+
 ## 📄 License
 
 This project is licensed under the MIT License.

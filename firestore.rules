@@ -38,7 +38,14 @@ service cloud.firestore {
       allow update, delete: if false;
     }
 
-    // 6. Default: Deny everything else
+
+    // 6. System Config (Kill Switch): Public Read, Admin Write
+    match /system_config/{configId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // 7. Default: Deny everything else
     match /{document=**} {
       allow read, write: if false;
     }
