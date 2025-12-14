@@ -21,6 +21,7 @@ import {
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { toast } from "sonner";
+import { sendContactForm } from "@/lib/email";
 
 const ContactPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -51,6 +52,15 @@ const ContactPage = () => {
         createdAt: serverTimestamp(),
         status: "new",
       });
+
+      // Send email notification
+      await sendContactForm({
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        subject: formData.subject,
+        message: formData.message,
+      });
+
       toast.success("Message sent! We'll get back to you soon.");
       setFormData({
         firstName: "",

@@ -162,8 +162,23 @@ Since this is a client-side app, the Gemini API key is technically exposed. To p
 1.  Go to **Google AI Studio**.
 2.  Enable **HTTP Referrer Restrictions**.
 3.  Whitelist your domains:
+
     - `https://novluma-saas.vercel.app/*`
     - `http://localhost:5173/*`
+
+    - `http://localhost:5173/*`
+
+## 📧 Email Notification System
+
+Novluma uses a **Dual-Template** setup with EmailJS to handle different types of communication:
+
+1.  **Welcome Emails**: Sent to users upon signup.
+    - Uses `VITE_EMAILJS_TEMPLATE_ID`.
+    - Template: "Welcome" (Customer-facing).
+2.  **Admin Notifications**: Sent to YOU when actions happen.
+    - Uses `VITE_EMAILJS_NOTIFICATION_TEMPLATE_ID`.
+    - Template: "Admin Notification" (Internal).
+    - Triggers: Contact Form submissions, Job Applications.
 
 ## 📄 License
 

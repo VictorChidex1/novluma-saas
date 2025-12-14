@@ -37,3 +37,65 @@ export const sendWelcomeEmail = async (email: string, name: string) => {
     console.error("Failed to send welcome email:", error);
   }
 };
+
+export const sendContactForm = async (data: {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}) => {
+  const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+  const templateId = import.meta.env.VITE_EMAILJS_NOTIFICATION_TEMPLATE_ID;
+  const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+  if (!serviceId || !templateId || !publicKey) return;
+
+  try {
+    await emailjs.send(
+      serviceId,
+      templateId,
+      {
+        to_name: "Admin",
+        from_name: data.name,
+        from_email: data.email,
+        subject: `StartUp Notification: ${data.subject}`,
+        message: data.message,
+      },
+      publicKey
+    );
+  } catch (error) {
+    console.error("Failed to send contact email:", error);
+  }
+};
+
+export const sendJobApplication = async (data: {
+  role: string;
+  name: string;
+  email: string;
+  coverLetter?: string;
+}) => {
+  const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+  const templateId = import.meta.env.VITE_EMAILJS_NOTIFICATION_TEMPLATE_ID;
+  const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+  if (!serviceId || !templateId || !publicKey) return;
+
+  try {
+    await emailjs.send(
+      serviceId,
+      templateId,
+      {
+        to_name: "Hiring Manager",
+        from_name: data.name,
+        from_email: data.email,
+        subject: `New Application: ${data.role}`,
+        message: `Candidate: ${data.name} (${data.email})\nRole: ${
+          data.role
+        }\n\nCover Letter:\n${data.coverLetter || "N/A"}`,
+      },
+      publicKey
+    );
+  } catch (error) {
+    console.error("Failed to send application email:", error);
+  }
+};

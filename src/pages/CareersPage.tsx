@@ -34,6 +34,7 @@ import {
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { toast } from "sonner";
+import { sendJobApplication } from "@/lib/email";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -112,6 +113,15 @@ const CareersPage = () => {
         coverLetter: formData.coverLetter,
         createdAt: serverTimestamp(),
       });
+
+      // Send email notification
+      await sendJobApplication({
+        role: selectedRole || "Unknown Role",
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        coverLetter: formData.coverLetter,
+      });
+
       toast.success("Application submitted successfully! We'll be in touch.");
       setFormData({
         firstName: "",
