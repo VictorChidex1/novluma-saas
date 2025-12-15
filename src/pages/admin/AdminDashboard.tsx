@@ -30,7 +30,6 @@ import {
   FileText,
   MessageSquare,
   FolderOpen,
-  Calendar,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -540,7 +539,7 @@ const AdminDashboard = () => {
                               ).toLocaleDateString()
                             : "N/A"}
                         </TableCell>
-                        <TableCell className="text-gray-900 font-medium">
+                        <TableCell className="text-gray-900 dark:text-gray-100 font-medium">
                           {proj.userName}
                         </TableCell>
                       </TableRow>
