@@ -1,5 +1,6 @@
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
+import { getBrandVoiceById } from "./brandVoices";
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
@@ -29,7 +30,8 @@ const checkSystemStatus = async () => {
 export const generateContent = async (
   topic: string,
   platform: string,
-  tone: string
+  tone: string,
+  voiceId?: string
 ): Promise<string> => {
   if (!API_KEY) {
     throw new Error("Gemini API Key is missing");
@@ -38,10 +40,36 @@ export const generateContent = async (
   // 1. Check Kill Switch
   await checkSystemStatus();
 
+  let brandVoiceInstruction = "";
+  if (voiceId) {
+    try {
+      const voice = await getBrandVoiceById(voiceId);
+      if (voice) {
+        brandVoiceInstruction = `
+        CRITICAL INSTRUCTION: You represent a specific author. You MUST write in their unique "Brand Voice".
+        
+        BRAND VOICE DNA:
+        - Emotional Tone: ${voice.analysis.tone}
+        - Sentence Structure: ${voice.analysis.sentence_structure}
+        - Signature Vocabulary: ${voice.analysis.vocabulary.join(", ")}
+        - Avoid These Words: ${
+          voice.analysis.banned_words?.join(", ") || "None"
+        }
+        
+        Do not sound generic. Sound like THIS person.
+        `;
+      }
+    } catch (error) {
+      console.warn("Failed to fetch brand voice, reverting to default.", error);
+    }
+  }
+
   const prompt = `
-    You are an expert content creator. Write a ${platform} about "${topic}".
+    ${brandVoiceInstruction || "You are an expert content creator."}
     
-    Tone: ${tone}
+    Task: Write a ${platform} about "${topic}".
+    
+    ${!brandVoiceInstruction ? `Tone: ${tone}` : ""}
     
     Requirements:
     - If it's a Twitter Thread, separate tweets with "---".
@@ -239,5 +267,91 @@ export const refineContent = async (
   // If all failed, throw the last meaningful error
   throw new Error(
     lastError?.message || "Failed to refine text. Please try again."
+  );
+};
+
+export const analyzeBrandVoice = async (
+  text: string
+): Promise<{
+  tone: string;
+  sentence_structure: string;
+  vocabulary: string[];
+  banned_words: string[];
+  emoji_usage: boolean;
+}> => {
+  if (!API_KEY) {
+    throw new Error("Gemini API Key is missing");
+  }
+
+  // 1. Check Kill Switch
+  await checkSystemStatus();
+
+  const prompt = `
+    Act as a Linguistic Expert. Analyze the following sample text to extract the author's unique writing style (Brand Voice).
+    
+    SAMPLE TEXT:
+    "${text.slice(0, 2000)}"
+    
+    Return a JSON object with these exact keys:
+    - "tone": A short description of the emotional tone (e.g., "Professional but Witty", "Urgent and Direct").
+    - "sentence_structure": A description of how they structure sentences (e.g., "Short, punchy sentences", "Long, complex clauses").
+    - "vocabulary": An array of 5-10 characteristic words or jargon they use.
+    - "banned_words": An array of words they clearly avoid (or opposites of their style).
+    - "emoji_usage": boolean (true if they use emojis, false otherwise).
+
+    Return ONLY the JSON. No markedown formatting.
+  `;
+
+  // List of models and versions to try
+  const strategies = [
+    { model: "gemini-2.0-flash", version: "v1beta" },
+    { model: "gemini-2.0-pro-exp", version: "v1beta" },
+    { model: "gemini-flash-latest", version: "v1beta" },
+  ];
+
+  let lastError: any = null;
+
+  for (const strategy of strategies) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/${strategy.version}/models/${strategy.model}:generateContent?key=${API_KEY}`;
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { responseMimeType: "application/json" }, // Force JSON
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.error?.message || `Model ${strategy.model} failed`
+        );
+      }
+
+      const data = await response.json();
+      const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+      if (!content) throw new Error("Empty response from AI");
+
+      // Clean markdown if present (e.g. ```json ... ```)
+      const jsonString = content
+        .replace(/```json/g, "")
+        .replace(/```/g, "")
+        .trim();
+      return JSON.parse(jsonString);
+    } catch (error: any) {
+      console.warn(
+        `Analysis Strategy ${strategy.model} failed:`,
+        error.message
+      );
+      lastError = error;
+    }
+  }
+
+  throw new Error(
+    lastError?.message || "Failed to analyze brand voice. Please try again."
   );
 };

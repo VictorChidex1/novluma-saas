@@ -17,11 +17,14 @@ import {
   Instagram,
   Video,
   Youtube,
+  Fingerprint,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { addProject, checkUsage, incrementUsage } from "@/lib/projects";
 import { generateContent } from "@/lib/gemini";
+import { getBrandVoices } from "@/lib/brandVoices";
+import type { BrandVoice } from "@/types";
 import { toast } from "sonner";
 
 export function NewProject() {
@@ -29,10 +32,19 @@ export function NewProject() {
   const { user } = useAuth();
   const [step, setStep] = useState(1);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [voices, setVoices] = useState<BrandVoice[]>([]);
+  const [selectedVoiceId, setSelectedVoiceId] = useState<string>("");
+
   const [formData, setFormData] = useState({
     topic: "",
     platform: "",
     tone: "",
+  });
+
+  useState(() => {
+    if (user) {
+      getBrandVoices(user.uid).then(setVoices).catch(console.error);
+    }
   });
 
   const platforms = [
@@ -128,7 +140,8 @@ export function NewProject() {
       const generatedContent = await generateContent(
         formData.topic,
         formData.platform,
-        formData.tone
+        formData.tone,
+        selectedVoiceId
       );
 
       const wordCount = generatedContent.split(/\s+/).length;
@@ -241,13 +254,65 @@ export function NewProject() {
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                   Select a tone
                 </h2>
+
+                {voices.length > 0 && (
+                  <div className="mb-8">
+                    <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">
+                      Your Brand Voices
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {voices.map((voice) => (
+                        <button
+                          key={voice.id}
+                          onClick={() => {
+                            setSelectedVoiceId(voice.id);
+                            updateForm("tone", "Custom Voice"); // UI feedback
+                          }}
+                          className={`p-6 rounded-xl border-2 text-left transition-all relative overflow-hidden ${
+                            selectedVoiceId === voice.id
+                              ? "border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20"
+                              : "border-gray-200 dark:border-gray-800 hover:border-indigo-300 dark:hover:border-indigo-700"
+                          }`}
+                        >
+                          {selectedVoiceId === voice.id && (
+                            <div className="absolute top-0 right-0 p-2 bg-indigo-600 text-white rounded-bl-xl">
+                              <Sparkles size={12} />
+                            </div>
+                          )}
+                          <div className="flex items-center gap-3 mb-2">
+                            <Fingerprint
+                              className={`w-5 h-5 ${
+                                selectedVoiceId === voice.id
+                                  ? "text-indigo-600"
+                                  : "text-gray-400"
+                              }`}
+                            />
+                            <span className="font-semibold text-gray-900 dark:text-white">
+                              {voice.name}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            {voice.analysis.tone}
+                          </p>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">
+                  Standard Tones
+                </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {tones.map((tone) => (
                     <button
                       key={tone.id}
-                      onClick={() => updateForm("tone", tone.id)}
+                      onClick={() => {
+                        setSelectedVoiceId(""); // Clear custom voice
+                        updateForm("tone", tone.id);
+                      }}
                       className={`p-6 rounded-xl border-2 text-left transition-all ${
-                        formData.tone === tone.id
+                        formData.tone === tone.id && !selectedVoiceId
                           ? "border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20"
                           : "border-gray-200 dark:border-gray-800 hover:border-indigo-300 dark:hover:border-indigo-700"
                       }`}

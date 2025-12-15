@@ -12,6 +12,7 @@ import { GettingStartedPage } from "./pages/GettingStartedPage";
 import { ApiDocsPage } from "./pages/ApiDocsPage";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { FAQPage } from "./pages/FAQPage";
+import { BrandVoicesPage } from "./pages/BrandVoicesPage";
 
 import ContactPage from "./pages/ContactPage";
 import CareersPage from "./pages/CareersPage";
@@ -125,6 +126,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <GettingStartedPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/brand-voices"
+                element={
+                  <ProtectedRoute>
+                    <BrandVoicesPage />
                   </ProtectedRoute>
                 }
               />

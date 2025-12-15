@@ -50,3 +50,21 @@ export interface Application {
   coverLetter: string;
   createdAt: any;
 }
+
+export interface BrandVoiceAnalysis {
+  tone: string;
+  sentence_structure: string;
+  vocabulary: string[];
+  banned_words?: string[];
+  emoji_usage?: boolean;
+}
+
+export interface BrandVoice {
+  id: string;
+  userId: string;
+  name: string;
+  description?: string;
+  analysis: BrandVoiceAnalysis;
+  exemplar: string;
+  createdAt: any;
+}

@@ -45,7 +45,13 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
-    // 7. Default: Deny everything else
+    // 7. Brand Voices: Users can read/write their OWN voices
+    match /brand_voices/{voiceId} {
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow read, update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+
+    // 8. Default: Deny everything else
     match /{document=**} {
       allow read, write: if false;
     }

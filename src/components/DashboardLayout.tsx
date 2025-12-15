@@ -9,6 +9,7 @@ import {
   HelpCircle,
   LogOut,
   Book,
+  Fingerprint,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -27,6 +28,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
     { name: "Projects", href: "/dashboard/projects", icon: FolderOpen },
     { name: "Team", href: "/dashboard/team", icon: Users },
+    { name: "Brand Voice", href: "/dashboard/brand-voices", icon: Fingerprint },
     { name: "Reports", href: "/reports", icon: PieChart },
     { name: "Settings", href: "/dashboard/settings", icon: Settings },
     { name: "Documentation", href: "/docs", icon: Book },

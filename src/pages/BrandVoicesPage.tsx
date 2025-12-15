@@ -1,0 +1,397 @@
+import { useState, useEffect } from "react";
+import { DashboardLayout } from "../components/DashboardLayout";
+import { useAuth } from "../context/AuthContext";
+import {
+  getBrandVoices,
+  addBrandVoice,
+  deleteBrandVoice,
+} from "../lib/brandVoices";
+import { analyzeBrandVoice } from "../lib/gemini";
+import type { BrandVoice, BrandVoiceAnalysis } from "../types";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Plus,
+  Trash2,
+  Sparkles,
+  Fingerprint,
+  Check,
+  X,
+  Loader2,
+  Mic,
+  FileText,
+} from "lucide-react";
+import { toast } from "sonner";
+
+export function BrandVoicesPage() {
+  const { user } = useAuth();
+  const [voices, setVoices] = useState<BrandVoice[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Wizard State
+  const [showWizard, setShowWizard] = useState(false);
+  const [step, setStep] = useState<"input" | "analyzing" | "review" | "saving">(
+    "input"
+  );
+  const [sampleText, setSampleText] = useState("");
+  const [analysis, setAnalysis] = useState<BrandVoiceAnalysis | null>(null);
+  const [voiceName, setVoiceName] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      loadVoices();
+    }
+  }, [user]);
+
+  const loadVoices = async () => {
+    if (!user) return;
+    try {
+      setLoading(true);
+      const data = await getBrandVoices(user.uid);
+      setVoices(data);
+    } catch (error) {
+      console.error("Failed to load voices:", error);
+      toast.error("Failed to load your brand voices.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAnalyze = async () => {
+    if (!sampleText.trim() || sampleText.length < 50) {
+      toast.error("Please provide at least 50 characters of sample text.");
+      return;
+    }
+
+    setStep("analyzing");
+    try {
+      const result = await analyzeBrandVoice(sampleText);
+      setAnalysis(result);
+      setStep("review");
+    } catch (error) {
+      console.error("Analysis failed:", error);
+      toast.error("Failed to analyze text. Please try again.");
+      setStep("input");
+    }
+  };
+
+  const handleSave = async () => {
+    if (!user || !analysis || !voiceName) return;
+
+    setStep("saving");
+    try {
+      await addBrandVoice(user.uid, voiceName, sampleText, analysis);
+      toast.success("Brand Voice created successfully!");
+      setShowWizard(false);
+      resetWizard();
+      loadVoices();
+    } catch (error) {
+      console.error("Failed to save voice:", error);
+      toast.error("Failed to save voice.");
+      setStep("review");
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this voice?")) return;
+    try {
+      await deleteBrandVoice(id);
+      setVoices(voices.filter((v) => v.id !== id));
+      toast.success("Voice deleted.");
+    } catch (error) {
+      toast.error("Failed to delete voice.");
+    }
+  };
+
+  const resetWizard = () => {
+    setStep("input");
+    setSampleText("");
+    setAnalysis(null);
+    setVoiceName("");
+  };
+
+  return (
+    <DashboardLayout>
+      <div className="max-w-6xl mx-auto">
+        <header className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+              <Fingerprint className="w-8 h-8 text-indigo-500" />
+              Brand Voice Intelligence
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-2">
+              Teach Novluma to write exactly like you.
+            </p>
+          </div>
+          <button
+            onClick={() => setShowWizard(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors"
+          >
+            <Plus size={20} />
+            New Voice
+          </button>
+        </header>
+
+        {loading ? (
+          <div className="flex justify-center py-20">
+            <Loader2 className="w-10 h-10 animate-spin text-indigo-500" />
+          </div>
+        ) : voices.length === 0 ? (
+          <div className="text-center py-20 bg-white dark:bg-gray-900 rounded-2xl border border-dashed border-gray-200 dark:border-gray-800">
+            <div className="w-16 h-16 bg-indigo-50 dark:bg-indigo-900/20 rounded-full flex items-center justify-center mx-auto mb-4 text-indigo-500">
+              <Mic size={32} />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              No voices found
+            </h3>
+            <p className="text-gray-500 max-w-md mx-auto mb-6">
+              Create your first Brand Voice to unlock the "Personal Layout" in
+              content generation.
+            </p>
+            <button
+              onClick={() => setShowWizard(true)}
+              className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors"
+            >
+              Create Your First Voice
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {voices.map((voice) => (
+              <motion.div
+                key={voice.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 hover:border-indigo-500 dark:hover:border-indigo-500 transition-colors group relative"
+              >
+                <button
+                  onClick={() => handleDelete(voice.id)}
+                  className="absolute top-4 right-4 p-2 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <Trash2 size={16} />
+                </button>
+
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-lg bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                    <Fingerprint size={20} />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 dark:text-white">
+                      {voice.name}
+                    </h3>
+                    <p className="text-xs text-gray-500">
+                      {new Date(
+                        voice.createdAt?.seconds * 1000
+                      ).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                    <span className="text-xs font-medium text-gray-500 uppercase block mb-1">
+                      Tone
+                    </span>
+                    <p className="text-sm text-gray-700 dark:text-gray-300">
+                      {voice.analysis.tone}
+                    </p>
+                  </div>
+                  <div className="p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                    <span className="text-xs font-medium text-gray-500 uppercase block mb-1">
+                      Vocabulary
+                    </span>
+                    <div className="flex flex-wrap gap-1">
+                      {voice.analysis.vocabulary.slice(0, 3).map((word, i) => (
+                        <span
+                          key={i}
+                          className="text-xs bg-white dark:bg-gray-800 px-2 py-0.5 rounded border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400"
+                        >
+                          {word}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
+
+        {/* Wizard Modal */}
+        <AnimatePresence>
+          {showWizard && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+              onClick={() => setShowWizard(false)}
+            >
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.95, opacity: 0 }}
+                onClick={(e) => e.stopPropagation()}
+                className="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200 dark:border-gray-800"
+              >
+                {/* Modal Header */}
+                <div className="p-6 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center sticky top-0 bg-white dark:bg-gray-900 z-10">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-indigo-500" />
+                    Create New Voice
+                  </h3>
+                  <button
+                    onClick={() => setShowWizard(false)}
+                    className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+
+                {/* Modal Content */}
+                <div className="p-6">
+                  {step === "input" && (
+                    <div className="space-y-4">
+                      <div className="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-lg flex gap-3 text-indigo-700 dark:text-indigo-300 text-sm">
+                        <FileText className="w-5 h-5 shrink-0" />
+                        <p>
+                          Paste a sample of your writing (at least 50 words).
+                          This could be a LinkedIn post, a blog intro, or an
+                          email. The AI will analyze your unique style DNA.
+                        </p>
+                      </div>
+                      <textarea
+                        value={sampleText}
+                        onChange={(e) => setSampleText(e.target.value)}
+                        placeholder="Paste your text here..."
+                        className="w-full h-64 p-4 rounded-xl bg-gray-50 dark:bg-gray-800 border-none focus:ring-2 focus:ring-indigo-500 dark:text-white resize-none"
+                      />
+                      <div className="flex justify-end">
+                        <button
+                          onClick={handleAnalyze}
+                          disabled={!sampleText.trim()}
+                          className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+                        >
+                          <Sparkles size={18} />
+                          Analyze DNA
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {step === "analyzing" && (
+                    <div className="flex flex-col items-center justify-center py-20">
+                      <Loader2 className="w-12 h-12 animate-spin text-indigo-500 mb-4" />
+                      <h4 className="text-lg font-medium text-gray-900 dark:text-white">
+                        Analyzing your writing style...
+                      </h4>
+                      <p className="text-gray-500 text-sm mt-2">
+                        Extracting tone, vocabulary, and structure.
+                      </p>
+                    </div>
+                  )}
+
+                  {step === "review" && analysis && (
+                    <div className="space-y-6">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                          Voice Name
+                        </label>
+                        <input
+                          type="text"
+                          value={voiceName}
+                          onChange={(e) => setVoiceName(e.target.value)}
+                          placeholder="e.g. My LinkedIn Voice"
+                          className="w-full px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+                          <span className="text-xs uppercase font-bold text-gray-500 mb-2 block">
+                            Tone
+                          </span>
+                          <p className="text-gray-900 dark:text-white">
+                            {analysis.tone}
+                          </p>
+                        </div>
+                        <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+                          <span className="text-xs uppercase font-bold text-gray-500 mb-2 block">
+                            Sentence Structure
+                          </span>
+                          <p className="text-gray-900 dark:text-white text-sm">
+                            {analysis.sentence_structure}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+                        <span className="text-xs uppercase font-bold text-gray-500 mb-2 block">
+                          Signature Vocabulary
+                        </span>
+                        <div className="flex flex-wrap gap-2">
+                          {analysis.vocabulary.map((word, i) => (
+                            <span
+                              key={i}
+                              className="px-2 py-1 bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300"
+                            >
+                              {word}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {analysis.banned_words &&
+                        analysis.banned_words.length > 0 && (
+                          <div className="p-4 bg-red-50 dark:bg-red-900/10 rounded-xl border border-red-100 dark:border-red-900/20">
+                            <span className="text-xs uppercase font-bold text-red-500 mb-2 block">
+                              Avoids
+                            </span>
+                            <div className="flex flex-wrap gap-2">
+                              {analysis.banned_words.map((word, i) => (
+                                <span
+                                  key={i}
+                                  className="px-2 py-1 bg-white dark:bg-gray-900 rounded text-sm text-red-600 dark:text-red-400"
+                                >
+                                  {word}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                      <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-800">
+                        <button
+                          onClick={() => setStep("input")}
+                          className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                        >
+                          Back
+                        </button>
+                        <button
+                          onClick={handleSave}
+                          disabled={!voiceName}
+                          className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+                        >
+                          <Check size={18} />
+                          Save Voice
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {step === "saving" && (
+                    <div className="flex flex-col items-center justify-center py-20">
+                      <Loader2 className="w-12 h-12 animate-spin text-green-500 mb-4" />
+                      <h4 className="text-lg font-medium text-gray-900 dark:text-white">
+                        Saving Voice Profile...
+                      </h4>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </DashboardLayout>
+  );
+}
