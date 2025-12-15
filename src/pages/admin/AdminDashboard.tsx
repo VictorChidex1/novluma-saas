@@ -3,7 +3,14 @@ import { Navbar } from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/context/AuthContext";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 import type { Application } from "@/types";
 import {
   Table,
@@ -23,6 +30,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   Download,
   Loader2,
   Search,
@@ -32,6 +45,7 @@ import {
   FolderOpen,
   ChevronLeft,
   ChevronRight,
+  Trash2,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
@@ -45,6 +59,7 @@ interface Project {
   platform: string;
   tone: string;
   words: number;
+  content?: string; // Content for viewing
   createdAt: any;
 }
 
@@ -63,89 +78,113 @@ const AdminDashboard = () => {
     "applications" | "messages" | "projects"
   >("applications");
 
+  // Project Management State
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // 1. Fetch Users for Mapping
-        const usersSnapshot = await getDocs(collection(db, "users"));
-        const userMap = new Map<string, string>();
-        usersSnapshot.forEach((doc) => {
-          const data = doc.data();
-          userMap.set(doc.id, data.displayName || data.email || "Unknown User");
-        });
-
-        // 2. Fetch Applications
-        const appQuery = query(
-          collection(db, "applications"),
-          orderBy("createdAt", "desc")
-        );
-        const appSnapshot = await getDocs(appQuery);
-        const apps: Application[] = [];
-        appSnapshot.forEach((doc) => {
-          apps.push({ id: doc.id, ...doc.data() } as Application);
-        });
-        setApplications(apps);
-
-        // 3. Fetch Messages
-        const msgQuery = query(
-          collection(db, "contact_messages"),
-          orderBy("createdAt", "desc")
-        );
-        const msgSnapshot = await getDocs(msgQuery);
-        const msgs: any[] = [];
-        msgSnapshot.forEach((doc) => {
-          msgs.push({ id: doc.id, ...doc.data() });
-        });
-        setMessages(msgs);
-
-        // 4. Fetch blog posts count
-        const postsQ = query(collection(db, "blog_posts"));
-        const postsSnapshot = await getDocs(postsQ);
-        setPostCount(postsSnapshot.size);
-
-        // 5. Fetch Total Projects and Map Names
-        const projectsQ = query(collection(db, "projects"));
-        const projectsSnapshot = await getDocs(projectsQ);
-        const projs: Project[] = [];
-        projectsSnapshot.forEach((doc) => {
-          const data = doc.data();
-          projs.push({
-            id: doc.id,
-            userId: data.userId,
-            userName: userMap.get(data.userId) || "Unknown User", // Map Name
-            title: data.title || "Untitled Project",
-            platform: data.platform || "Unknown",
-            tone: data.tone || "Standard",
-            words: data.words || 0,
-            createdAt: data.createdAt,
-          });
-        });
-        // Sort manually
-        projs.sort((a, b) => {
-          const dateA = a.createdAt?.seconds || 0;
-          const dateB = b.createdAt?.seconds || 0;
-          return dateB - dateA;
-        });
-
-        setProjects(projs);
-      } catch (error: any) {
-        console.error("Error fetching data:", error);
-        toast.error(`Failed to load data: ${error.message}`);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      // 1. Fetch Users for Mapping
+      const usersSnapshot = await getDocs(collection(db, "users"));
+      const userMap = new Map<string, string>();
+      usersSnapshot.forEach((doc) => {
+        const data = doc.data();
+        userMap.set(doc.id, data.displayName || data.email || "Unknown User");
+      });
+
+      // 2. Fetch Applications
+      const appQuery = query(
+        collection(db, "applications"),
+        orderBy("createdAt", "desc")
+      );
+      const appSnapshot = await getDocs(appQuery);
+      const apps: Application[] = [];
+      appSnapshot.forEach((doc) => {
+        apps.push({ id: doc.id, ...doc.data() } as Application);
+      });
+      setApplications(apps);
+
+      // 3. Fetch Messages
+      const msgQuery = query(
+        collection(db, "contact_messages"),
+        orderBy("createdAt", "desc")
+      );
+      const msgSnapshot = await getDocs(msgQuery);
+      const msgs: any[] = [];
+      msgSnapshot.forEach((doc) => {
+        msgs.push({ id: doc.id, ...doc.data() });
+      });
+      setMessages(msgs);
+
+      // 4. Fetch blog posts count
+      const postsQ = query(collection(db, "blog_posts"));
+      const postsSnapshot = await getDocs(postsQ);
+      setPostCount(postsSnapshot.size);
+
+      // 5. Fetch Total Projects and Map Names
+      const projectsQ = query(collection(db, "projects"));
+      const projectsSnapshot = await getDocs(projectsQ);
+      const projs: Project[] = [];
+      projectsSnapshot.forEach((doc) => {
+        const data = doc.data();
+        projs.push({
+          id: doc.id,
+          userId: data.userId,
+          userName: userMap.get(data.userId) || "Unknown User", // Map Name
+          title: data.title || "Untitled Project",
+          platform: data.platform || "Unknown",
+          tone: data.tone || "Standard",
+          words: data.words || 0,
+          content: data.content, // Ensure content is fetched
+          createdAt: data.createdAt,
+        });
+      });
+      // Sort manually
+      projs.sort((a, b) => {
+        const dateA = a.createdAt?.seconds || 0;
+        const dateB = b.createdAt?.seconds || 0;
+        return dateB - dateA;
+      });
+
+      setProjects(projs);
+    } catch (error: any) {
+      console.error("Error fetching data:", error);
+      toast.error(`Failed to load data: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Reset pagination when searching or switching views
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm, viewMode]);
+
+  const handleDeleteProject = async (projectId: string) => {
+    if (
+      !confirm(
+        "Are you sure you want to delete this project? This action cannot be undone."
+      )
+    )
+      return;
+
+    try {
+      await deleteDoc(doc(db, "projects", projectId));
+      toast.success("Project deleted successfully");
+      // Update Name List locally instead of full refetch
+      setProjects((prev) => prev.filter((p) => p.id !== projectId));
+    } catch (error: any) {
+      console.error("Error deleting project:", error);
+      toast.error("Failed to delete project");
+    }
+  };
 
   const downloadResume = (base64: string, filename: string) => {
     try {
@@ -504,13 +543,14 @@ const AdminDashboard = () => {
                     <TableHead>Words</TableHead>
                     <TableHead>Created At</TableHead>
                     <TableHead>User Name</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {paginatedData.length === 0 ? (
                     <TableRow>
                       <TableCell
-                        colSpan={6}
+                        colSpan={7}
                         className="text-center h-32 text-gray-500"
                       >
                         No projects found.
@@ -518,7 +558,11 @@ const AdminDashboard = () => {
                     </TableRow>
                   ) : (
                     paginatedData.map((proj: any) => (
-                      <TableRow key={proj.id}>
+                      <TableRow
+                        key={proj.id}
+                        className="cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-900"
+                        onClick={() => setSelectedProject(proj)}
+                      >
                         <TableCell
                           className="font-medium text-indigo-600 dark:text-indigo-400 max-w-[200px] truncate"
                           title={proj.title}
@@ -542,6 +586,19 @@ const AdminDashboard = () => {
                         <TableCell className="text-gray-900 dark:text-gray-100 font-medium">
                           {proj.userName}
                         </TableCell>
+                        <TableCell className="text-right">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
+                            onClick={(e) => {
+                              e.stopPropagation(); // Prevent row click
+                              handleDeleteProject(proj.id);
+                            }}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
                       </TableRow>
                     ))
                   )}
@@ -550,6 +607,77 @@ const AdminDashboard = () => {
             )}
           </div>
         </div>
+
+        {/* Project View Dialog */}
+        <Dialog
+          open={!!selectedProject}
+          onOpenChange={(open) => !open && setSelectedProject(null)}
+        >
+          <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="text-xl font-bold">
+                Project Details
+              </DialogTitle>
+            </DialogHeader>
+            {selectedProject && (
+              <div className="space-y-6">
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="text-gray-500 block mb-1">User</span>
+                    <span className="font-medium">
+                      {selectedProject.userName}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-gray-500 block mb-1">Created At</span>
+                    <span className="font-medium">
+                      {selectedProject.createdAt?.seconds
+                        ? new Date(
+                            selectedProject.createdAt.seconds * 1000
+                          ).toLocaleString()
+                        : "N/A"}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-gray-500 block mb-1">Platform</span>
+                    <span className="font-medium capitalize">
+                      {selectedProject.platform}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-gray-500 block mb-1">Tone</span>
+                    <span className="font-medium capitalize">
+                      {selectedProject.tone}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <span className="text-gray-500 text-sm font-medium">
+                    Title/Topic
+                  </span>
+                  <div className="p-3 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 font-medium">
+                    {selectedProject.title}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-500 text-sm font-medium">
+                      Generated Content
+                    </span>
+                    <span className="text-xs text-gray-400">
+                      {selectedProject.words} words
+                    </span>
+                  </div>
+                  <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 whitespace-pre-wrap leading-relaxed text-sm">
+                    {selectedProject.content || "No content available."}
+                  </div>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
       </main>
       <Footer />
     </div>
