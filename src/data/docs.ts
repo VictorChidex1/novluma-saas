@@ -130,22 +130,56 @@ export const docsData: DocCategory[] = [
       },
       {
         slug: "brand-voice",
-        title: "Brand Voice",
-        description: "Customize the AI to sound like you.",
+        title: "Brand Voice Intelligence",
+        description: "Clone your personal writing style using Style DNA.",
         content: `
-          <h1>Brand Voice Customization</h1>
-          <p>Consistency is key. Novluma allows you to define a "Brand Voice" that applies to all your projects.</p>
+          <h1>Brand Voice Intelligence (The Personal Layout)</h1>
+          <p class="lead">Novluma's Brand Voice system goes beyond simple tone settings. It uses <strong>Style DNA Technology</strong> to mathematically analyze your writing patterns and replicate them.</p>
 
-          <h2>How to Setup</h2>
+          <div class="callout callout-info">
+            <strong>🎯 The Goal:</strong> Stop the AI from sounding like a generic robot. Make it sound exactly like <em>You</em>.
+          </div>
+
+          <h2>How It Works (The 3-Step Process)</h2>
+          <br />
+          
+          <h3>1. The Analyzer (Voice Lab)</h3>
+          <p>We analyze your past writing to extract your linguistic fingerprint.</p>
+          <ul>
+            <li><strong>Input</strong>: You paste a sample text (e.g., a LinkedIn post or email).</li>
+            <li><strong>Analysis</strong>: The AI identifies your sentence structure, vocabulary, and emotional undertones.</li>
+            <li><strong>Output</strong>: A "Style DNA" profile is saved to your account.</li>
+          </ul>
+          <br />
+
+          <h3>2. The Vault (Storage)</h3>
+          <p>Your voices are stored securely in your private "Voice Vault". You can have unlimited voices for different contexts:</p>
+          <ul>
+            <li><strong>"LinkedIn Voice"</strong>: Punchy, viral, professional.</li>
+            <li><strong>"Newsletter Voice"</strong>: Personal, storytelling, warm.</li>
+            <li><strong>"Cold Email Voice"</strong>: Short, direct, sales-focused.</li>
+          </ul>
+          <br />
+
+          <h3>3. The Ghostwriter (Generation)</h3>
+          <p>When you create a new project, select your custom voice. The system performs <strong>Context Injection</strong>, forcing the AI to strictly adhere to your rules before it writes a single word.</p>
+
+          <h2>Step-by-Step Guide</h2>
           <ol>
-            <li>Go to <strong>Settings > Brand Voice</strong>.</li>
-            <li>Upload a sample of your writing (blog post, email, etc.).</li>
-            <li>The AI will analyze your style and create a custom profile.</li>
+            <li>Navigate to <strong>Dashboard > Brand Voice</strong>.</li>
+            <li>Click <strong>"New Voice"</strong>.</li>
+            <li>Paste at least 200 words of content you have written.</li>
+            <li>Click <strong>"Analyze DNA"</strong>.</li>
+            <li>Review the extracted profile (Tone, Vocabulary, Banned Words).</li>
+            <li>Click <strong>"Save Voice"</strong>.</li>
           </ol>
 
-          <div class="callout callout-tip">
-            <strong>💡 Tip:</strong> You can create multiple voices for different clients or channels.
-          </div>
+          <h2>Tips for Best Results</h2>
+          <ul>
+            <li><strong>Consistency is Key</strong>: Don't mix a funny tweet with a serious legal contract in the same sample.</li>
+            <li><strong>Length Matters</strong>: Provide at least 3-4 paragraphs for accurate analysis.</li>
+            <li><strong>iterate</strong>: If the voice isn't perfect, delete it and try a different sample.</li>
+          </ul>
         `,
       },
       {

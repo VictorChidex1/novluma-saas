@@ -57,6 +57,12 @@ A professional, high-performance landing page designed to convert:
     - **PDF Generation**: Styled browser-native print export.
     - **Markdown Download**: Instant `.md` file generation for developers.
 
+### **Brand Voice Intelligence (New)**
+
+- **Style DNA Analysis**: Analyzes user text samples to extract specific tone, vocabulary, and sentence structures.
+- **Context Injection**: Uses your "Style DNA" to force the AI to write explicitly in your voice.
+- **Voice Lab**: A dedicated dashboard to manage multiple personas (e.g., "LinkedIn Victor" vs "Email Victor").
+
 ### **Landing Page**
 
 A professional, high-performance landing page designed to convert:
