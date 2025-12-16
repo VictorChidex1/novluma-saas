@@ -8,6 +8,14 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 // Initialize EmailJS
 initEmail();
 
+// Production Console Purge
+if (import.meta.env.PROD) {
+  // We keep warn and error for critical debugging, but silence the noise
+  console.log = () => {};
+  console.info = () => {};
+  console.debug = () => {};
+}
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ErrorBoundary>
