@@ -3,6 +3,8 @@ import {
   type User,
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signOut,
   onAuthStateChanged,
   createUserWithEmailAndPassword,
@@ -87,17 +89,46 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // Handle Redirect Result on Mount
+  useEffect(() => {
+    const handleRedirectResult = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (result) {
+          await createUserProfile(result.user);
+        }
+      } catch (error) {
+        console.error("Error handling redirect result", error);
+      }
+    };
+    handleRedirectResult();
+  }, []);
+
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({
       prompt: "select_account",
     });
+
     try {
-      const result = await signInWithPopup(auth, provider);
-      await createUserProfile(result.user);
-    } catch (error) {
-      console.error("Error signing in with Google", error);
-      throw error;
+      // Check if mobile device
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+      if (isMobile) {
+        await signInWithRedirect(auth, provider);
+        // Redirect happens, no code after this runs
+      } else {
+        const result = await signInWithPopup(auth, provider);
+        await createUserProfile(result.user);
+      }
+    } catch (error: any) {
+      if (error.code === "auth/popup-blocked") {
+        // Fallback to redirect if popup blocked
+        await signInWithRedirect(auth, provider);
+      } else {
+        console.error("Error signing in with Google", error);
+        throw error;
+      }
     }
   };
 
