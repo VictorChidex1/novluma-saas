@@ -1324,3 +1324,60 @@ const signInWithGoogle = async () => {
 };
 ```
 This Hybrid Approach gives us the best of both worlds: clean popups on Desktop, and reliable redirects on Mobile.
+
+# Chapter 25: The Console Purge (Production Polish)
+
+## 25.1 The Amateur Hour Problem
+During development, we write `console.log(user)` or `console.log("Token:", token)` to debug.
+If these make it to production, any user can open the browser DevTools (F12) and see this sensitive data. It looks unprofessional ("amateur hour") and poses a security risk.
+
+## 25.2 The Fix: Runtime Suppression (Monkey Patching)
+Instead of manually deleting every `console.log` (which we might need again later for debugging), we "disable" the console *only* when the app is running in production.
+
+### The Code Breakdown (`src/main.tsx`)
+```typescript
+if (import.meta.env.PROD) {
+  console.log = () => {};
+  console.info = () => {};
+  console.debug = () => {};
+}
+```
+
+### Key Concepts
+1.  **Environment Detection (`import.meta.env.PROD`)**:
+    *   Vite sets this boolean to `true` when you run `npm run build`, and `false` during `npm run dev`.
+    *   This ensures we can still see logs while coding!
+
+2.  **Monkey Patching**:
+    *   We are actively "overwriting" the browser's built-in `console.log` function.
+    *   Original: Prints text to the console.
+    *   New: `() => {}` (An empty function that does nothing).
+
+3.  **Selective Suppression**:
+    *   We silenced `log`, `info`, and `debug` (noise).
+    *   We **kept** `error` and `warn` (signals). If the app crashes in production, we still want to see the red error message in the console so we can fix it.
+
+# Chapter 26: The "White Screen" Prevention (Error Boundaries)
+
+## 26.1 The Problem
+In standard React, if a single component (like a Button) throws a JavaScript error during rendering, React unmounts the *entire* application tree. The user sees a terrifying blank white screen.
+
+## 26.2 The Solution: Error Boundaries
+An Error Boundary is a React component that catches JavaScript errors anywhere in their child component tree, logs those errors, and displays a fallback UI instead of the component tree that crashed.
+
+### Our Implementation (`src/components/ErrorBoundary.tsx`)
+We wrapped the entire app in `main.tsx`:
+```tsx
+<ErrorBoundary>
+  <App />
+</ErrorBoundary>
+```
+
+### Features of our "Premium" Boundary
+1.  **Friendly UI**: Instead of white nothingness, users see a "Something went wrong" card.
+2.  **Recovery Options**: We give them a "Reload Page" button (which fixes 99% of transient errors) and a "Back to Home" button.
+3.  **Dev-Mode Diagnostics**:
+    *   If you (the dev) trigger it locally, you see the full error stack trace on the screen.
+    *   If a user triggers it in production, they see only the friendly message (security best practice).
+
+This turns a "catastrophic failure" into a "minor inconvenience".

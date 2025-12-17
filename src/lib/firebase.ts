@@ -20,3 +20,24 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 export const analytics = getAnalytics(app);
+
+// App Check Implementation
+import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
+
+if (typeof window !== "undefined") {
+  // Localhost Debug Token
+  // @ts-ignore
+  self.FIREBASE_APPCHECK_DEBUG_TOKEN = import.meta.env.DEV ? true : false;
+
+  const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+
+  if (siteKey) {
+    initializeAppCheck(app, {
+      provider: new ReCaptchaV3Provider(siteKey),
+      isTokenAutoRefreshEnabled: true,
+    });
+    console.log("🛡️ App Check Security Enabled");
+  } else {
+    console.warn("⚠️ App Check disabled: Missing VITE_RECAPTCHA_SITE_KEY");
+  }
+}
