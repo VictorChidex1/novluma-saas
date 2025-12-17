@@ -28,8 +28,9 @@ if (typeof window !== "undefined") {
   // Localhost Debug Token
   if (import.meta.env.DEV) {
     // @ts-ignore
-    // We force the token to match what the user typed in Firebase Console (matching their "0bce" typo)
-    self.FIREBASE_APPCHECK_DEBUG_TOKEN = "3d3c969c-0bce-4068-90eb-8c0b71b49c9d";
+    // We use the token from .env.local so it doesn't get committed to GitHub
+    self.FIREBASE_APPCHECK_DEBUG_TOKEN =
+      import.meta.env.VITE_APP_CHECK_DEBUG_TOKEN;
     console.log("🔧 Using Hardcoded Debug Token for Localhost");
   }
 
