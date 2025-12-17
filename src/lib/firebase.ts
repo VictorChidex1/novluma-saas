@@ -26,8 +26,12 @@ import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
 if (typeof window !== "undefined") {
   // Localhost Debug Token
-  // @ts-ignore
-  self.FIREBASE_APPCHECK_DEBUG_TOKEN = import.meta.env.DEV ? true : false;
+  if (import.meta.env.DEV) {
+    // @ts-ignore
+    // We force the token to match what the user typed in Firebase Console (matching their "0bce" typo)
+    self.FIREBASE_APPCHECK_DEBUG_TOKEN = "3d3c969c-0bce-4068-90eb-8c0b71b49c9d";
+    console.log("🔧 Using Hardcoded Debug Token for Localhost");
+  }
 
   const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
