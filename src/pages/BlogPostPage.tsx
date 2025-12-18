@@ -98,6 +98,17 @@ const BlogPostPage = () => {
     );
   }
 
+  // Helper function for image paths
+  const getImageUrl = (imagePath: string) => {
+    if (!imagePath) return "";
+    if (imagePath.startsWith("http")) return imagePath;
+    const cleanPath = imagePath.startsWith("/")
+      ? imagePath.slice(1)
+      : imagePath;
+    const webpPath = cleanPath.replace(/\.(png|jpg|jpeg)$/i, ".webp");
+    return `${import.meta.env.BASE_URL}${webpPath}`;
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans selection:bg-indigo-100 dark:selection:bg-indigo-900/30 selection:text-indigo-900 dark:selection:text-indigo-100 flex flex-col">
       <Navbar />
@@ -107,7 +118,7 @@ const BlogPostPage = () => {
         <div className="relative h-[60vh] min-h-[400px] w-full overflow-hidden">
           <div className="absolute inset-0 bg-black/50 z-10"></div>
           <img
-            src={post.image}
+            src={getImageUrl(post.image)}
             alt={post.title}
             className="absolute inset-0 w-full h-full object-cover"
           />
@@ -220,7 +231,7 @@ const BlogPostPage = () => {
                     >
                       <div className="relative h-32 rounded-lg overflow-hidden mb-3">
                         <img
-                          src={related.image}
+                          src={getImageUrl(related.image)}
                           alt={related.title}
                           className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
                         />

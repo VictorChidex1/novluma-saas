@@ -6,7 +6,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const IMAGES_DIR = path.join(__dirname, "../src/assets/images");
+const IMAGES_DIR = path.join(__dirname, "../public");
 
 // Colors for console output
 const colors = {

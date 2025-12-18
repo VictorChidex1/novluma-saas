@@ -212,7 +212,7 @@ const CareersPage = () => {
               >
                 <div className="absolute inset-0 bg-indigo-500/20 rounded-3xl transform rotate-3 scale-105 -z-10 blur-2xl"></div>
                 <img
-                  src={`${import.meta.env.BASE_URL}career-hero.png`}
+                  src={`${import.meta.env.BASE_URL}career-hero.webp`}
                   alt="Novluma Team"
                   className="rounded-3xl shadow-2xl w-full object-cover aspect-[4/3] border border-indigo-800/50"
                 />
@@ -349,7 +349,7 @@ const CareersPage = () => {
               >
                 <div className="absolute -inset-4 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-3xl opacity-20 blur-2xl -z-10"></div>
                 <img
-                  src={`${import.meta.env.BASE_URL}join-novluma.png`}
+                  src={`${import.meta.env.BASE_URL}join-novluma.webp`}
                   alt="Join Novluma"
                   className="rounded-3xl shadow-2xl w-full object-cover"
                 />

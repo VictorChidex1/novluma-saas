@@ -16,7 +16,7 @@ export function GettingStartedPage() {
       color: "text-blue-500",
       bg: "bg-blue-100 dark:bg-blue-900/30",
       screenshotColor: "bg-blue-50 dark:bg-blue-900/20",
-      image: "/wizard-step.png",
+      image: "/wizard-step.webp",
     },
     {
       icon: Sparkles,
@@ -26,7 +26,7 @@ export function GettingStartedPage() {
       color: "text-purple-500",
       bg: "bg-purple-100 dark:bg-purple-900/30",
       screenshotColor: "bg-purple-50 dark:bg-purple-900/20",
-      image: "/generating-step.png",
+      image: "/generating-step.webp",
     },
     {
       icon: Pencil,
@@ -36,7 +36,7 @@ export function GettingStartedPage() {
       color: "text-indigo-500",
       bg: "bg-indigo-100 dark:bg-indigo-900/30",
       screenshotColor: "bg-indigo-50 dark:bg-indigo-900/20",
-      image: "/editor-step.png",
+      image: "/editor-step.webp",
     },
     {
       icon: Save,
@@ -46,7 +46,7 @@ export function GettingStartedPage() {
       color: "text-green-500",
       bg: "bg-green-100 dark:bg-green-900/30",
       screenshotColor: "bg-green-50 dark:bg-green-900/20",
-      image: "/dashboard-step.png",
+      image: "/dashboard-step.webp",
     },
   ];
 

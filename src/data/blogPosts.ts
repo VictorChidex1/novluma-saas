@@ -40,7 +40,7 @@ export const blogPosts: BlogPost[] = [
     date: "Dec 2, 2025",
     readTime: "5 min read",
     category: "AI & Tech",
-    image: "/generative-ai.png",
+    image: "/generative-ai.webp",
   },
   {
     slug: "mastering-prompt-engineering",
@@ -72,7 +72,7 @@ export const blogPosts: BlogPost[] = [
     date: "Nov 28, 2025",
     readTime: "8 min read",
     category: "Engineering",
-    image: "/prompt-engineering.png",
+    image: "/prompt-engineering.webp",
   },
   {
     slug: "designing-for-ai-interfaces",
@@ -103,7 +103,7 @@ export const blogPosts: BlogPost[] = [
     date: "Nov 25, 2025",
     readTime: "6 min read",
     category: "Design",
-    image: "/designing-ai-interface.png",
+    image: "/designing-ai-interface.webp",
   },
   {
     slug: "building-scalable-ai-infrastructure",
@@ -129,7 +129,7 @@ export const blogPosts: BlogPost[] = [
     date: "Nov 20, 2025",
     readTime: "10 min read",
     category: "Engineering",
-    image: "/scalable-ai.png",
+    image: "/scalable-ai.webp",
   },
   {
     slug: "ethics-of-ai-content-generation",
@@ -155,7 +155,7 @@ export const blogPosts: BlogPost[] = [
     date: "Nov 15, 2025",
     readTime: "7 min read",
     category: "Culture",
-    image: "/ethics-of-ai.png",
+    image: "/ethics-of-ai.webp",
   },
   {
     slug: "concept-to-launch-in-24-hours",
@@ -184,7 +184,7 @@ export const blogPosts: BlogPost[] = [
     date: "Nov 10, 2025",
     readTime: "4 min read",
     category: "Culture",
-    image: "/concept-to-launch.png",
+    image: "/concept-to-launch.webp",
   },
   {
     slug: "understanding-transformer-models",
@@ -213,7 +213,7 @@ export const blogPosts: BlogPost[] = [
     date: "Nov 5, 2025",
     readTime: "12 min read",
     category: "AI & Tech",
-    image: "/transformer-models.png",
+    image: "/transformer-models.webp",
   },
   {
     slug: "ai-in-healthcare-revolution",
@@ -233,7 +233,7 @@ export const blogPosts: BlogPost[] = [
     date: "Oct 28, 2025",
     readTime: "7 min read",
     category: "AI & Tech",
-    image: "/ai-healthcare.png",
+    image: "/ai-healthcare.webp",
   },
   {
     slug: "rise-of-edge-ai",
@@ -253,7 +253,7 @@ export const blogPosts: BlogPost[] = [
     date: "Oct 25, 2025",
     readTime: "6 min read",
     category: "Engineering",
-    image: "/edge-ai.png",
+    image: "/edge-ai.webp",
   },
   {
     slug: "minimalism-in-digital-design",
@@ -273,7 +273,7 @@ export const blogPosts: BlogPost[] = [
     date: "Oct 20, 2025",
     readTime: "5 min read",
     category: "Design",
-    image: "/minimalism-design.png",
+    image: "/minimalism-design.webp",
   },
   {
     slug: "navigating-remote-work-culture",
@@ -293,7 +293,7 @@ export const blogPosts: BlogPost[] = [
     date: "Oct 15, 2025",
     readTime: "8 min read",
     category: "Culture",
-    image: "/remote-work.png",
+    image: "/remote-work.webp",
   },
   {
     slug: "understanding-rag",
@@ -311,7 +311,7 @@ export const blogPosts: BlogPost[] = [
     date: "Oct 10, 2025",
     readTime: "9 min read",
     category: "Engineering",
-    image: "/rag-architecture.png",
+    image: "/rag-architecture.webp",
   },
   {
     slug: "future-of-saas-pricing",
@@ -331,7 +331,7 @@ export const blogPosts: BlogPost[] = [
     date: "Oct 5, 2025",
     readTime: "6 min read",
     category: "AI & Tech",
-    image: "/saas-pricing.png",
+    image: "/saas-pricing.webp",
   },
   {
     slug: "creative-coding-art",
@@ -350,6 +350,6 @@ export const blogPosts: BlogPost[] = [
     date: "Oct 1, 2025",
     readTime: "5 min read",
     category: "Design",
-    image: "/creative-coding.png",
+    image: "/creative-coding.webp",
   },
 ];

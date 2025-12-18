@@ -84,11 +84,16 @@ const BlogPage = () => {
   const getImageUrl = (imagePath: string) => {
     if (!imagePath) return "";
     if (imagePath.startsWith("http")) return imagePath;
-    // Remove leading slash if present to avoid double slashes with BASE_URL
+
+    // Remove leading slash if present
     const cleanPath = imagePath.startsWith("/")
       ? imagePath.slice(1)
       : imagePath;
-    return `${import.meta.env.BASE_URL}${cleanPath}`;
+
+    // Replace extension with .webp
+    const webpPath = cleanPath.replace(/\.(png|jpg|jpeg)$/i, ".webp");
+
+    return `${import.meta.env.BASE_URL}${webpPath}`;
   };
 
   const featuredPost = currentPosts[0];
