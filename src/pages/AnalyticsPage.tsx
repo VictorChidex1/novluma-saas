@@ -35,6 +35,8 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { RecentActivityTable } from "@/components/RecentActivityTable";
+import { ROICalculator } from "@/components/ROICalculator";
 
 export function AnalyticsPage() {
   const { user } = useAuth();
@@ -108,12 +110,12 @@ export function AnalyticsPage() {
     return days;
   }, [projects]);
 
-  // 4. Prepare Pie Chart Data (Content Types)
+  // 4. Prepare Pie Chart Data (Platform Distribution)
   const typeData = useMemo(() => {
     const counts: Record<string, number> = {};
     projects.forEach((p) => {
-      // Use 'category' or infer type since 'type' doesn't exist on Project interface yet
-      const type = (p as any).type || (p as any).category || "Blog Post";
+      const type =
+        p.platform || (p as any).type || (p as any).category || "Blog Post";
       counts[type] = (counts[type] || 0) + 1;
     });
 
@@ -251,10 +253,10 @@ export function AnalyticsPage() {
           </div>
         </div>
 
-        {/* Content Distribution */}
+        {/* Platform Distribution */}
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 shadow-sm">
           <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">
-            Content Split
+            Platform Distribution
           </h3>
           <div className="h-[300px] w-full relative">
             <ResponsiveContainer width="100%" height="100%">
@@ -300,7 +302,15 @@ export function AnalyticsPage() {
         </div>
       </div>
 
-      {/* Recent Activity Table could go here */}
+      {/* Bottom Section: Activity & ROI */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2">
+          <RecentActivityTable projects={projects} />
+        </div>
+        <div>
+          <ROICalculator totalWords={stats.totalWords} />
+        </div>
+      </div>
     </div>
   );
 }
