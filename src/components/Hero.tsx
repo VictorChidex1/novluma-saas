@@ -1,6 +1,6 @@
 import { ArrowRight, Play, X } from "lucide-react";
 import { motion, type Variants, AnimatePresence } from "framer-motion";
-import heroImage from "../assets/images/hero.png";
+import HeroImg from "../assets/images/hero.webp";
 import { useState } from "react";
 
 interface HeroProps {
@@ -45,13 +45,10 @@ export function Hero({ onGetStarted }: HeroProps) {
         >
           {/* Background Image */}
           <div className="absolute inset-0">
-            <motion.img
-              initial={{ scale: 1.1, opacity: 0 }}
-              animate={{ scale: 1, opacity: 0.5 }}
-              transition={{ duration: 1.5, ease: "easeOut" }}
-              src={heroImage}
-              alt="Background"
-              className="w-full h-full object-cover"
+            <img
+              src={HeroImg}
+              alt="Dashboard Preview"
+              className="relative rounded-lg shadow-2xl border border-border/50 w-full"
             />
             {/* Gradient Overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-gray-900/90 via-gray-900/60 to-gray-900/30 mix-blend-multiply" />

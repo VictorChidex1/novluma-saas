@@ -7,14 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Target, Zap, Globe, Heart } from "lucide-react";
 
 // Team Images
-import agbahoImg from "@/assets/images/team/agbaho-victor.png";
-import oziomaImg from "@/assets/images/team/dr-ozioma.png";
-import churchyllImg from "@/assets/images/team/churchyll-goodman.png";
-import onyinyeImg from "@/assets/images/team/onyinye-elizabeth.png";
-import emmanuelImg from "@/assets/images/team/emmanuel-olafisoye.png";
-import alexImg from "@/assets/images/team/bosa.png";
-import karlImg from "@/assets/images/team/mymimi.png";
-import estherImg from "@/assets/images/team/esther-onyi.png";
+// Team Images
+import agbahoImg from "@/assets/images/team/agbaho-victor.webp";
+import oziomaImg from "@/assets/images/team/dr-ozioma.webp";
+import churchyllImg from "@/assets/images/team/churchyll-goodman.webp";
+import onyinyeImg from "@/assets/images/team/onyinye-elizabeth.webp";
+import emmanuelImg from "@/assets/images/team/emmanuel-olafisoye.webp";
+import alexImg from "@/assets/images/team/bosa.webp";
+import karlImg from "@/assets/images/team/mymimi.webp";
+import estherImg from "@/assets/images/team/esther-onyi.webp";
 
 const AboutPage = () => {
   return (

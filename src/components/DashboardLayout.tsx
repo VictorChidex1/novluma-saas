@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import logo from "../assets/images/Logo.png";
+import Logo from "../assets/images/Logo.webp";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -39,7 +39,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     <div className="flex flex-col h-full bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800">
       <div className="p-6 border-b border-gray-200 dark:border-gray-800">
         <Link to="/" className="flex items-center gap-3">
-          <img src={logo} alt="Novluma Logo" className="h-8 w-auto" />
+          <img src={Logo} alt="Novluma" className="h-8 w-8" />
           <span className="text-xl font-bold text-gray-900 dark:text-white">
             Novluma
           </span>
@@ -87,7 +87,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Mobile header */}
       <div className="md:hidden fixed top-0 left-0 right-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 z-20 px-4 h-16 flex items-center justify-between print:hidden">
         <Link to="/" className="flex items-center gap-2">
-          <img src={logo} alt="Novluma Logo" className="h-8 w-auto" />
+          <img src={Logo} alt="Novluma Logo" className="h-8 w-auto" />
           <span className="text-xl font-bold text-gray-900 dark:text-white">
             Novluma
           </span>

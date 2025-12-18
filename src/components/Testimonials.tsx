@@ -3,9 +3,9 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Quote } from "lucide-react";
 
-import drAlex from "@/assets/images/team/dr-alex.png";
-import Bosa from "@/assets/images/team/Bosa.jpg";
-import Minimi from "@/assets/images/team/Minimi.jpg";
+import drAlex from "@/assets/images/team/dr-alex.webp";
+import Bosa from "@/assets/images/team/Bosa.webp";
+import Minimi from "@/assets/images/team/Minimi.webp";
 
 const testimonials = [
   {

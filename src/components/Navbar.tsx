@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../lib/firebase";
-import logo from "../assets/images/Logo.png";
+import Logo from "../assets/images/Logo.webp";
 import { AuthModal } from "./AuthModal";
 
 interface NavbarProps {
@@ -123,7 +123,7 @@ export function Navbar({
         <div className="flex justify-between h-16 relative">
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-2">
-              <img src={logo} alt="Novluma Logo" className="h-8 w-auto" />
+              <img src={Logo} alt="Novluma" className="h-8 w-8" />
               <span className="text-xl font-bold text-gray-900 dark:text-white">
                 Novluma
               </span>
