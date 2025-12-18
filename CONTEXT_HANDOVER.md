@@ -1,17 +1,18 @@
 # Novluma SaaS - Comprehensive Project Documentation
 
-**Project Status**: MVP Complete
-**Last Updated**: December 5, 2025
+**Project Status**: MVP Complete & Refined
+**Last Updated**: December 18, 2025
 
-## � Project Overview
+## 📚 Project Overview
 
 Novluma is a modern SaaS platform designed for AI-powered content generation. It features a high-converting landing page, a full user dashboard, a blog system, an admin panel, and a powerful AI engine.
 
 ## 🛠️ Technology Stack
 
 - **Frontend**: React (Vite), TypeScript, Tailwind CSS
-- **Animations**: Framer Motion
+- **Animations**: Framer Motion (Scroll-triggered animations, Sticky scroll)
 - **Backend / Database**: Firebase (Auth, Firestore, Storage)
+- **Security**: Firebase App Check (ReCAPTCHA v3)
 - **AI Engine**: Google Gemini API (REST Integration)
 - **Deployment**: Vercel / GitHub Pages support
 - **Email**: EmailJS (Transactional emails)
@@ -22,21 +23,30 @@ Novluma is a modern SaaS platform designed for AI-powered content generation. It
 
 ### 1. Public Facing Pages
 
-- **Landing Page**:
-  - Hero section with video/image background and parallax effects.
-  - "Features", "Pricing", "Testimonials", and "FAQ" sections.
+- **Landing Page (Revamped)**:
+  - **Hero Section**: Enhanced with video/image background and parallax effects.
+  - **Sticky Process Section**: "Scrollytelling" experience inspired by high-end portfolios (`hen-ry.com`), featuring sticky cards that transition smoothly.
+  - **New Sections**: Services Overview, Why Choose Us, Testimonials, Call to Action.
+  - **Scroll-to-Top**: Interactive button for better navigation.
   - **Infinite Logo Marquee** for social proof.
-- **About Us**: Team grid, company timeline, and mission statement.
+- **About Us**:
+  - **Team Grid & Timeline**: Professional layout.
+  - **Downloadable CV**: Integrated functionality to download the founder's CV (`victor-chidera-full-stack-cv.pdf`) directly from the Navbar and About section.
+  - **Decorative Visuals**: Refined alignment for "backend" and "competencies" arrays, optimized for mobile.
 - **Careers**: Job board with an integrated application form (connected to Firestore).
 - **Contact**: Professional form with real-time validation.
 - **Legal Pages**: Privacy Policy, Terms of Service, Cookie Policy.
 - **Blog System**:
-  - Public blog with category filtering and pagination.
-  - Dynamic article pages (`/blog/:slug`).
+  - **Public Blog**: Category filtering and pagination.
+  - **Dynamic Pages**: Article pages (`/blog/:slug`).
 
 ### 2. Authentication & User System
 
 - **Auth**: Google Sign-In and Email/Password (Firebase Auth).
+  - **Hybrid Strategy**: `signInWithRedirect` for mobile (better UX), `signInWithPopup` for desktop.
+- **Security**:
+  - **Firebase App Check**: Integrates ReCAPTCHA v3 to protect backend resources from abuse.
+  - **Debug Tokens**: Configured for local development (`localhost`) to bypass strict ReCAPTCHA checks.
 - **Profile Management**: Users can upload avatars (Base64 encoded), update names, and manage security settings (2FA UI, Password change).
 - **Dashboard**:
   - **Overview**: Usage stats, recent activity feed.
@@ -68,7 +78,7 @@ Novluma is a modern SaaS platform designed for AI-powered content generation. It
 ### 6. UX Enhancements
 
 - **Skeleton Loaders**: Replaced basic spinners with shimmering skeleton UI for "Projects List" and "Editor" to improve perceived performance.
-- **Animations**: Extended Framer Motion usage to Support Deck cards (staggered entrance).
+- **Animations**: Extended Framer Motion usage to Support Deck cards (staggered entrance) and Process Section.
 - **Dynamic Greeting**:
   - **Logic**: Uses `new Date().getHours()` to determine time of day.
   - **Behavior**: Returns "Good morning" (<12), "Good afternoon" (<18), or "Good evening" to personalize the dashboard experience.
@@ -82,6 +92,22 @@ Novluma is a modern SaaS platform designed for AI-powered content generation. It
 ---
 
 ## 🐛 Debugging Log (Critical Issues Fixed)
+
+### 10. Firebase App Check "Forbidden" (Localhost)
+
+- **Issue**: Local development requests to Firestore were getting 403 Forbidden errors after enabling App Check.
+- **Root Cause**: ReCAPTCHA v3 blocks `localhost` traffic by default as it looks suspicious.
+- **Fix**: Implemented a "Debug Token" system. Generated a debug UUID in Firebase Console and injected it into `firebase.ts` only when `import.meta.env.DEV` is true.
+
+### 11. Process Component Spacing
+
+- **Issue**: Inconsistent spacing between "Process" and "Selected Works" sections.
+- **Fix**: Analyzed `Benefits.jsx`, `Process.jsx`, and `FeaturedProjects.jsx` to standardize padding and margin values, ensuring visual consistency.
+
+### 12. Process Animation "Glitch"
+
+- **Issue**: The sticky scroll animation in the Process section was jumpy or overlapping with the navbar.
+- **Fix**: Refined Framer Motion variants and scroll offsets to replicate the smooth "stacking" effect seen on premium portfolios.
 
 ### 7. Broken Logo on Subpaths (GitHub Pages)
 
@@ -171,6 +197,7 @@ VITE_FIREBASE_STORAGE_BUCKET=...
 VITE_FIREBASE_MESSAGING_SENDER_ID=...
 VITE_FIREBASE_APP_ID=...
 VITE_FIREBASE_MEASUREMENT_ID=...
+VITE_RECAPTCHA_SITE_KEY=...  # Added for App Check
 
 # EmailJS
 VITE_EMAILJS_SERVICE_ID=...
@@ -184,15 +211,15 @@ VITE_GEMINI_API_KEY=...
 ### Critical Files
 
 - `src/lib/gemini.ts`: AI logic & model fallback.
-- `src/lib/firebase.ts`: Firebase initialization.
+- `src/lib/firebase.ts`: Firebase initialization & App Check configuration.
 - `src/lib/projects.ts`: Firestore CRUD operations.
 - `firestore.rules`: Security rules for the database.
 - `src/main.tsx`: Entry point with Error Boundary.
 
 ---
 
-## � Future Roadmap
+## 🔮 Future Roadmap
 
 1.  **AI Refinement**: Add "Regenerate" and "Expand" features.
 2.  **Payment Integration**: Connect Stripe for billing.
-3.  **Analytics**: detailed user behavior tracking.
+3.  **Analytics**: Detailed user behavior tracking.
