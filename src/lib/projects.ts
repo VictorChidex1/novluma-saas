@@ -152,7 +152,7 @@ export const checkUsage = async (userId: string): Promise<boolean> => {
     }
 
     // Check Limit (Default: 10k, can be adjusted)
-    const LIMIT = 10000;
+    const LIMIT = 5000;
     return usage.wordsUsed < LIMIT;
   } catch (error) {
     console.error("Error checking usage:", error);

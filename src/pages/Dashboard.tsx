@@ -102,7 +102,7 @@ export function Dashboard() {
     {
       label: "Words Generated",
       current: usageData.role === "admin" ? "∞" : usageData.wordsUsed,
-      limit: usageData.role === "admin" ? "Unlimited" : 10000,
+      limit: usageData.role === "admin" ? "Unlimited" : 5000,
       color: "bg-indigo-600",
       subtext:
         usageData.role === "admin"
