@@ -40,7 +40,7 @@ export function Dashboard() {
       description: "View performance",
       icon: BarChart2,
       color: "bg-pink-500",
-      href: "/reports",
+      href: "/dashboard/analytics",
     },
     {
       title: "Settings",

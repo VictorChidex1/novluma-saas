@@ -13,6 +13,7 @@ import { ApiDocsPage } from "./pages/ApiDocsPage";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { FAQPage } from "./pages/FAQPage";
 import { BrandVoicesPage } from "./pages/BrandVoicesPage";
+import { AnalyticsPage } from "./pages/AnalyticsPage";
 
 import ContactPage from "./pages/ContactPage";
 import CareersPage from "./pages/CareersPage";
@@ -142,6 +143,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <ApiDocsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/analytics"
+                element={
+                  <ProtectedRoute>
+                    <AnalyticsPage />
                   </ProtectedRoute>
                 }
               />
