@@ -13,7 +13,7 @@ import oziomaImg from "@/assets/images/team/dr-ozioma.webp";
 import churchyllImg from "@/assets/images/team/churchyll-goodman.webp";
 import onyinyeImg from "@/assets/images/team/onyinye-elizabeth.webp";
 import emmanuelImg from "@/assets/images/team/emmanuel-olafisoye.webp";
-import alexImg from "@/assets/images/team/bosa.webp";
+import alexImg from "@/assets/images/team/Bosa.webp";
 import karlImg from "@/assets/images/team/mymimi.webp";
 import estherImg from "@/assets/images/team/esther-onyi.webp";
 
