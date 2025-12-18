@@ -182,6 +182,15 @@ Novluma is a modern SaaS platform designed for AI-powered content generation. It
   - Corrected syntax to `href={`#${item.toLowerCase()}`}`.
   - Split logic: `Docs/FAQ` use React Router `<Link>`, while landing page sections use anchor tags for smooth scrolling.
 
+### 13. Image Optimization & Performance
+
+- **Issue**: Massive initial bundle size (20MB+) due to unoptimized assets.
+- **Actions**:
+  - Implemented `scripts/convert-to-webp.js` using `sharp` to resize (max 1200px) and convert to WebP.
+  - Reduced public asset size by ~95% (e.g., 2.3MB -> 10KB).
+  - Implemented **Runtime Adapter** in `BlogPage.tsx` to dynamically swap `.png` DB references for `.webp` at runtime.
+  - **Result**: Significant performance boost.
+
 ---
 
 ## 🔧 Configuration Reference

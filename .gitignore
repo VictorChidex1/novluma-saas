@@ -28,4 +28,5 @@ dist-ssr
 *.sln
 *.sw?
 
+CONTEXT_HANDOVER.md
 NOVLUMA_TEXTBOOK.md
