@@ -123,7 +123,13 @@ export function Navbar({
         <div className="flex justify-between h-16 relative">
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-2">
-              <img src={Logo} alt="Novluma" className="h-8 w-8" />
+              <img
+                src={Logo}
+                alt="Novluma"
+                className="h-8 w-8"
+                width="32"
+                height="32"
+              />
               <span className="text-xl font-bold text-gray-900 dark:text-white">
                 Novluma
               </span>

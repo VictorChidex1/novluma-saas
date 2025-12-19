@@ -49,6 +49,9 @@ export function Hero({ onGetStarted }: HeroProps) {
               src={HeroImg}
               alt="Dashboard Preview"
               className="relative rounded-lg shadow-2xl border border-border/50 w-full"
+              width="1200"
+              height="675"
+              fetchPriority="high"
             />
             {/* Gradient Overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-gray-900/90 via-gray-900/60 to-gray-900/30 mix-blend-multiply" />

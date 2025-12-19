@@ -232,7 +232,23 @@ VITE_GEMINI_API_KEY=...
 1.  **AI Refinement**: Add "Regenerate" and "Expand" features.
 2.  **Payment Integration**: Connect Stripe for billing.
 3.  **Analytics**: Detailed user behavior tracking.
-- **Enhanced Analytics**:
-    -   **ROI Calculator**: Real-time "Money Saved" estimation based on word count.
-    -   **Activity Log**: Last 5 generated projects with status tracking.
-    -   **Platform Breakdown**: Visual distribution of content across platforms.
+### 8. Analytics 2.0 (Value Engine)
+
+- **ROI Calculator (`ROICalculator.tsx`)**:
+  - **Tech**: React `useState` for dynamic inputs, `useEffect` for real-time math recalculation.
+  - **Purpose**: Anchors software value against freelance costs.
+- **Platform Distribution**:
+  - **Logic**: Aggregates project frequency using a generic `Record<string, number>` bucket strategy.
+  - **Visualization**: Recharts PieChart with custom tooltip.
+- **Activity Log**:
+  - **Performance**: Uses `slice(0, 5)` on existing data (zero API cost) vs fetching new queries.
+  - **UI**: Conditional rendering switch for "Smart Icons" based on platform type.
+
+---
+
+## 🐛 Recent Critical Fixes
+
+### 14. Deployment Failure (Case Sensitivity)
+- **Issue**: Vercel build failed with `ENOENT: no such file ... bosa.webp`.
+- **Root Cause**: Developer imported `bosa.webp` (lowercase) while file was `Bosa.webp` (Uppercase). MacOS (Case-Insensitive) allowed it; Linux (Case-Sensitive) rejected it.
+- **Fix**: Corrected import in `AboutPage.tsx` to match file system exactly. 
