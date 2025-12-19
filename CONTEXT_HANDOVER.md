@@ -232,3 +232,7 @@ VITE_GEMINI_API_KEY=...
 1.  **AI Refinement**: Add "Regenerate" and "Expand" features.
 2.  **Payment Integration**: Connect Stripe for billing.
 3.  **Analytics**: Detailed user behavior tracking.
+- **Enhanced Analytics**:
+    -   **ROI Calculator**: Real-time "Money Saved" estimation based on word count.
+    -   **Activity Log**: Last 5 generated projects with status tracking.
+    -   **Platform Breakdown**: Visual distribution of content across platforms.

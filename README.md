@@ -56,6 +56,10 @@ A professional, high-performance landing page designed to convert:
   - **Export System**:
     - **PDF Generation**: Styled browser-native print export.
     - **Markdown Download**: Instant `.md` file generation for developers.
+  - **Analytics 2.0 (New)**:
+    - **ROI Calculator**: Estimates money saved vs hiring freelancers.
+    - **Platform Intelligence**: Tracks which social platforms you use most.
+    - **Activity Feed**: Live log of recent generations.
 
 ### **Brand Voice Intelligence (New)**
 
