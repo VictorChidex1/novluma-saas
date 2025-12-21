@@ -12,7 +12,7 @@ A professional, high-performance landing page designed to convert:
 - **Features**: Interactive grid with **3D Tilt** effects on hover.
 - **How It Works**: Step-by-step process with **Pop & Wiggle** animations and a drawing connector line.
 - **Testimonials**: Social proof with **Floating + Scale** card animations.
-- **Pricing**: Clear pricing tiers with a **Pulse** effect on the popular plan.
+- **Pricing**: Dynamic "Public Beta" pricing with **Monthly/Yearly Toggle**, savings calculator, and **Free Beta Access** overrides.
 - **FAQ**: Objection handling with **Cascade** entrance and **Focus Glow** effects.
 - **Footer**: 4-column layout with integrated **Newsletter Signup**.
 

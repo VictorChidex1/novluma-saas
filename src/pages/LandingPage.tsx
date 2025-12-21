@@ -44,7 +44,7 @@ export function LandingPage() {
       <Features />
       <HowItWorks />
       <Testimonials />
-      <Pricing />
+      <Pricing onGetStarted={() => openAuth("signup")} />
       <FAQ />
       <Footer />
       <AuthModal

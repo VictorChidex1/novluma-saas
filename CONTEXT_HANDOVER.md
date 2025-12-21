@@ -252,3 +252,19 @@ VITE_GEMINI_API_KEY=...
 - **Issue**: Vercel build failed with `ENOENT: no such file ... bosa.webp`.
 - **Root Cause**: Developer imported `bosa.webp` (lowercase) while file was `Bosa.webp` (Uppercase). MacOS (Case-Insensitive) allowed it; Linux (Case-Sensitive) rejected it.
 - **Fix**: Corrected import in `AboutPage.tsx` to match file system exactly. 
+
+## ⚡ Performance Strategy (Lighthouse Optimization)
+**Current Status: 92/100 Accessibility, 32/100 Performance (Known Trade-off)**
+
+### 1. The LCP Fix (Hero Image)
+- **Problem**: 14s load time on mobile networks.
+- **Solution**: Implemented `fetchPriority="high"` on the Hero image. This forces the browser to prioritize the hero visual over non-critical scripts.
+- **Asset Optimization**: Resized `Logo.webp` from 77KB to 3KB using `sharp`.
+
+### 2. The Main Thread Trade-off (Firebase App Check)
+- **Observation**: `iframe.js` blocks the main thread for ~7s.
+- **Context**: This is **Firebase App Check (ReCAPTCHA)**. It verifies the user is human to protect the API keys.
+- **Decision**: We accept this performance hit for security. **Do not remove** unless you migrate to a backend-proxy architecture.
+
+### 3. Layout Stability
+- **Fix**: Added explicit `width` and `height` attributes to `Navbar` and `Hero` images to prevent Cumulative Layout Shift (CLS).
