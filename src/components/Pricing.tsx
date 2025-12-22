@@ -218,9 +218,18 @@ export function Pricing({ onGetStarted }: PricingProps) {
                                 : "text-gray-500 dark:text-gray-400"
                             }`}
                           />
-                          <span className="text-sm text-gray-700 dark:text-gray-300">
-                            {feature}
-                          </span>
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <span className="text-sm text-gray-700 dark:text-gray-300 cursor-help border-b border-dotted border-gray-300 dark:border-gray-600">
+                                  {feature}
+                                </span>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>More info about {feature}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
                         </li>
                       ))}
                     </ul>

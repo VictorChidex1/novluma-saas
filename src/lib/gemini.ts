@@ -2,7 +2,9 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
 import { getBrandVoiceById } from "./brandVoices";
 
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+// API_KEY is no longer needed on the client for generation,
+// strictly checks if environment is misconfigured but we use the proxy now.
+const HAS_API_KEY = !!import.meta.env.VITE_GEMINI_API_KEY;
 
 // KILL SWITCH: Global Guard
 const checkSystemStatus = async () => {
@@ -19,12 +21,29 @@ const checkSystemStatus = async () => {
         );
       }
     }
-    // If doc doesn't exist, default to ALLOW (fail open)
   } catch (error: any) {
     if (error.message.includes("maintenance")) throw error;
-    // Log other errors but don't block user (fail safe)
     console.warn("System check failed, proceeding:", error);
   }
+};
+
+// Helper to call our Vercel Proxy
+const callGeminiProxy = async (payload: any) => {
+  const response = await fetch("/api/generate", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error?.message || `Proxy Error: ${response.status}`);
+  }
+
+  return data;
 };
 
 export const generateContent = async (
@@ -33,10 +52,6 @@ export const generateContent = async (
   tone: string,
   voiceId?: string
 ): Promise<string> => {
-  if (!API_KEY) {
-    throw new Error("Gemini API Key is missing");
-  }
-
   // 1. Check Kill Switch
   await checkSystemStatus();
 
@@ -96,43 +111,12 @@ export const generateContent = async (
   for (const strategy of strategies) {
     try {
       console.log(`Attempting: ${strategy.model} (${strategy.version})`);
-      const url = `https://generativelanguage.googleapis.com/${strategy.version}/models/${strategy.model}:generateContent?key=${API_KEY}`;
 
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-        }),
+      const data = await callGeminiProxy({
+        contents: [{ parts: [{ text: prompt }] }],
+        model: strategy.model,
+        version: strategy.version,
       });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.warn(
-          `${strategy.model} (${strategy.version}) failed:`,
-          errorData
-        );
-
-        // Critical: If key is invalid/leaked, stop trying other models to avoid spamming errors
-        if (
-          response.status === 403 &&
-          (errorData.error?.message?.includes("leaked") ||
-            errorData.error?.message?.includes("API key"))
-        ) {
-          throw new Error(
-            "CRITICAL: Your API key has been flagged as LEAKED by Google. You must generate a new one at aistudio.google.com."
-          );
-        }
-
-        throw new Error(
-          errorData.error?.message ||
-            `API Error: ${response.status} ${response.statusText}`
-        );
-      }
-
-      const data = await response.json();
 
       if (
         !data.candidates ||
@@ -150,18 +134,17 @@ export const generateContent = async (
       );
       lastError = error;
 
-      // If it was the critical leaked key error, rethrow immediately to notify user
-      if (error.message.includes("LEAKED")) {
+      // If it we got a server configuration error, stop trying
+      if (error.message.includes("Missing API Key")) {
         throw error;
       }
-      // Otherwise continue to next strategy
     }
   }
 
   console.error("All strategies failed. Last error:", lastError);
   throw new Error(
     lastError?.message ||
-      "Failed to generate content. Please check your API key."
+      "Failed to generate content. Please check system status."
   );
 };
 
@@ -169,10 +152,6 @@ export const refineContent = async (
   content: string,
   instruction: string
 ): Promise<string> => {
-  if (!API_KEY) {
-    throw new Error("Gemini API Key is missing");
-  }
-
   // 1. Check Kill Switch
   await checkSystemStatus();
 
@@ -185,12 +164,11 @@ export const refineContent = async (
     output ONLY the rewritten text. Do not include any explanations or quotes.
   `;
 
-  // List of models and versions to try (Verified available models)
   const strategies = [
-    { model: "gemini-2.0-flash", version: "v1beta" }, // Primary: Fast & Stable
-    { model: "gemini-2.0-pro-exp", version: "v1beta" }, // Premium: High Intelligence (Requested)
-    { model: "gemini-2.0-flash-exp", version: "v1beta" }, // Backup: Experimental Flash
-    { model: "gemini-flash-latest", version: "v1beta" }, // Fallback: Generic
+    { model: "gemini-2.0-flash", version: "v1beta" },
+    { model: "gemini-2.0-pro-exp", version: "v1beta" },
+    { model: "gemini-2.0-flash-exp", version: "v1beta" },
+    { model: "gemini-flash-latest", version: "v1beta" },
   ];
 
   const safetySettings = [
@@ -210,29 +188,13 @@ export const refineContent = async (
 
   for (const strategy of strategies) {
     try {
-      const url = `https://generativelanguage.googleapis.com/${strategy.version}/models/${strategy.model}:generateContent?key=${API_KEY}`;
-
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          safetySettings: safetySettings,
-        }),
+      const data = await callGeminiProxy({
+        contents: [{ parts: [{ text: prompt }] }],
+        model: strategy.model,
+        version: strategy.version,
+        safetySettings,
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(
-          errorData.error?.message || `Model ${strategy.model} failed`
-        );
-      }
-
-      const data = await response.json();
-
-      // Check for safety blocks
       if (data.promptFeedback && data.promptFeedback.blockReason) {
         throw new Error(
           `Blocked by safety filter: ${data.promptFeedback.blockReason}`
@@ -260,11 +222,9 @@ export const refineContent = async (
     } catch (error) {
       console.warn(`Strategy ${strategy.model} failed:`, error);
       lastError = error;
-      // Continue to next model
     }
   }
 
-  // If all failed, throw the last meaningful error
   throw new Error(
     lastError?.message || "Failed to refine text. Please try again."
   );
@@ -279,10 +239,6 @@ export const analyzeBrandVoice = async (
   banned_words: string[];
   emoji_usage: boolean;
 }> => {
-  if (!API_KEY) {
-    throw new Error("Gemini API Key is missing");
-  }
-
   // 1. Check Kill Switch
   await checkSystemStatus();
 
@@ -302,7 +258,6 @@ export const analyzeBrandVoice = async (
     Return ONLY the JSON. No markedown formatting.
   `;
 
-  // List of models and versions to try
   const strategies = [
     { model: "gemini-2.0-flash", version: "v1beta" },
     { model: "gemini-2.0-pro-exp", version: "v1beta" },
@@ -313,30 +268,17 @@ export const analyzeBrandVoice = async (
 
   for (const strategy of strategies) {
     try {
-      const url = `https://generativelanguage.googleapis.com/${strategy.version}/models/${strategy.model}:generateContent?key=${API_KEY}`;
-
-      const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { responseMimeType: "application/json" }, // Force JSON
-        }),
+      const data = await callGeminiProxy({
+        contents: [{ parts: [{ text: prompt }] }],
+        model: strategy.model,
+        version: strategy.version,
+        generationConfig: { responseMimeType: "application/json" },
       });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(
-          errorData.error?.message || `Model ${strategy.model} failed`
-        );
-      }
-
-      const data = await response.json();
       const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
 
       if (!content) throw new Error("Empty response from AI");
 
-      // Clean markdown if present (e.g. ```json ... ```)
       const jsonString = content
         .replace(/```json/g, "")
         .replace(/```/g, "")
