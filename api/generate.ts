@@ -14,7 +14,10 @@ export default async function handler(req: Request) {
     const { contents, model, version, generationConfig, safetySettings } =
       await req.json();
 
-    if (!process.env.GEMINI_API_KEY) {
+    const apiKey =
+      process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
+
+    if (!apiKey) {
       return new Response(
         JSON.stringify({
           error: "Server Configuration Error: Missing API Key",
@@ -25,9 +28,7 @@ export default async function handler(req: Request) {
 
     const apiUrl = `https://generativelanguage.googleapis.com/${
       version || "v1beta"
-    }/models/${model || "gemini-2.0-flash"}:generateContent?key=${
-      process.env.GEMINI_API_KEY
-    }`;
+    }/models/${model || "gemini-2.0-flash"}:generateContent?key=${apiKey}`;
 
     const response = await fetch(apiUrl, {
       method: "POST",

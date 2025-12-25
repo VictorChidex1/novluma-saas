@@ -2,9 +2,8 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
 import { getBrandVoiceById } from "./brandVoices";
 
-// API_KEY is no longer needed on the client for generation,
-// strictly checks if environment is misconfigured but we use the proxy now.
-const HAS_API_KEY = !!import.meta.env.VITE_GEMINI_API_KEY;
+// API_KEY is managed server-side in Vercel.
+// We no longer check for it on the client to avoid accidental leaking.
 
 // KILL SWITCH: Global Guard
 const checkSystemStatus = async () => {
