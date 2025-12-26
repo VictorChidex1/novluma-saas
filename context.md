@@ -12,8 +12,8 @@
 - **Styling:** Tailwind CSS
 - **Backend:** Vercel Serverless Functions (Node.js/Edge runtimes)
 - **Database & Auth:** Firebase Firestore (NoSQL) & Firebase Authentication
-- **State Management:** [Select: Zustand / Context API / React Query]
-- **Package Manager:** [Select: npm]
+- **State Management:** Context API
+- **Package Manager:** npm
 
 **Architecture Constraints:**
 

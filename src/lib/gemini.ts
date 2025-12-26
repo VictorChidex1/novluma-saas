@@ -2,9 +2,6 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
 import { getBrandVoiceById } from "./brandVoices";
 
-// API_KEY is managed server-side in Vercel.
-// We no longer check for it on the client to avoid accidental leaking.
-
 // KILL SWITCH: Global Guard
 const checkSystemStatus = async () => {
   try {
