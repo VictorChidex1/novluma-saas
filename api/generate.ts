@@ -1,5 +1,5 @@
 export const config = {
-  runtime: "edge", // Use Edge runtime for speed and lower cost
+  runtime: "edge",
 };
 
 export default async function handler(req: Request) {

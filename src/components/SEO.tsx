@@ -8,7 +8,7 @@ interface SEOProps {
   type?: string;
 }
 
-export const SEO = ({
+const SEO = ({
   title = "Novluma | AI-Powered Content Creation & Analytics",
   description = "Elevate your digital presence with Novluma. The all-in-one AI platform for content creation, social media scheduling, and advanced analytics. Start for free today.",
   image = "/og-image.webp",
@@ -42,3 +42,5 @@ export const SEO = ({
     </Helmet>
   );
 };
+
+export default SEO;
