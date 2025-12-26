@@ -11,7 +11,7 @@ interface SEOProps {
 export const SEO = ({
   title = "Novluma | AI-Powered Content Creation & Analytics",
   description = "Elevate your digital presence with Novluma. The all-in-one AI platform for content creation, social media scheduling, and advanced analytics. Start for free today.",
-  image = "/og-logo.webp",
+  image = "/og-image.webp",
   url = "https://novluma-saas.vercel.app/",
   type = "website",
 }: SEOProps) => {
