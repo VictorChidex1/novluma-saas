@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, ArrowRight, Eye, EyeOff, ArrowLeft } from "lucide-react";
 
 export function LoginPage() {
   const [email, setEmail] = useState("");
@@ -52,7 +52,15 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen pt-20 pb-12 flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
+    <div className="min-h-screen pt-20 pb-12 flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 relative">
+      <Link
+        to="/"
+        className="absolute top-8 left-8 flex items-center text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors font-medium"
+      >
+        <ArrowLeft size={20} className="mr-2" />
+        Back to Home
+      </Link>
+
       <div className="w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
         {/* Header */}
         <div className="px-8 pt-8 pb-6 text-center">
