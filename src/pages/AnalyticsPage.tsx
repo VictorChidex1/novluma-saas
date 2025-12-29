@@ -8,7 +8,9 @@ import {
   Zap,
   Download,
   Calendar,
+  ArrowLeft,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import {
   AreaChart,
   Area,
@@ -144,6 +146,13 @@ export function AnalyticsPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 px-2">
         <div>
+          <Link
+            to="/dashboard"
+            className="flex items-center text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors mb-4"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Dashboard
+          </Link>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
             Analytics
           </h1>
