@@ -97,10 +97,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         const result = await getRedirectResult(auth);
         if (result) {
+          console.log("Redirect sign-in successful, creating profile...");
           await createUserProfile(result.user);
         }
       } catch (error) {
         console.error("Error handling redirect result", error);
+        // You could set a global error state here if needed
       }
     };
     handleRedirectResult();
@@ -113,20 +115,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     try {
-      // Check if mobile device
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-      if (isMobile) {
-        sessionStorage.setItem("authRedirecting", "true");
-        await signInWithRedirect(auth, provider);
-        // Redirect happens, no code after this runs
-      } else {
-        const result = await signInWithPopup(auth, provider);
-        await createUserProfile(result.user);
-      }
+      // Architect's Note: Switched to Popup for ALL devices to avoid Safari ITP Redirect Loops.
+      // signInWithRedirect is unreliable on modern mobile browsers without custom domain proxies.
+      const result = await signInWithPopup(auth, provider);
+      await createUserProfile(result.user);
     } catch (error: any) {
       if (error.code === "auth/popup-blocked") {
-        // Fallback to redirect if popup blocked
+        // Only fallback to redirect if absolutely necessary (e.g. strict in-app browsers)
+        console.warn("Popup blocked, falling back to redirect...");
+        sessionStorage.setItem("authRedirecting", "true");
         await signInWithRedirect(auth, provider);
       } else {
         console.error("Error signing in with Google", error);
