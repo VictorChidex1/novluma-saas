@@ -8,27 +8,12 @@ import HowItWorks from "../components/HowItWorks";
 import FAQ from "../components/FAQ";
 import Footer from "../components/Footer";
 
-import { useState } from "react";
-import { AuthModal } from "../components/AuthModal";
-// import { useAuth } from "../context/AuthContext"; // Unused now
-// import { Navigate } from "react-router-dom";      // Unused now
+import { useNavigate } from "react-router-dom";
 
 import SEO from "../components/SEO";
 
 export function LandingPage() {
-  // const { user, loading } = useAuth(); // Unused now
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [authTab, setAuthTab] = useState<"signin" | "signup">("signin");
-
-  // Redirect logic removed to allow users to visit the homepage from the dashboard logic
-  // if (user && !loading) {
-  //   return <Navigate to="/dashboard" replace />;
-  // }
-
-  const openAuth = (tab: "signin" | "signup") => {
-    setAuthTab(tab);
-    setIsAuthModalOpen(true);
-  };
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 selection:bg-indigo-100 dark:selection:bg-indigo-900/30 selection:text-indigo-900 dark:selection:text-indigo-100">
@@ -37,21 +22,16 @@ export function LandingPage() {
         description="Novluma is the ultimate AI-powered content creation platform. Transform your ideas into professional content in seconds."
       />
       <Navbar
-        onSignin={() => openAuth("signin")}
-        onGetStarted={() => openAuth("signup")}
+        onSignin={() => navigate("/login")}
+        onGetStarted={() => navigate("/signup")}
       />
-      <Hero onGetStarted={() => openAuth("signup")} />
+      <Hero onGetStarted={() => navigate("/signup")} />
       <Features />
       <HowItWorks />
       <Testimonials />
-      <Pricing onGetStarted={() => openAuth("signup")} />
+      <Pricing onGetStarted={() => navigate("/signup")} />
       <FAQ />
       <Footer />
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        defaultTab={authTab}
-      />
     </div>
   );
 }

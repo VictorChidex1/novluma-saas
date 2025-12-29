@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { useClickOutside } from "../hooks/useClickOutside";
@@ -19,7 +19,6 @@ import {
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import Logo from "../assets/images/Logo.webp";
-import { AuthModal } from "./AuthModal";
 
 interface NavbarProps {
   onMenuClick?: () => void;
@@ -36,25 +35,17 @@ export function Navbar({
 }: NavbarProps) {
   const { user, userRole, logout } = useAuth();
   const { toggleTheme } = useTheme();
+  const navigate = useNavigate();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
-  // Internal Auth State (Fallback for pages that don't pass handlers)
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [authTab, setAuthTab] = useState<"signin" | "signup">("signin");
-
-  const openInternalAuth = (tab: "signin" | "signup") => {
-    setAuthTab(tab);
-    setIsAuthModalOpen(true);
-  };
-
   const handleSigninClick = () => {
     if (onSignin) {
       onSignin();
     } else {
-      openInternalAuth("signin");
+      navigate("/login");
     }
   };
 
@@ -62,7 +53,7 @@ export function Navbar({
     if (onGetStarted) {
       onGetStarted();
     } else {
-      openInternalAuth("signup");
+      navigate("/signup");
     }
   };
 
@@ -402,13 +393,6 @@ export function Navbar({
           </div>
         </div>
       )}
-
-      {/* Internal Auth Modal (Fallback) */}
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        defaultTab={authTab}
-      />
     </motion.nav>
   );
 }

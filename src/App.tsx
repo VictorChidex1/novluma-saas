@@ -37,6 +37,8 @@ import AdminDashboard from "@/pages/admin/AdminDashboard";
 import AdminBlogPage from "@/pages/admin/AdminBlogPage";
 import AdminPostEditor from "@/pages/admin/AdminPostEditor";
 import { AdminRoute } from "@/components/AdminRoute";
+import { LoginPage } from "./pages/LoginPage";
+import { SignupPage } from "./pages/SignupPage";
 
 import { HelmetProvider } from "react-helmet-async";
 import { useEffect } from "react";
@@ -69,6 +71,8 @@ function App() {
             <Toaster />
             <Routes>
               <Route path="/" element={<LandingPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/signup" element={<SignupPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/careers" element={<CareersPage />} />
               <Route path="/about" element={<AboutPage />} />
