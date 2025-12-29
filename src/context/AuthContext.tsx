@@ -115,6 +115,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
       if (isMobile) {
+        sessionStorage.setItem("authRedirecting", "true");
         await signInWithRedirect(auth, provider);
         // Redirect happens, no code after this runs
       } else {

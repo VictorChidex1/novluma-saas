@@ -246,7 +246,7 @@ export const docsData: DocCategory[] = [
           <h2>Free Tier</h2>
           <p>Perfect for testing the waters. Includes 5 generations per day.</p>
           
-          <h2>Pro Tier ($29/mo)</h2>
+          <h2>Pro Tier ($19/mo)</h2>
           <p>Unlimited generations, priority support, and access to GPT-4 class models.</p>
         `,
       },

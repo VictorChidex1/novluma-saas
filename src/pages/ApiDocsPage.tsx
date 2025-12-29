@@ -169,6 +169,7 @@ export function ApiDocsPage() {
                   The Novluma API uses API keys to authenticate requests. You
                   can view and manage your API keys in the Dashboard Settings.
                 </p>
+
                 <div className="bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-100 dark:border-yellow-900/30 rounded-lg p-4 flex gap-3 mb-6">
                   <Key className="w-5 h-5 text-yellow-600 dark:text-yellow-400 shrink-0 mt-0.5" />
                   <div>

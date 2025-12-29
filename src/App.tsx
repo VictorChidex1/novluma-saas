@@ -1,5 +1,10 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+} from "react-router-dom";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import { LandingPage } from "./pages/LandingPage";
 import { Dashboard } from "./pages/Dashboard";
@@ -34,6 +39,23 @@ import AdminPostEditor from "@/pages/admin/AdminPostEditor";
 import { AdminRoute } from "@/components/AdminRoute";
 
 import { HelmetProvider } from "react-helmet-async";
+import { useEffect } from "react";
+
+// Helper component to handle redirects inside Router context
+function AuthRedirectHandler() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const isRedirecting = sessionStorage.getItem("authRedirecting");
+    if (user && isRedirecting === "true") {
+      sessionStorage.removeItem("authRedirecting");
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
+
+  return null;
+}
 
 function App() {
   return (
@@ -41,6 +63,7 @@ function App() {
       <AuthProvider>
         <ThemeProvider>
           <Router basename={import.meta.env.BASE_URL}>
+            <AuthRedirectHandler />
             <ScrollToTop />
             <ScrollToHashElement />
             <Toaster />

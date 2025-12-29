@@ -365,7 +365,7 @@ const CareersPage = () => {
                 </h2>
                 <div className="space-y-6 text-lg text-gray-600 dark:text-gray-300">
                   <p>
-                    At Lumina, we're not just building software; we're crafting
+                    At Novluma, we're not just building software; we're crafting
                     the future of creativity. We value <strong>autonomy</strong>
                     , <strong>mastery</strong>, and <strong>purpose</strong>.
                   </p>
