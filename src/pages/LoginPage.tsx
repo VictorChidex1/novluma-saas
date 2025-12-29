@@ -121,12 +121,12 @@ export function LoginPage() {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Password
                 </label>
-                <a
-                  href="#"
+                <Link
+                  to="/forgot-password"
                   className="text-xs font-medium text-indigo-600 hover:text-indigo-500"
                 >
                   Forgot password?
-                </a>
+                </Link>
               </div>
               <div className="relative">
                 <Lock
