@@ -5,6 +5,18 @@
 
 ---
 
+## 🤝 AI Collaboration Protocol (Strict)
+
+**1. PERMISSION FIRST:** You (the AI) must **always** ask for explicit permission before implementing any new feature, refactoring code, or changing architecture. Do not generate full implementation code until the user says "Yes" or "Proceed."
+
+**2. THE "WHY" RULE:** Before suggesting any change, you must provide a detailed explanation of:
+
+- **The Risk:** What happens if we don't do it? (e.g., Security vulnerability, Crash risk).
+- **The Value:** What do we gain? (e.g., Scalability, Lower cost, Better UX).
+- **The Plan:** Briefly explain how you will build it.
+
+---
+
 ## 1. TECH STACK & ARCHITECTURE
 
 - **Frontend Framework:** React (Vite)

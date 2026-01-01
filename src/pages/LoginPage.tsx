@@ -66,7 +66,8 @@ export function LoginPage() {
     <div className="min-h-screen pt-20 pb-12 flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 relative">
       <Link
         to="/"
-        className="absolute top-8 left-8 flex items-center text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors font-medium"
+        className="absolute top-8 left-8 flex items-center text-gray-500 hover:text-gray-900 dark:text-gray-400
+         dark:hover:text-white transition-colors font-medium"
       >
         <ArrowLeft size={20} className="mr-2" />
         Back to Home
@@ -92,7 +93,8 @@ export function LoginPage() {
           {/* Google Button */}
           <button
             onClick={handleGoogleSignIn}
-            className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 font-medium py-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors mb-6"
+            className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700
+             text-gray-700 dark:text-gray-200 font-medium py-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors mb-6"
           >
             <img
               src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"

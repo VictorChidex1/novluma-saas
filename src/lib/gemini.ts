@@ -25,10 +25,22 @@ const checkSystemStatus = async () => {
 
 // Helper to call our Vercel Proxy
 const callGeminiProxy = async (payload: any) => {
+  // 1. Get the current User ID Token
+  const { auth } = await import("./firebase"); // Dynamic import to avoid cycles
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error("You must be logged in to generate content.");
+  }
+
+  const token = await user.getIdToken();
+
+  // 2. Send Request with Token
   const response = await fetch("/api/generate", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`, // <--- The Golden Key
     },
     body: JSON.stringify(payload),
   });
