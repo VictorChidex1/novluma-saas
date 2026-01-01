@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { docsData } from "../../data/docs";
 import { Menu, X, Search } from "lucide-react";
+import { OnThisPage } from "./OnThisPage";
 
 interface DocsLayoutProps {
   children: React.ReactNode;
@@ -107,6 +108,9 @@ export function DocsLayout({ children }: DocsLayoutProps) {
         <main className="flex-1 w-full max-w-4xl px-4 md:px-8 py-10 min-h-[calc(100vh-4rem)]">
           {children}
         </main>
+
+        {/* Table of Contents (Right Sidebar) */}
+        <OnThisPage />
       </div>
     </div>
   );
