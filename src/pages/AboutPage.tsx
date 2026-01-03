@@ -405,7 +405,7 @@ const AboutPage = () => {
                     <blockquote className="text-lg md:text-xl text-indigo-100/90 leading-relaxed font-medium mb-8">
                       "The gap between an idea and its execution is where dreams
                       often die. I built Novluma to close that gap. We are
-                      forging a new kind of creative partner—one that amplifies
+                      forging a new kind of creative partner, one that amplifies
                       your intuition instead of replacing it, turning 'what if'
                       into 'what is' at the speed of thought."
                     </blockquote>
